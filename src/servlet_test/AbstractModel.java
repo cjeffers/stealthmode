@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.mysql.jdbc.ResultSetMetaData;
+
 import servlet_test.MyDBInfo;
 
 
@@ -19,13 +22,76 @@ import servlet_test.MyDBInfo;
 
 public class AbstractModel {
 	
+	/*
+	 * Instance variables and methods
+	 */
+	
+	private String tableName;
+	private String[] colNames;
+	private Statement state;
+	
+	// SQL query strings
+	private String QUERY_BEGIN = ("SELECT * FROM " + tableName);
+	private String WHERE = " WHERE ";
+	
+	/**
+	 * Constructor requires a table name and an
+	 * array of the column names
+	 */
+	public AbstractModel(String theTableName, String[] theColNames, Connection theConnection) throws SQLException {
+		tableName = theTableName;
+		colNames = theColNames;
+		try{
+			state = theConnection.createStatement();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Given an id, returns all of the column values for the row
+	 * @param id
+	 * @return List<String> of column contents
+	 */
+	public List<String> findByID(String id) {
+		String query = QUERY_BEGIN + WHERE + colNames[0] + " = \"" + id + "\"";
+		try {
+			ResultSet rs = state.executeQuery(query);
+			
+			List<String> list = new ArrayList<String>();
+			
+			if (rs.next()) {
+				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
+				int colNum = rsmd.getColumnCount();
+				
+				for (int i = 1; i <= colNum; i++) {
+					list.add(rs.getString(i));
+				}
+				
+				return list;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	/*
+	 * Static variables and methods
+	 */
+	
 	// Database info
 	private static final String username = MyDBInfo.MYSQL_USERNAME;
 	private static final String password = MyDBInfo.MYSQL_PASSWORD;
 	private static final String dbName = MyDBInfo.MYSQL_DATABASE_NAME;
 	private static final String server = MyDBInfo.MYSQL_DATABASE_SERVER;
 	
-	
+	// connection
 	private static Connection connection = null;
 	
 	
@@ -48,12 +114,26 @@ public class AbstractModel {
 		}
 	}
 	
+	/**
+	 * Returns the connection to the MySQL server
+	 * If connection is null, initializes it.
+	 * @return connection
+	 */
 	public static Connection getConnection() {
 		if (connection == null) initConnection();
 		return connection;
 	}
 	
-	
+	/**
+	 * Closes the connection to the MySQL server
+	 */
+	public static void closeConnection() {
+		try {
+			connection.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
