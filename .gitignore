@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+
+# Ignore Mac backups #
+.DS_Store
