@@ -7,3 +7,4 @@
 
 # Ignore Mac backups #
 .DS_Store
+/build
