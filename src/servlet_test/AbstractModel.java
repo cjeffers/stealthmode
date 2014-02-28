@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mysql.jdbc.ResultSetMetaData;
-
 import servlet_test.MyDBInfo;
 
 
@@ -18,8 +16,6 @@ import servlet_test.MyDBInfo;
  * This class abstracts the accessing of the MySQL database
  * used to store data for the quiz website
  */
-
-
 public class AbstractModel {
 	
 	/*
@@ -38,7 +34,7 @@ public class AbstractModel {
 	 * Constructor requires a table name and an
 	 * array of the column names
 	 */
-	public AbstractModel(String theTableName, String[] theColNames, Connection theConnection) throws SQLException {
+	public AbstractModel(String theTableName, String[] theColNames, Connection theConnection){
 		tableName = theTableName;
 		colNames = theColNames;
 		try{
@@ -53,7 +49,7 @@ public class AbstractModel {
 	 * @param id
 	 * @return List<String> of column contents
 	 */
-	public List<String> findByID(String id) {
+	public List<String> getByID(String id) {
 		String query = QUERY_BEGIN + WHERE + colNames[0] + " = \"" + id + "\"";
 		try {
 			ResultSet rs = state.executeQuery(query);
@@ -77,7 +73,62 @@ public class AbstractModel {
 		return null;
 	}
 	
+	/**
+	 * Returns all of the objects in the table as a list.
+	 * Technically, returns a List< List<String> >.
+	 * @return list of objects
+	 */
+	public List< List<String> > getAll() {
+		List< List<String> > allObjects = new ArrayList< List<String> >();
+		try {
+			ResultSet rs = state.executeQuery(QUERY_BEGIN);
+			
+			List<String> object;
+			
+			while(rs.next()) {
+				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
+				int colNum = rsmd.getColumnCount();
+				object = new ArrayList<String>();
+				
+				for (int i = 1; i <= colNum; i++) {
+					object.add(rs.getString(i));
+				}
+				
+				allObjects.add(object);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return allObjects;
+	}
 	
+	/**
+	 * Returns an object given a column name index and entry value
+	 */
+	public List<String> getByValue(int index, String value) {
+		String query = QUERY_BEGIN + WHERE + colNames[index] + " = \"" + value + "\"";
+		try {
+			ResultSet rs = state.executeQuery(query);
+			
+			List<String> list = new ArrayList<String>();
+			
+			if (rs.next()) {
+				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
+				int colNum = rsmd.getColumnCount();
+				
+				for (int i = 1; i <= colNum; i++) {
+					list.add(rs.getString(i));
+				}
+				
+				return list;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 	
