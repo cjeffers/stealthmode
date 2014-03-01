@@ -9,52 +9,52 @@ import java.sql.Connection;
  * the same way a User or Question class might.
  */
 public class Metropolis extends AbstractModel {
-	
+
 	// Constants
 	private static final String tableName = "Metropolis";
 	private static final String[] colNames = {"Metropolis", "Continent", "Population"};
 
-	
+
 	/*
 	 * Instance variables and methods
 	 */
-	
+
 	private String name;
 	private String continent;
 	private long population;
-	
-	
+
+
 	// ---------Constructors---------
-	
+
 	// Default constructor
 	public Metropolis(String theName, String theContinent, long thePopulation, Connection theConnection) {
-		super(tableName, colNames, theConnection);
+		super(tableName, theConnection);
 		name = theName;
 		continent = theContinent;
 		population = thePopulation;
 	}
-	
+
 	// Constructor where population is represented as a String
 	public Metropolis(String theName, String theContinent, String thePopulation, Connection theConnection) {
 		this(theName, theContinent, Long.parseLong(thePopulation), theConnection);
 	}
-	
+
 	// Override of toString
 	@Override
 	public String toString() {
 		return (name + ", " + continent + ", " + population);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
