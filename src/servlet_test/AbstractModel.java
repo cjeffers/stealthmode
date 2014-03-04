@@ -6,12 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.mysql.jdbc.PreparedStatement;
 
 import servlet_test.MyDBInfo;
 
@@ -46,7 +43,7 @@ public class AbstractModel {
 	 */
 	
 	private Map<String, Object> valueMap;
-	private Connection instance_connection;   // needed for save and delete
+	//private Connection instance_connection;   // needed for save and delete
 	private String instance_tableName;        // needed for save and delete
 	private boolean isInDatabase;
 	
@@ -61,7 +58,7 @@ public class AbstractModel {
 	 * @param theIsInDatabase boolean
 	 */
 	public AbstractModel(Connection theConnection, String theTableName, Map<String, Object> theValueMap, boolean theIsInDatabase) {
-		instance_connection = theConnection;
+		//instance_connection = theConnection;
 		instance_tableName = theTableName;
 		isInDatabase = theIsInDatabase;
 		valueMap = theValueMap;
@@ -175,7 +172,29 @@ public class AbstractModel {
 	private static String LE_EQ = " <= ";
 
 
+	/*
+	 * getByID()
+	 * String tableName (overloaded to default this to the static variable)
+	 * int id
+	 */
 	
+	/**
+	 * getByID - tableName and id needed
+	 * Returns null if exception thrown or nothing found
+	 * @param table name
+	 * @param id
+	 * @return the row as an Abstract Model
+	 */
+	public AbstractModel getByID(String tableName, int id) {
+		return(getOneByValue(tableName, "id", id));
+	}
+	
+	/**
+	 * getByID - table name defaulted
+	 * Returns null if exception thrown or nothing found
+	 * @param id
+	 * @return the row as an Abstract Model
+	 */
 	
 	/*
 	 * getOneByValue/getByValue
@@ -204,14 +223,14 @@ public class AbstractModel {
 	 * getOneByValue - all parameters
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown or the search returns zero results
-	 * @param colName
+	 * @param the table name
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
 	 * @param comparator
 	 * @return row as an Abstract Model
 	 */
-	public AbstractModel getOneByValue(String theTableName, String colName, Object value, String comparator) {
-		ResultSet rs = getResultSet(colName, value, theTableName, comparator);
+	public static AbstractModel getOneByValue(String theTableName, String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet(theTableName, colName, value, comparator);
 
 		try {
 			if(rs.next()) {
@@ -227,13 +246,12 @@ public class AbstractModel {
 	 * getOneByValue - default table name to static variable
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown or the search returns zero results
-	 * @param colName
+	 * @param column name
 	 * @param value
-	 * @param theTableName
 	 * @param comparator
 	 * @return row as an Abstract Model
 	 */
-	public AbstractModel getOneByValue(String colName, Object value, String comparator) {
+	public static AbstractModel getOneByValue(String colName, Object value, String comparator) {
 		return getOneByValue(tableName, colName, value, comparator);
 	}
 	
@@ -241,13 +259,12 @@ public class AbstractModel {
 	 * getOneByValue - default comparator to equals
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown or the search returns zero results
-	 * @param colName
+	 * @param table name
+	 * @param column name
 	 * @param value
-	 * @param theTableName
-	 * @param comparator
 	 * @return row as an Abstract Model
 	 */
-	public AbstractModel getOneByValue(String theTableName, String colName, Object value) {
+	public static AbstractModel getOneByValue(String theTableName, String colName, Object value) {
 		return getOneByValue(theTableName, colName, value, EQ);
 	}
 	
@@ -255,27 +272,25 @@ public class AbstractModel {
 	 * getOneByValue - default comparator to equals
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown or the search returns zero results
-	 * @param colName
+	 * @param column name
 	 * @param value
-	 * @param theTableName
-	 * @param comparator
 	 * @return row as an Abstract Model
 	 */
-	public AbstractModel getOneByValue(String colName, Object value) {
+	public static AbstractModel getOneByValue(String colName, Object value) {
 		return getOneByValue(tableName, colName, value, EQ);
 	}
 	
 	/**
 	 * Returns the rows returned by the search parameters as a list of Abstract Models
 	 * Returns null if an exception is thrown
-	 * @param colName
+	 * @param the table name
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
 	 * @param comparator
 	 * @return list of rows returned by search as Abstract Models
 	 */
-	public List<AbstractModel> getByValue(String theTableName, String colName, Object value, String comparator) {
-		ResultSet rs = getResultSet(colName, value, theTableName, comparator);
+	public static List<AbstractModel> getByValue(String theTableName, String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet(theTableName, colName, value, comparator);
 		List<AbstractModel> list = new ArrayList<AbstractModel>();
 		try {
 			while(rs.next()) {
@@ -292,13 +307,12 @@ public class AbstractModel {
 	 * getByValue - default table name to static variable
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown
-	 * @param colName
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
 	 * @param comparator
 	 * @return list of rows returned by search as Abstract Models
 	 */
-	public List<AbstractModel> getByValue(String colName, Object value, String comparator) {
+	public static List<AbstractModel> getByValue(String colName, Object value, String comparator) {
 		return getByValue(tableName, colName, value, comparator);
 	}
 	
@@ -306,13 +320,12 @@ public class AbstractModel {
 	 * getByValue - default comparator to equals
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown
-	 * @param colName
+	 * @param the table name
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
-	 * @param comparator
 	 * @return list of rows returned by search as Abstract Models
 	 */
-	public List<AbstractModel> getByValue(String theTableName, String colName, Object value) {
+	public static List<AbstractModel> getByValue(String theTableName, String colName, Object value) {
 		return getByValue(theTableName, colName, value, EQ);
 	}
 	
@@ -320,26 +333,24 @@ public class AbstractModel {
 	 * getByValue - default comparator to equals
 	 * Returns the first row returned by the search parameters as an Abstract Model
 	 * Returns null if an exception is thrown
-	 * @param colName
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
-	 * @param comparator
 	 * @return list of rows returned by search as Abstract Models
 	 */
-	public List<AbstractModel> getByValue(String colName, Object value) {
+	public static List<AbstractModel> getByValue(String colName, Object value) {
 		return getByValue(tableName, colName, value, EQ);
 	}
 	
 	/**
 	 * Given search parameters, returns a Result Set using a prepared statement
 	 * Returns null if an exception is thrown
-	 * @param colName
+	 * @param the table name
+	 * @param the column name
 	 * @param value
-	 * @param theTableName
 	 * @param comparator
 	 * @return ResultSet
 	 */
-	private ResultSet getResultSet(String colName, Object value, String theTableName, String comparator) {
+	private static ResultSet getResultSet(String theTableName, String colName, Object value, String comparator) {
 		String prepared = QUERY_BEGIN + "?" + WHERE + "?" + comparator + "?";
 		try {
 			java.sql.PreparedStatement prepState = connection.prepareStatement(prepared);
