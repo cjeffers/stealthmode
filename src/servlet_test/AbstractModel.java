@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import servlet_test.MyDBInfo;
 
 
@@ -86,6 +88,27 @@ public class AbstractModel {
 		this(theConnection, theTableName, new HashMap<String, Object>(), false);
 	}
 	
+	/**
+	 * ResultSet constructor - constructs using a SQL result set
+	 * Assumes the result set has already been moved to the correct row
+	 * Defaults isInDatabase to true
+	 * @param theConnection connection to the database server
+	 * @param theTableName name of the table in the database to use
+	 * @param theRS result set from which to construct the value map
+	 */
+	public AbstractModel(Connection theConnection, String theTableName, ResultSet theRS) {
+		this(theConnection, theTableName, new HashMap<String, Object>(), true);
+		try {
+			java.sql.ResultSetMetaData rsmd = theRS.getMetaData();
+			int count = rsmd.getColumnCount();
+			for (int i = 1; i <= count; i++) {
+				this.setValue(rsmd.getColumnName(i), theRS.getObject(i));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	// Getter and Setter
 	
@@ -128,7 +151,14 @@ public class AbstractModel {
 	
 	
 	/*
-	 * Instance variables and methods
+	 * Static variables and methods for querying the database
+	 * 
+	 * Methods:
+	 * getByValue
+	 * getOneByValue
+	 * getByID
+	 * getAll
+	 * getWhere
 	 */
 
 	private static Statement state;
@@ -136,78 +166,223 @@ public class AbstractModel {
 
 	// SQL query strings
 	private static String QUERY_BEGIN = "SELECT * FROM ";
-	private static String TABLE_BEGIN;
 	private static String WHERE = " WHERE ";
+	
+	private static String EQ = " = ";
+	private static String GR = " > ";
+	private static String LE = " < ";
+	private static String GR_EQ = " >= ";
+	private static String LE_EQ = " <= ";
 
-	/**
-	 * Given an id, returns all of the column values for the row
-	 * @param id
-	 * @return List<String> of column contents
-	 */
-	public static List<String> getByID(int id) {
-        return getByValue("id", Integer.toString(id));
-	}
 
-	/**
-	 * Returns all of the objects in the table as a list.
-	 * Technically, returns a List< List<String> >.
-	 * @return list of objects
+	
+	
+	/*
+	 * getOneByValue/getByValue
+	 * All Parameters:
+	 * String column name
+	 * Object value
+	 * String table name
+	 * String comparator
+	 * 
+	 * Versions:
+	 * all parameters
+	 * default table name to static variable
+	 * default comparator to equals
+	 * default both table name and comparator
+	 * 
+	 * NOTE: because both table name and comparator are Strings,
+	 * the two overloaded methods where these are individually
+	 * defaulted are only distinguishable by the order of the
+	 * parameters.  Ensure you don't mix this up.
+	 * 
+	 * getByValue returns a list of Abstract Models
+	 * getOneByValue returns a single Abstract Model
 	 */
-	public static List< List<String> > getAll() {
-		List< List<String> > allObjects = new ArrayList< List<String> >();
+	
+	/**
+	 * getOneByValue - all parameters
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown or the search returns zero results
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return row as an Abstract Model
+	 */
+	public AbstractModel getOneByValue(String theTableName, String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet(colName, value, theTableName, comparator);
+
 		try {
-			ResultSet rs = state.executeQuery(TABLE_BEGIN);
-
-			List<String> object;
-
-			while(rs.next()) {
-				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
-				int colNum = rsmd.getColumnCount();
-				object = new ArrayList<String>();
-
-				for (int i = 1; i <= colNum; i++) {
-					object.add(rs.getString(i));
-				}
-
-				allObjects.add(object);
+			if(rs.next()) {
+				return(new AbstractModel(connection, theTableName, rs));
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return allObjects;
-	}
-
-	/**
-	 * Returns an object given a column name index and entry value
-	 */
-	public static List<String> getByValue(String colName, String value) {
-		String query = TABLE_BEGIN + WHERE + colName + " = \"" + value + "\"";
-        System.out.println(query);
-		try {
-			ResultSet rs = state.executeQuery(query);
-
-			List<String> list = new ArrayList<String>();
-
-			if (rs.next()) {
-				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
-				int colNum = rsmd.getColumnCount();
-
-				for (int i = 1; i <= colNum; i++) {
-					list.add(rs.getString(i));
-				}
-
-				return list;
-			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	/**
+	 * getOneByValue - default table name to static variable
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown or the search returns zero results
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return row as an Abstract Model
+	 */
+	public AbstractModel getOneByValue(String colName, Object value, String comparator) {
+		return getOneByValue(tableName, colName, value, comparator);
+	}
 	
+	/**
+	 * getOneByValue - default comparator to equals
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown or the search returns zero results
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return row as an Abstract Model
+	 */
+	public AbstractModel getOneByValue(String theTableName, String colName, Object value) {
+		return getOneByValue(theTableName, colName, value, EQ);
+	}
 	
+	/**
+	 * getOneByValue - default comparator to equals
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown or the search returns zero results
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return row as an Abstract Model
+	 */
+	public AbstractModel getOneByValue(String colName, Object value) {
+		return getOneByValue(tableName, colName, value, EQ);
+	}
+	
+	/**
+	 * Returns the rows returned by the search parameters as a list of Abstract Models
+	 * Returns null if an exception is thrown
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return list of rows returned by search as Abstract Models
+	 */
+	public List<AbstractModel> getByValue(String theTableName, String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet(colName, value, theTableName, comparator);
+		List<AbstractModel> list = new ArrayList<AbstractModel>();
+		try {
+			while(rs.next()) {
+				list.add(new AbstractModel(connection, theTableName, rs));
+			}
+			return list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * getByValue - default table name to static variable
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return list of rows returned by search as Abstract Models
+	 */
+	public List<AbstractModel> getByValue(String colName, Object value, String comparator) {
+		return getByValue(tableName, colName, value, comparator);
+	}
+	
+	/**
+	 * getByValue - default comparator to equals
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return list of rows returned by search as Abstract Models
+	 */
+	public List<AbstractModel> getByValue(String theTableName, String colName, Object value) {
+		return getByValue(theTableName, colName, value, EQ);
+	}
+	
+	/**
+	 * getByValue - default comparator to equals
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return list of rows returned by search as Abstract Models
+	 */
+	public List<AbstractModel> getByValue(String colName, Object value) {
+		return getByValue(tableName, colName, value, EQ);
+	}
+	
+	/**
+	 * Given search parameters, returns a Result Set using a prepared statement
+	 * Returns null if an exception is thrown
+	 * @param colName
+	 * @param value
+	 * @param theTableName
+	 * @param comparator
+	 * @return ResultSet
+	 */
+	private ResultSet getResultSet(String colName, Object value, String theTableName, String comparator) {
+		String prepared = QUERY_BEGIN + "?" + WHERE + "?" + comparator + "?";
+		try {
+			java.sql.PreparedStatement prepState = connection.prepareStatement(prepared);
+			prepState.setString(1, theTableName);
+			prepState.setString(2, colName);
+			prepState.setObject(3, value);
+			return(prepState.executeQuery());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	/**
+	 * Returns the list of objects returned by executing the given
+	 * query on the table in the database.  The string passed in
+	 * is appended to "SELECT * FROM ", so that part is not needed.
+	 * Note:
+	 * The parameter is "theTableName", not to be confused with the
+	 * static variable "tableName".
+	 * IMPORTANT:
+	 * Prepared statements are not used so do not make this method
+	 * available to website users in any way.
+	 */
+	public static List<AbstractModel> getWhere(String sqlQuery, String theTableName) {
+		String query = QUERY_BEGIN + sqlQuery;
+		List<AbstractModel> list = new ArrayList<AbstractModel>();
+		
+		try {
+			ResultSet rs = state.executeQuery(query);
+
+
+			while (rs.next()) {
+				list.add(new AbstractModel(connection, theTableName, rs));
+			}
+			return list;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 
