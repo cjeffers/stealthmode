@@ -7,41 +7,137 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import servlet_test.MyDBInfo;
 
 
 /*
  * This class abstracts the accessing of the MySQL database
- * used to store data for the quiz website
+ * used to store data for the quiz website.  There are two
+ * main goals for this class:
+ * 
+ * 1) Provide static methods to ease querying the database's tables
+ * 2) Provide a framework for storing info from the database, so
+ *    that a row can be represented as a single object
  */
 public class AbstractModel {
 
 	/*
+	 * AbstractModel instance variables and methods.
+	 * 
+	 * An instance of an abstract model is a representation of a row 
+	 * in a database table.  All of its values are stored in a hash map, 
+	 * where the keys correspond to the column names and these map to 
+	 * their values.
+	 * 
+	 * getValue uses the map to get its value and setValue change the
+	 * map.  Neither interact with the database.
+	 * 
+	 * An AbstractModel can be written to the database by calling the
+	 * method "save()".  To remove the row from the database, call the
+	 * method "delete()".  Each instance also has a boolean which 
+	 * represents whether or not the instance is already in the database
+	 * or not.
+	 */
+	
+	private Map<String, Object> valueMap;
+	private Connection instance_connection;   // needed for save and delete
+	private String instance_tableName;        // needed for save and delete
+	private boolean isInDatabase;
+	
+	
+	// Constructors
+	
+	/**
+	 * Full constructor
+	 * @param theConnection connection to the database server
+	 * @param theTableName name of the table in the database to use
+	 * @param theValueMap map from column names to values
+	 * @param theIsInDatabase boolean
+	 */
+	public AbstractModel(Connection theConnection, String theTableName, Map<String, Object> theValueMap, boolean theIsInDatabase) {
+		instance_connection = theConnection;
+		instance_tableName = theTableName;
+		isInDatabase = theIsInDatabase;
+		valueMap = theValueMap;
+	}
+	
+	/**
+	 * Not in database constructor - defaults isInDatabase to false
+	 * @param theConnection connection to the database server
+	 * @param theTableName name of the table in the database to use
+	 * @param theValueMap map from column names to values
+	 */
+	public AbstractModel(Connection theConnection, String theTableName, Map<String, Object> theValueMap) {
+		this(theConnection, theTableName, theValueMap, false);
+	}
+	
+	/**
+	 * Minimum constructor - requires a connection and a table name.
+	 * Defaults isInDatabase to false.
+	 * Creates a new map for valueMap using a hash map implementation
+	 * @param theConnection connection to the database server
+	 * @param theTableName name of the table in the database to use
+	 */
+	public AbstractModel(Connection theConnection, String theTableName) {
+		this(theConnection, theTableName, new HashMap<String, Object>(), false);
+	}
+	
+	
+	// Getter and Setter
+	
+	/**
+	 * Returns the value associated with the given column name
+	 * Returns null of the column name is not in the map
+	 * @param colName
+	 * @return value
+	 */
+	public Object getValue(String colName) {
+		return valueMap.get(colName);
+	}
+	
+	/**
+	 * Sets the column name - value pairing
+	 * If this column name already existed in the map, overwrites
+	 * it.  Otherwise, adds it to the map
+	 * @param colName
+	 * @param value
+	 */
+	public void setValue(String colName, Object value) {
+		valueMap.put(colName, value);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
 	 * Instance variables and methods
 	 */
 
-	private static String tableName;
 	private static Statement state;
+	private static String tableName;
 
 	// SQL query strings
-	private static String QUERY_BEGIN;
+	private static String QUERY_BEGIN = "SELECT * FROM ";
+	private static String TABLE_BEGIN;
 	private static String WHERE = " WHERE ";
-
-	/**
-	 * Constructor requires a table name and an
-	 * array of the column names
-	 */
-	public AbstractModel(String theTableName, Connection theConnection){
-		tableName = theTableName;
-        QUERY_BEGIN = ("SELECT * FROM " + tableName);
-		try{
-			state = theConnection.createStatement();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Given an id, returns all of the column values for the row
@@ -60,7 +156,7 @@ public class AbstractModel {
 	public static List< List<String> > getAll() {
 		List< List<String> > allObjects = new ArrayList< List<String> >();
 		try {
-			ResultSet rs = state.executeQuery(QUERY_BEGIN);
+			ResultSet rs = state.executeQuery(TABLE_BEGIN);
 
 			List<String> object;
 
@@ -86,7 +182,7 @@ public class AbstractModel {
 	 * Returns an object given a column name index and entry value
 	 */
 	public static List<String> getByValue(String colName, String value) {
-		String query = QUERY_BEGIN + WHERE + colName + " = \"" + value + "\"";
+		String query = TABLE_BEGIN + WHERE + colName + " = \"" + value + "\"";
         System.out.println(query);
 		try {
 			ResultSet rs = state.executeQuery(query);
@@ -109,11 +205,14 @@ public class AbstractModel {
 		}
 		return null;
 	}
+	
+	
+	
 
 
 
 	/*
-	 * Static variables and methods
+	 * Static variables and methods for managing a server connection
 	 */
 
 	// Database info
@@ -166,185 +265,4 @@ public class AbstractModel {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*      Jacob's Database class created for HW 5.  Used for reference.
-
-	// column names
-	private static String[] colNames = {"productid", "name", "imagefile", "price"};
-
-	// name of the table in the SQL database
-	private static String tableName = "products";
-
-	// SQL login info
-	private static String password = MyDBInfo.MYSQL_PASSWORD;
-	private static String server = MyDBInfo.MYSQL_DATABASE_SERVER;
-	private static String dbName = MyDBInfo.MYSQL_DATABASE_NAME;
-	private static String username = MyDBInfo.MYSQL_USERNAME;
-
-	// SQL query strings
-	private static String QUERY_BEGIN = ("SELECT * FROM " + tableName);
-	private static String WHERE = " WHERE ";
-
-	// instance variables
-	private Connection connection;
-	private Statement statement;
-	private boolean open;         // true if the connection is open
-
-
-
-	 * Sets up the connection to the SQL database and
-	 * creates a statement that is used throughout
-	 * the class to execute queries and updates
-
-	public Database() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			connection = DriverManager.getConnection("jdbc:mysql://" + server, username, password);
-			open = true;
-
-			statement = connection.createStatement();
-			statement.executeQuery("USE " + dbName);
-
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Returns a list of all of the products in the database
-	 * @return product list
-
-	public List<Product> getAll() {
-		if (!open) throw new RuntimeException("connection is closed");
-
-		String query = QUERY_BEGIN;
-		List<Product> list = new ArrayList<Product>();
-		Product product;
-
-		try {
-			ResultSet rs = statement.executeQuery(query);
-			while(rs.next()) {
-				product = makeProduct(rs);
-				list.add(product);
-			}
-			return list;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Returns a product based on the given product id
-	 * @param product id
-	 * @return product
-
-	public Product getOne(String id) {
-		if (!open) throw new RuntimeException("connection is closed");
-
-		String query = QUERY_BEGIN + WHERE + colNames[0] + " = \"" + id + "\"";
-		try {
-			ResultSet rs = statement.executeQuery(query);
-			if (rs.next()) {
-				return makeProduct(rs);
-			}
-			return null;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Makes a product from the result set
-	 * @param result set
-	 * @return product
-
-	private Product makeProduct(ResultSet rs) {
-		try{
-			Product product = new Product(rs.getString(1), rs.getString(2),
-					rs.getString(3), Double.parseDouble(rs.getString(4)));
-			return product;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	/**
-	 * closes the connection to the SQL database
-
-	public void closeConnection() {
-		try {
-			connection.close();
-			open = false;
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * returns a list of the column names
-	 * @return list
-
-	public static List<String> getColumnNames() {
-		return Arrays.asList(colNames);
-	}
-	*/
 }
