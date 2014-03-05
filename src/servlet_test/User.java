@@ -7,7 +7,30 @@ public class User {
 	
 	private AbstractModel model;
 	
-	public User(String theUsername, byte[] password, boolean administrator){
+	/**
+	 * Access a user based off its username
+	 * @param theUsername the username associated with the user
+	 */
+	public User(String theUsername){
+		model = AbstractModel.getOneByValue("users", "Name", (Object)theUsername);
+	}
+	
+	/**
+	 * Access a user based off its id
+	 * @param id the id associated with the user
+	 */
+	public User(int id){
+		model = AbstractModel.getOneByValue("users", "ID", (Object)id);
+	}
+	
+	
+	/**
+	 * Creates a new user
+	 * @param username
+	 * @param password
+	 * @param administrator
+	 */
+	public User(String username, String password, boolean administrator){
 		model = new AbstractModel(AbstractModel.getConnection(), "users");
 	}
 	
