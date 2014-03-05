@@ -136,7 +136,7 @@ public class User extends AbstractModel{
      * Returns a list of all administrators.
      * @return a list of all Users who are administrators.
      */
-    public static List<User> findAdministrators()
+    public static List<User> findAdministrators() //check
 
     // add/get linked things
     // friends
@@ -152,7 +152,7 @@ public class User extends AbstractModel{
      */
     public void addFriend(int friendID)
 
-    // quizzes created
+    // quizzes created---- unnecessary now
     /**
      * Get a list of all quizzes created by this user.
      * @return A List of quizzes that the user created.
@@ -188,7 +188,7 @@ public class User extends AbstractModel{
      * @return a list of users with values for column that match value
      */
     @Override
-    public static List<User> getByValue(String colName, Object value)
+    public static List<User> getByValue(String colName, Object value) //check
 
     /**
      * Return all users where colName compares as specified to value.
@@ -201,7 +201,7 @@ public class User extends AbstractModel{
      *         specified.
      */
     @Override
-    public static List<User> getByValue(String colName, Object value, String comparator)
+    public static List<User> getByValue(String colName, Object value, String comparator) //check
 
     /**
      * Return the first user where colName matches value.
@@ -212,7 +212,7 @@ public class User extends AbstractModel{
      * @return the first User where colName matches value.
      */
     @Override
-    public static User getOneByValue(String colName, Object value)
+    public static User getOneByValue(String colName, Object value) //check
 
     /**
      * Return the first user where colName compares as specified to value.
@@ -225,7 +225,7 @@ public class User extends AbstractModel{
      *         specified.
      */
     @Override
-    public static User getOneByValue(String colName, Object value, String comparator)
+    public static User getOneByValue(String colName, Object value, String comparator) //check
 
     /**
      * Get a list of all users.

@@ -356,7 +356,7 @@ public class AbstractModel {
 	 * @param comparator
 	 * @return ResultSet
 	 */
-	private static ResultSet getResultSet(String theTableName, String colName, Object value, String comparator) {
+	protected static ResultSet getResultSet(String theTableName, String colName, Object value, String comparator) {
 		String prepared = QUERY_BEGIN + theTableName + WHERE + colName + comparator + "?";
 		try {
 			java.sql.PreparedStatement prepState = connection.prepareStatement(prepared);
