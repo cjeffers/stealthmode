@@ -323,6 +323,14 @@ public class AbstractModel {
 	public static List<AbstractModel> getByValue(String colName, Object value) {
 		return getByValue(tableName, colName, value, EQ);
 	}
+	
+	/**
+	 * Allows a client to access the map
+	 * @return the map associated with an abstract model.
+	 */
+	public Map<String, Object> getMap(){
+		return valueMap;
+	}
 
 	/**
 	 * Given search parameters, returns a Result Set using a prepared statement
