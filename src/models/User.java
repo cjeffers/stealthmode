@@ -138,6 +138,24 @@ public class User extends AbstractModel{
 		newNote.setValue("SentBy", getName());
 	}
 	
+	
+	//Once the quiz class is made, change String quizName into a quiz type.
+	/**
+	 * Returns the quizzes that this user has made.
+	 * @return A list of strings, where each string represents a quiz this user has made.
+	 */
+	public List<String> seeQuizzesMade(){
+		List<String> quizzesMadeByMe = new ArrayList<String>();
+		List<AbstractModel> myQuizzes = getByValue("Quizzes", "MadeBy", getName(), "=");
+		for (int i = 0; i < myQuizzes.size(); i++){
+			AbstractModel currQuiz = myQuizzes.get(i);
+			String quizName = (String) currQuiz.getValue("Name");
+			quizzesMadeByMe.add(quizName);
+		}
+		return quizzesMadeByMe;
+	}
+	
+	
 	/**
 	 * Sets administrator privilege
 	 * @param isAdministrator whether the user is an administrator or not
