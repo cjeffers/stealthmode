@@ -119,10 +119,9 @@ public class User extends AbstractModel{
 			AbstractModel currChallenge = challengesSentToMe.get(i);
 			String sentBy = (String) currChallenge.getValue("SentBy");
 			String quiz = (String) currChallenge.getValue("Quiz");
-			HashMap<String, String> Challenge = new ArrayList<String>();
-			note.add(sentBy);
-			note.add(message);
-			notes.add(note);
+			HashMap<String, String> challenge = new HashMap<String, String>();
+			challenge.put(sentBy, quiz);
+			challenges.add(challenge);
 		}
 		return challenges;
 	}
