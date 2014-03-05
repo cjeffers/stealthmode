@@ -1,4 +1,4 @@
-package servlet_test;
+package models;
 
 /*
  * This file stores the info needed to access the
