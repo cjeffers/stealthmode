@@ -20,7 +20,7 @@ public class User extends AbstractModel{
      * @param fullname user's full name, not necessarily unique
      * @param administrator is this user an administrator?
      */
-    public User(String username, String password, String fullname, boolean administrator)
+    public User(String username, String password, String fullname, boolean administrator) //check
 
     /**
      * Create a new User from an AbstractModel.
@@ -28,7 +28,7 @@ public class User extends AbstractModel{
      * of AbstractModel.
      * @param am the AbstractModel to create the User from
      */
-    public User(AbstractModel am)
+    public User(AbstractModel am) //check
 
 
     // set/get/find by attributes
@@ -40,7 +40,7 @@ public class User extends AbstractModel{
      *         doesn't exist
      */
     @Override
-    public static User findByID(int id)
+    public static User findByID(int id) //check
 
     // username
 
@@ -48,13 +48,13 @@ public class User extends AbstractModel{
      * Get user's username.
      * @return the username
      */
-    public String getUserName()
+    public String getUserName() //check
 
     /**
      * Set the user's username.
      * @param username the new username
      */
-    public void setUserName(String username)
+    public void setUserName(String username) //check
 
     /**
      * Find a user by the given username.
@@ -62,7 +62,7 @@ public class User extends AbstractModel{
      * @return the instance of User with the given username, or null if
      *         it doesn't exist
      */
-    public static User findByUserName(String username)
+    public static User findByUserName(String username) //check
 
 
     // actual name
@@ -71,13 +71,13 @@ public class User extends AbstractModel{
      * Get user's full name.
      * @return the full name
      */
-    public String getFullName()
+    public String getFullName() //check
 
     /**
      * Set the user's full name.
      * @param full name the new full name
      */
-    public void setFullName(String name)
+    public void setFullName(String name) //check
 
     /**
      * Find all users by the given full name.

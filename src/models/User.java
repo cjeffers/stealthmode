@@ -23,9 +23,20 @@ public class User extends AbstractModel{
     }
 
     /**
+     * Create a new User from an AbstractModel.
+     * This is so findBy*() methods can return instances of User instead
+     * of AbstractModel.
+     * @param am the AbstractModel to create the User from
+     */
+    public User(AbstractModel am){	
+    	super(am.getConnection(), USERS_DATABASE, am.getMap(), true);
+    }
+    
+    
+    /**
      * Access a user based off its id
      * @param id the id associated with the user
-     * @return User instance corresponding to the user
+     * @return User instance corresponding to the user, or null if it doesn't exist
      */
     public static User findByID(int id){
         User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "id", (Object)id);
@@ -39,12 +50,13 @@ public class User extends AbstractModel{
      * @param password
      * @param administrator
      */
-    public User(String username, String password, boolean administrator){
+    public User(String username, String password, String fullname, boolean administrator){
         super(AbstractModel.getConnection(), USERS_DATABASE);
         if(!nameInUse(username)){
-            setName(username);
+            setUserName(username);
             setPassword(password);
             setAdministrator(administrator);
+            setFullname(fullname);
         }
     }
 
@@ -54,7 +66,7 @@ public class User extends AbstractModel{
      */
     public List<User> seeFriends(){
         List<User> friends = new ArrayList<User>();
-        List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getName(), "=");
+        List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getUserName(), "=");
         for (int i = 0; i < modelsOfFriends.size(); i++){
             AbstractModel currFriends = modelsOfFriends.get(i);
             User toAdd = findByUsername((String)currFriends.getValue("MyName"));
@@ -71,9 +83,9 @@ public class User extends AbstractModel{
     public void addFriend(String username){
         AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), FRIENDS_DATABASE);
         newFriend.setValue("FriendsWith", username);
-        newFriend.setValue("MyName", getName());
+        newFriend.setValue("MyName", getUserName());
         AbstractModel reverseNewFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
-        reverseNewFriend.setValue("FriendsWith", getName());
+        reverseNewFriend.setValue("FriendsWith", getUserName());
         reverseNewFriend.setValue("MyName", username);
         //newFriend.save();
         //reverseNewFriend.save;
@@ -85,7 +97,7 @@ public class User extends AbstractModel{
      */
     public List<ArrayList<String>> seeNotes(){
         List<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
-        List<AbstractModel> notesSentToMe = getByValue("Notes", "SentTo", getName(), "=");
+        List<AbstractModel> notesSentToMe = getByValue("Notes", "SentTo", getUserName(), "=");
         for (int i = 0; i < notesSentToMe.size(); i++){
             AbstractModel currNote = notesSentToMe.get(i);
             String sentBy = (String) currNote.getValue("SentBy");
@@ -107,7 +119,7 @@ public class User extends AbstractModel{
         AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", message);
-        newNote.setValue("SentBy", getName());
+        newNote.setValue("SentBy", getUserName());
     }
 
     //Needs to be changed to a quiz once quiz functionality is made
@@ -117,7 +129,7 @@ public class User extends AbstractModel{
      */
     public List<HashMap<String, String>> seeChallenges(){
         List<HashMap<String, String>> challenges = new ArrayList<HashMap<String, String>>();
-        List<AbstractModel> challengesSentToMe = getByValue("Challenges", "SentTo", getName(), "=");
+        List<AbstractModel> challengesSentToMe = getByValue("Challenges", "SentTo", getUserName(), "=");
         for (int i = 0; i < challengesSentToMe.size(); i++){
             AbstractModel currChallenge = challengesSentToMe.get(i);
             String sentBy = (String) currChallenge.getValue("SentBy");
@@ -138,7 +150,7 @@ public class User extends AbstractModel{
         AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", quiz);
-        newNote.setValue("SentBy", getName());
+        newNote.setValue("SentBy", getUserName());
     }
 
 
@@ -149,7 +161,7 @@ public class User extends AbstractModel{
      */
     public List<String> seeQuizzesMade(){
         List<String> quizzesMadeByMe = new ArrayList<String>();
-        List<AbstractModel> myQuizzes = getByValue("Quizzes", "MadeBy", getName(), "=");
+        List<AbstractModel> myQuizzes = getByValue("Quizzes", "MadeBy", getUserName(), "=");
         for (int i = 0; i < myQuizzes.size(); i++){
             AbstractModel currQuiz = myQuizzes.get(i);
             String quizName = (String) currQuiz.getValue("Name");
@@ -188,7 +200,7 @@ public class User extends AbstractModel{
      * Sets the name of the user. If the name is already in use, does nothing.
      * @param username the desired username
      */
-    public void setName(String username){
+    public void setUserName(String username){
         if(nameInUse(username)){
             setValue("Username", username);
         }
@@ -198,10 +210,26 @@ public class User extends AbstractModel{
      * Gets the name of the user
      * @return the name of the user
      */
-    public String getName(){
+    public String getUserName(){
         return (String) getValue("Username");
     }
 
+    /**
+     * Sets the name of the user. If the name is already in use, does nothing.
+     * @param username the desired username
+     */
+    public void setFullname(String fullname){
+        setValue("Fullname", fullname);
+    }
+
+    /**
+     * Gets the name of the user
+     * @return the name of the user
+     */
+    public String getFullname(){
+        return (String) getValue("Fullname");
+    }
+    
     /**
      * Turns the password into a hash and stores that hash
      * @param password the password, in string form.
