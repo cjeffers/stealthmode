@@ -107,6 +107,38 @@ public class User extends AbstractModel{
 		newNote.setValue("SentBy", getName());
 	}
 	
+	//Needs to be changed to a quiz once quiz functionality is made
+	/**
+	 * Sees a list of challenges sent to this user.
+	 * @return returns an array of challenges. Each challenge is a list of strings with two values-the person who sent it, and the quiz.
+	 */
+	public List<HashMap<String, String>> seeChallenges(){
+		List<HashMap<String, String>> challenges = new ArrayList<HashMap<String, String>>();
+		List<AbstractModel> challengesSentToMe = getByValue("Challenges", "SentTo", getName(), "=");
+		for (int i = 0; i < challengesSentToMe.size(); i++){
+			AbstractModel currChallenge = challengesSentToMe.get(i);
+			String sentBy = (String) currChallenge.getValue("SentBy");
+			String quiz = (String) currChallenge.getValue("Quiz");
+			HashMap<String, String> Challenge = new ArrayList<String>();
+			note.add(sentBy);
+			note.add(message);
+			notes.add(note);
+		}
+		return challenges;
+	}
+	
+	/**
+	 * Sends a challenge to someone
+	 * @param recipient Who the challenge is sent to
+	 * @param quiz What the quiz is
+	 */
+	public void sendChallenge(String recipient, String quiz){
+		AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+		newNote.setValue("SentTo", recipient);
+		newNote.setValue("Message", quiz);
+		newNote.setValue("SentBy", getName());
+	}
+	
 	/**
 	 * Sets administrator privilege
 	 * @param isAdministrator whether the user is an administrator or not
