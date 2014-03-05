@@ -9,14 +9,15 @@ import java.util.Map;
 
 public class User extends AbstractModel{
 	
-	
+	private static String USERS_DATABASE = "users";
+	private static String FRIENDS_DATABASE = "friends";
 	
 	/**
 	 * Access a user based off its username
 	 * @param theUsername the username associated with the user
 	 */
-	public static User findUser(String theUsername){
-		User user = (User) AbstractModel.getOneByValue("users", "Name", (Object)theUsername);
+	public static User findByUsername(String theUsername){
+		User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "name", (Object)theUsername);
 		return user;
 	}
 	
@@ -24,8 +25,8 @@ public class User extends AbstractModel{
 	 * Access a user based off its id
 	 * @param id the id associated with the user
 	 */
-	public static User findUser(int id){
-		User user = (User) AbstractModel.getOneByValue("users", "ID", (Object)id);
+	public static User findByID(int id){
+		User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "id", (Object)id);
 		return user;
 	}
 	
@@ -37,7 +38,7 @@ public class User extends AbstractModel{
 	 * @param administrator
 	 */
 	public User(String username, String password, boolean administrator){
-		super(AbstractModel.getConnection(), "users");
+		super(AbstractModel.getConnection(), USERS_DATABASE);
 		if(!nameInUse(username)){
 			setName(username);
 			setPassword(password);
@@ -51,10 +52,10 @@ public class User extends AbstractModel{
 	 */
 	public List<User> seeFriends(){
 		List<User> friends = new ArrayList<User>();
-		List<AbstractModel> modelsOfFriends = getByValue("Friends", "FriendsWith", getName(), "=");
+		List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getName(), "=");
 		for (int i = 0; i < modelsOfFriends.size(); i++){
 			AbstractModel currFriends = modelsOfFriends.get(i);
-			User toAdd = findUser((String)currFriends.getValue("MyName"));
+			User toAdd = findByUsername((String)currFriends.getValue("MyName"));
 			friends.add(toAdd);
 		}
 		return friends;
@@ -66,7 +67,7 @@ public class User extends AbstractModel{
 	 * @param username The username of the new friend.
 	 */
 	public void addFriend(String username){
-		AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
+		AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), FRIENDS_DATABASE);
 		newFriend.setValue("FriendsWith", username);
 		newFriend.setValue("MyName", getName());
 		AbstractModel reverseNewFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
@@ -178,7 +179,7 @@ public class User extends AbstractModel{
 	 * @return whether the name is in user
 	 */
 	public boolean nameInUse(String username){
-		return (findUser(username) != null);
+		return (findByUsername(username) != null);
 	}
 	
 	/**
