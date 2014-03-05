@@ -55,7 +55,7 @@ public class User extends AbstractModel{
         if(!nameInUse(username)){
             setUserName(username);
             setPassword(password);
-            setAdministrator(administrator);
+            setAdminPriveledge(administrator);
             setFullname(fullname);
         }
     }
@@ -64,7 +64,7 @@ public class User extends AbstractModel{
      * Sees everyone that the current user is friends with.
      * @return Returns a List<User> which is comprised of everyone the user's budsies.
      */
-    public List<User> seeFriends(){
+    public List<User> getFriends(){
         List<User> friends = new ArrayList<User>();
         List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getUserName(), "=");
         for (int i = 0; i < modelsOfFriends.size(); i++){
@@ -175,8 +175,8 @@ public class User extends AbstractModel{
      * Sets administrator privilege
      * @param isAdministrator whether the user is an administrator or not
      */
-    public void setAdministrator(boolean isAdministrator){
-        setValue("Administrator", isAdministrator);
+    public void setAdminPriveledge(boolean isAdmin){
+        setValue("Administrator", isAdmin);
     }
 
     /**
@@ -230,6 +230,20 @@ public class User extends AbstractModel{
         return (String) getValue("Fullname");
     }
     
+    
+    /**
+     * Find all users by the given full name.
+     * @param fullname the full name to search for
+     * @return a list of Users with the given full name, which is empty
+     *         if none exist
+     */
+    public static List<User> findByName(String fullname){
+    	List<User> result = new ArrayList<User>();
+    	//Needs getAll functionality from AM.
+    	return result;
+    }
+    
+    
     /**
      * Turns the password into a hash and stores that hash
      * @param password the password, in string form.
@@ -246,6 +260,23 @@ public class User extends AbstractModel{
         return (byte[]) getValue("Password");
     }
 
+    
+    /**
+     * Set the URL for the user's profile picture.
+     * @param url the url for the picture
+     */
+    public void setPicURL(String url){
+    	setValue("PicURL", url);
+    }
+    
+    
+    /**
+     * Get the URL for the user's profile picture.
+     * @return the URL as a String
+     */
+    public String getPicURL(){
+    	return (String) getValue("PicURL");
+    }
     /**
      * returns whether the user inputed the correct password or not
      * @param passwordAttempt the user's attempt at a password

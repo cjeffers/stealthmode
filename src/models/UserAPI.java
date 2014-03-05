@@ -85,7 +85,7 @@ public class User extends AbstractModel{
      * @return a list of Users with the given full name, which is empty
      *         if none exist
      */
-    public static List<User> findByName(String fullname)
+    public static List<User> findByName(String fullname) //Waiting for getAll functionality in AM
 
 
     // password
@@ -96,14 +96,14 @@ public class User extends AbstractModel{
      * hash.
      * @param password the new password
      */
-    public void setPassword(String password)
+    public void setPassword(String password) //Check, minus the salt
 
     /**
      * Check to see if the guess matches the password.
      * @param guess the string to check against the stored hash.
      * @return true if the guess matches, false otherwise.
      */
-    public boolean isPasswordCorrect(String guess)
+    public boolean isPasswordCorrect(String guess) //Check
 
 
     // prof pic url
@@ -111,26 +111,26 @@ public class User extends AbstractModel{
      * Set the URL for the user's profile picture.
      * @param url the url for the picture
      */
-    public void setPicURL(String url)
+    public void setPicURL(String url) //check
 
     /**
      * Get the URL for the user's profile picture.
      * @return the URL as a String
      */
-    public String getPicURL()
+    public String getPicURL() //check
 
     // administrator
     /**
      * Set whether or not the user is an administrator.
      * @param isAdmin true if setting the user to admin, false if not.
      */
-    public void setAdminPrivilege(boolean isAdmin)
+    public void setAdminPrivilege(boolean isAdmin) //check
 
     /**
      * Returns whether or not the user is an administrator.
      * @return true if the user is an administrator, false if not.
      */
-    public boolean isAdministrator()
+    public boolean isAdministrator() //check
 
     /**
      * Returns a list of all administrators.
@@ -144,7 +144,7 @@ public class User extends AbstractModel{
      * Get a list of all friends.
      * @return a list of all users who are friends with this user.
      */
-    public List<User> getFriends()
+    public List<User> getFriends() //check
 
     /**
      * Make this user friends with someone else.
