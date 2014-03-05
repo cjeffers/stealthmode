@@ -1,26 +1,30 @@
-package servlet_test;
+package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class User {
+public class User extends AbstractModel{
 	
-	private AbstractModel model;
+	
 	
 	/**
 	 * Access a user based off its username
 	 * @param theUsername the username associated with the user
 	 */
-	public User(String theUsername){
-		model = AbstractModel.getOneByValue("users", "Name", (Object)theUsername);
+	public static User findUser(String theUsername){
+		User user = (User) AbstractModel.getOneByValue("users", "Name", (Object)theUsername);
+		return user;
 	}
 	
 	/**
 	 * Access a user based off its id
 	 * @param id the id associated with the user
 	 */
-	public User(int id){
-		model = AbstractModel.getOneByValue("users", "ID", (Object)id);
+	public static User findUser(int id){
+		User user = (User) AbstractModel.getOneByValue("users", "ID", (Object)id);
+		return user;
 	}
 	
 	
@@ -31,15 +35,25 @@ public class User {
 	 * @param administrator
 	 */
 	public User(String username, String password, boolean administrator){
-		model = new AbstractModel(AbstractModel.getConnection(), "users");
+		super(AbstractModel.getConnection(), "users");
+		setName(username);
+		setPassword(password);
+	}
+	
+	public void setName(String username){
+		setValue("Username", username);
+	}
+	
+	public String getName(){
+		return (String) getValue("Username");
 	}
 	
 	public void setPassword(String password){
-		model.setValue("Password", generateHash(password));
+		setValue("Password", generateHash(password));
 	}
 	
 	public byte[] getPasswordHash(){
-		return (byte[]) model.getValue("Password");
+		return (byte[]) getValue("Password");
 	}
 	
 	public boolean correctPassword(String passwordAttempt){

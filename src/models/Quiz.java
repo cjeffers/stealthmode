@@ -1,4 +1,4 @@
-package servlet_test;
+package models;
 
 import java.util.List;
 
