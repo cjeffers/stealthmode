@@ -41,7 +41,7 @@ public class AbstractModel {
 	 */
 
 	private Map<String, Object> valueMap;
-	//private Connection instance_connection;   // needed for save and delete
+    //private Connection connection;   // needed for save and delete
 	private String instance_tableName;        // needed for save and delete
 	private boolean isInDatabase;
 
@@ -127,21 +127,6 @@ public class AbstractModel {
 	public void setValue(String colName, Object value) {
 		valueMap.put(colName, value);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -373,7 +358,7 @@ public class AbstractModel {
 	 * available to website users in any way.
 	 */
 	public static List<AbstractModel> getWhere(String sqlQuery, String theTableName) {
-		String query = QUERY_BEGIN + sqlQuery;
+		String query = QUERY_BEGIN + theTableName + WHERE + sqlQuery;
 		List<AbstractModel> list = new ArrayList<AbstractModel>();
 
 		try {
@@ -416,8 +401,8 @@ public class AbstractModel {
 
 			connection = DriverManager.getConnection("jdbc:mysql://" + server, username, password);
 
-			Statement statement = connection.createStatement();
-			statement.executeQuery("USE " + dbName);
+			state = connection.createStatement();
+			state.executeQuery("USE " + dbName);
 
 		} catch(SQLException e) {
 			e.printStackTrace();
