@@ -77,6 +77,37 @@ public class User extends AbstractModel{
 	}
 	
 	/**
+	 * Sees a list of notes sent to this user.
+	 * @return returns an array of notes. Each note is a list of strings with two values-the person who sent it, and the message.
+	 */
+	public List<ArrayList<String>> seeNotes(){
+		List<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
+		List<AbstractModel> notesSentToMe = getByValue("Notes", "SentTo", getName(), "=");
+		for (int i = 0; i < notesSentToMe.size(); i++){
+			AbstractModel currNote = notesSentToMe.get(i);
+			String sentBy = (String) currNote.getValue("SentBy");
+			String message = (String) currNote.getValue("Message");
+			ArrayList<String> note = new ArrayList<String>();
+			note.add(sentBy);
+			note.add(message);
+			notes.add(note);
+		}
+		return notes;
+	}
+	
+	/**
+	 * Sends a note to someone
+	 * @param recipient Who the message is sent to
+	 * @param message What the message is
+	 */
+	public void sendNote(String recipient, String message){
+		AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+		newNote.setValue("SentTo", recipient);
+		newNote.setValue("Message", message);
+		newNote.setValue("SentBy", getName());
+	}
+	
+	/**
 	 * Sets administrator privilege
 	 * @param isAdministrator whether the user is an administrator or not
 	 */
@@ -159,6 +190,102 @@ public class User extends AbstractModel{
 		}
 		md.update(password.getBytes());
 		return md.digest();
+	}
+	
+	/**
+	 * Turns the user into a winner of the amateur author award
+	 * @param won whether the user has won it.
+	 */
+	public void setAmateurAuthor(boolean won){
+		setValue("AmateurAuthor", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the Amateur Author award.
+	 */
+	public boolean hasWonAmateurAuthor(){
+		return (Boolean) getValue("AmateurAuthor");
+	}
+	
+	/**
+	 * Turns the user into a winner of the prolific author award
+	 * @param won whether the user has won it.
+	 */
+	public void setProlificAuthor(boolean won){
+		setValue("ProlificAuthor", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the prolific Author award.
+	 */
+	public boolean hasWonProlificAuthor(){
+		return (Boolean) getValue("ProlificAuthor");
+	}
+	
+	/**
+	 * Turns the user into a winner of the prodigious author award
+	 * @param won whether the user has won it.
+	 */
+	public void setProdigiousAuthor(boolean won){
+		setValue("AmateurAuthor", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the Prodigious Author award.
+	 */
+	public boolean hasWonProdigiousAuthor(){
+		return (Boolean) getValue("ProdigiousAuthor");
+	}
+	
+	/**
+	 * Turns the user into a winner of the quiz machine award
+	 * @param won whether the user has won it.
+	 */
+	public void setQuizMachine(boolean won){
+		setValue("QuizMachine", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the QuizMachine award.
+	 */
+	public boolean hasWonQuizMachine(){
+		return (Boolean) getValue("QuizMachine");
+	}
+	
+	/**
+	 * Turns the user into a winner of the I am the greatest award
+	 * @param won whether the user has won it.
+	 */
+	public void setIsGreatest(boolean won){
+		setValue("IsGreatest", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the I am the greatest award.
+	 */
+	public boolean hasWonIsGreatest(){
+		return (Boolean) getValue("IsGreatest");
+	}
+	
+	/**
+	 * Turns the user into a winner of the practice makes perfect award
+	 * @param won whether the user has won it.
+	 */
+	public void setPracticed(boolean won){
+		setValue("PracticePerfect", won);
+	}
+	
+	/**
+	 * Sees if the user has won the award
+	 * @return if the user has won the Practice Makes Perfect award.
+	 */
+	public boolean hasWonPracticed(){
+		return (Boolean) getValue("PracticePerfect");
 	}
 	
 	public void commit(){
