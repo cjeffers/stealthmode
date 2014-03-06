@@ -128,6 +128,48 @@ public class AbstractModel {
 		valueMap.put(colName, value);
 	}
 
+	// save and delete
+
+	/**
+	 * Saves this AbstractModel's data in the database.
+	 * If it is not already in the table, it is added.
+	 * Otherwise, the values are simply updated.  Sets
+	 * isInDatabase to be true.
+	 */
+	public void save() {
+		if(!isInDatabase) insert();
+		update();
+	}
+
+	/**
+	 * Inserts this AbstractModel's id into the database.
+	 * Assumes this model does not already exist in the table.
+	 * Only inserts the id field.  Other fields can then be
+	 * inserted via an update.
+	 */
+	private void insert() {
+
+	}
+
+	/**
+	 * Updates this AbstractModel's data in the database.
+	 * Uses the model's id to identify the row to update.
+	 * Therefore, an AbstractModel's id can not change or
+	 * be updated.
+	 */
+	private void update() {
+
+	}
+
+	/**
+	 * Deletes this AbstractModel from the database if it
+	 * is already in it.  Otherwise, does nothing.  Sets
+	 * isInDatabase to be false.
+	 */
+	public void delete() {
+
+	}
+
 
 
 	/*
@@ -178,6 +220,33 @@ public class AbstractModel {
 	 * @param id
 	 * @return the row as an Abstract Model
 	 */
+
+	/**
+	 * getAll
+	 * Returns all of the rows in the given table as a list
+	 * of AbstractModels.  Exceptions result in returning
+	 * null.  Empty tables return empty lists.
+	 */
+	public static List<AbstractModel> getAll(String theTableName) {
+		try {
+			ResultSet rs = state.executeQuery(QUERY_BEGIN + theTableName);
+			return getFromRS(rs, theTableName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * getAll - defaulted table name
+	 * table name defaulted to the static variable
+	 * Returns all of the rows in the given table as a list
+	 * of AbstractModels.  Exceptions result in returning
+	 * null.  Empty tables return empty lists.
+	 */
+	public static List<AbstractModel> getAll() {
+		return getAll(tableName);
+	}
 
 	/*
 	 * getOneByValue/getByValue
@@ -274,16 +343,7 @@ public class AbstractModel {
 	 */
 	public static List<AbstractModel> getByValue(String theTableName, String colName, Object value, String comparator) {
 		ResultSet rs = getResultSet(theTableName, colName, value, comparator);
-		List<AbstractModel> list = new ArrayList<AbstractModel>();
-		try {
-			while(rs.next()) {
-				list.add(new AbstractModel(connection, theTableName, rs));
-			}
-			return list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return getFromRS(rs, theTableName);
 	}
 
 	/**
@@ -323,13 +383,30 @@ public class AbstractModel {
 	public static List<AbstractModel> getByValue(String colName, Object value) {
 		return getByValue(tableName, colName, value, EQ);
 	}
-	
+
 	/**
 	 * Allows a client to access the map
 	 * @return the map associated with an abstract model.
 	 */
 	public Map<String, Object> getMap(){
 		return valueMap;
+    }
+
+    /**
+	 * Returns a list of AbstractModels given a Result Set
+	 * and the table name
+	 */
+	private static List<AbstractModel> getFromRS(ResultSet rs, String theTableName) {
+		try {
+			List<AbstractModel> list = new ArrayList<AbstractModel>();
+			while(rs.next()) {
+				list.add(new AbstractModel(connection, theTableName, rs));
+			}
+			return list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
