@@ -2,7 +2,7 @@ package models;
 
 import java.util.List;
 
-public class Quiz {
+public class Quiz extends AbstractModel{
 
 	private AbstractModel model;
 	
@@ -14,11 +14,11 @@ public class Quiz {
 	 * @param givenMultiplePages whether the quiz consists of multiple pages
 	 * @param givenDateMade the date the quiz was made
 	 */
-	public Quiz(String givenName, boolean givenTimed, boolean givenMultiplePages, long givenDateMade){
-		model = new AbstractModel(AbstractModel.getConnection(), "quizzes");
-		setTimed(givenTimed);
-		setMultiplePages(givenMultiplePages);
-		setDateMade(givenDateMade);
+	public Quiz(String givenName, boolean theTimed, boolean theMultiplePages, long theDateMade){
+		super("quizzes");
+		setTimed(theTimed);
+		setMultiplePages(theMultiplePages);
+		setDateMade(theDateMade);
 	}
 	
 	public int getID(){
