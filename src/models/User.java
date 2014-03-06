@@ -2,6 +2,9 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +31,11 @@ public class User extends AbstractModel{
      * of AbstractModel.
      * @param am the AbstractModel to create the User from
      */
-    public User(AbstractModel am){	
-    	super(am.getConnection(), USERS_DATABASE, am.getMap(), true);
+    public User(AbstractModel am){
+    	super(AbstractModel.getConnection(), USERS_DATABASE, am.getMap(), true);
     }
-    
-    
+
+
     /**
      * Access a user based off its id
      * @param id the id associated with the user
@@ -55,7 +58,7 @@ public class User extends AbstractModel{
         if(!nameInUse(username)){
             setUserName(username);
             setPassword(password);
-            setAdministrator(administrator);
+            setAdminPriveledge(administrator);
             setFullname(fullname);
         }
     }
@@ -64,7 +67,7 @@ public class User extends AbstractModel{
      * Sees everyone that the current user is friends with.
      * @return Returns a List<User> which is comprised of everyone the user's budsies.
      */
-    public List<User> seeFriends(){
+    public List<User> getFriends(){
         List<User> friends = new ArrayList<User>();
         List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getUserName(), "=");
         for (int i = 0; i < modelsOfFriends.size(); i++){
@@ -73,6 +76,21 @@ public class User extends AbstractModel{
             friends.add(toAdd);
         }
         return friends;
+    }
+
+    /**
+     * Returns a list of all administrators.
+     * @return a list of all Users who are administrators.
+     */
+    public List<User> findAdministrators(){
+        List<User> administrators = new ArrayList<User>();
+        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "Administrator", "true", "=");
+        for (int i = 0; i < modelsOfAdmins.size(); i++){
+            AbstractModel currAdmin = modelsOfAdmins.get(i);
+            User toAdd = findByUsername((String)currAdmin.getValue("Username"));
+            administrators.add(toAdd);
+        }
+        return administrators;
     }
 
     /**
@@ -90,6 +108,8 @@ public class User extends AbstractModel{
         //newFriend.save();
         //reverseNewFriend.save;
     }
+
+
 
     /**
      * Sees a list of notes sent to this user.
@@ -175,8 +195,8 @@ public class User extends AbstractModel{
      * Sets administrator privilege
      * @param isAdministrator whether the user is an administrator or not
      */
-    public void setAdministrator(boolean isAdministrator){
-        setValue("Administrator", isAdministrator);
+    public void setAdminPriveledge(boolean isAdmin){
+        setValue("Administrator", isAdmin);
     }
 
     /**
@@ -229,7 +249,21 @@ public class User extends AbstractModel{
     public String getFullname(){
         return (String) getValue("Fullname");
     }
-    
+
+
+    /**
+     * Find all users by the given full name.
+     * @param fullname the full name to search for
+     * @return a list of Users with the given full name, which is empty
+     *         if none exist
+     */
+    public static List<User> findByName(String fullname){
+    	List<User> result = new ArrayList<User>();
+    	//Needs getAll functionality from AM.
+    	return result;
+    }
+
+
     /**
      * Turns the password into a hash and stores that hash
      * @param password the password, in string form.
@@ -244,6 +278,27 @@ public class User extends AbstractModel{
      */
     public byte[] getPasswordHash(){
         return (byte[]) getValue("Password");
+    }
+
+    public int getID(){
+    	return (Integer) getValue("ID");
+    }
+
+    /**
+     * Set the URL for the user's profile picture.
+     * @param url the url for the picture
+     */
+    public void setPicURL(String url){
+    	setValue("PicURL", url);
+    }
+
+
+    /**
+     * Get the URL for the user's profile picture.
+     * @return the URL as a String
+     */
+    public String getPicURL(){
+    	return (String) getValue("PicURL");
     }
 
     /**
@@ -368,7 +423,141 @@ public class User extends AbstractModel{
         return (Boolean) getValue("PracticePerfect");
     }
 
-    public void commit(){
+/*    *//**
+     * Return all users where colName matches value.
+     * Overrides the AbstractModel version in order to return Users
+     * instead of AbstractModels.
+     * @param colName a String that matches the column to filter by
+     * @param value the value to look for in the column
+     * @return a list of users with values for column that match value
+     *//*
+    @Override
+    public static List<User> getByValue(String colName, Object value){
+    	return getByValue(colname, value, "=");
+    }
+
+
+
+    *//**
+	 * Returns the rows returned by the search parameters as a list of Users
+	 * Returns null if an exception is thrown
+	 * @param the table name
+	 * @param the column name
+	 * @param value
+	 * @param comparator
+	 * @return list of rows returned by search as Abstract Models
+	 *//*
+    @Override
+	public static List<User> getByValue(String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet("USER_DATABASE", colName, value, comparator);
+		List<User> list = new ArrayList<User>();
+		try {
+			while(rs.next()) {
+				AbstractModel toAdd = new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs);
+				User newUser =  new User(toAdd);
+				list.add(newUser);
+			}
+			return list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+    *//**
+	 * getOneByValue - all parameters
+	 * Returns the first row returned by the search parameters as an Abstract Model
+	 * Returns null if an exception is thrown or the search returns zero results
+	 * @param the table name
+	 * @param the column name
+	 * @param value
+	 * @param comparator
+	 * @return row as an Abstract Model
+	 *//*
+    @Override
+	public static User getOneByValue(String colName, Object value, String comparator) {
+		ResultSet rs = getResultSet("USER_DATABASE", colName, value, comparator);
+
+		try {
+			if(rs.next()) {
+				return(new User(new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	*//**
+     * Return the first user where colName matches value.
+     * Overrides the AbstractModel version in order to return a User
+     * instead of AbstractModels.
+     * @param colName a String that matches the column to filter by
+     * @param value the value to look for in the column
+     * @return the first User where colName matches value.
+     *//*
+    @Override
+    public static User getOneByValue(String colName, Object value){
+    	return getOneByValue(colname, value, "=");
+    }
+
+    //Not implemented in AbstractModel yet
+    *//**
+     * Get a list of all users.
+     * @return a list containing all users in the database
+     *//*
+    @Override
+    public static List<User> getAll(){
+    	List<User> result = new ArrayList<User>();
+    	return result;
+    }
+
+    private static String QUERY_BEGIN = "SELECT * FROM ";
+	private static String WHERE = " WHERE ";
+	private static Statement state;
+
+    *//**
+     * Get a list of users filtered by an SQL query.
+     * Returns the equivalent of the SQL statemtent
+     * <code>"SELECT * FROM users WHERE " + sqlQuery;</code>
+     * IMPORTANT:
+     * Prepared statements are not used so do not make this method
+     * available to website users in any way.
+     * @param sqlQuery a String with the filtering conditions formatted as SQL
+     * @return a list of Users that match the specified query string
+     *//*
+    @Override
+    public static List<User> getWhere(String sqlQuery){
+    	String query = QUERY_BEGIN + sqlQuery;
+		List<User> list = new ArrayList<User>();
+
+		try {
+			ResultSet rs = state.executeQuery(query);
+
+
+			while (rs.next()) {
+				list.add(new User(new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs)));
+			}
+			return list;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }*/
+
+
+    /**
+     * Casts an abstract model as a user
+     * @param am the abstract model which will be turned into a user
+     * @return the user representing the am
+     */
+    public static User User(AbstractModel am){
+    	return (User) am;
+    }
+
+	public void commit(){
     //model.save();
     }
 

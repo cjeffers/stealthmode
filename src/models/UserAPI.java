@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 import java.util.*;
 
-public class User extends AbstractModel{
+public class UserPoop extends AbstractModel{
 
     public static final String USER_TABLE = "users";
 
@@ -85,7 +85,7 @@ public class User extends AbstractModel{
      * @return a list of Users with the given full name, which is empty
      *         if none exist
      */
-    public static List<User> findByName(String fullname)
+    public static List<User> findByName(String fullname) //Waiting for getAll functionality in AM
 
 
     // password
@@ -96,14 +96,14 @@ public class User extends AbstractModel{
      * hash.
      * @param password the new password
      */
-    public void setPassword(String password)
+    public void setPassword(String password) //Check, minus the salt
 
     /**
      * Check to see if the guess matches the password.
      * @param guess the string to check against the stored hash.
      * @return true if the guess matches, false otherwise.
      */
-    public boolean isPasswordCorrect(String guess)
+    public boolean isPasswordCorrect(String guess) //Check
 
 
     // prof pic url
@@ -111,32 +111,32 @@ public class User extends AbstractModel{
      * Set the URL for the user's profile picture.
      * @param url the url for the picture
      */
-    public void setPicURL(String url)
+    public void setPicURL(String url) //check
 
     /**
      * Get the URL for the user's profile picture.
      * @return the URL as a String
      */
-    public String getPicURL()
+    public String getPicURL() //check
 
     // administrator
     /**
      * Set whether or not the user is an administrator.
      * @param isAdmin true if setting the user to admin, false if not.
      */
-    public void setAdminPrivilege(boolean isAdmin)
+    public void setAdminPrivilege(boolean isAdmin) //check
 
     /**
      * Returns whether or not the user is an administrator.
      * @return true if the user is an administrator, false if not.
      */
-    public boolean isAdministrator()
+    public boolean isAdministrator() //check
 
     /**
      * Returns a list of all administrators.
      * @return a list of all Users who are administrators.
      */
-    public static List<User> findAdministrators()
+    public static List<User> findAdministrators() //check
 
     // add/get linked things
     // friends
@@ -144,7 +144,7 @@ public class User extends AbstractModel{
      * Get a list of all friends.
      * @return a list of all users who are friends with this user.
      */
-    public List<User> getFriends()
+    public List<User> getFriends() //check
 
     /**
      * Make this user friends with someone else.
@@ -152,7 +152,7 @@ public class User extends AbstractModel{
      */
     public void addFriend(int friendID)
 
-    // quizzes created
+    // quizzes created---- unnecessary now
     /**
      * Get a list of all quizzes created by this user.
      * @return A List of quizzes that the user created.
@@ -188,7 +188,7 @@ public class User extends AbstractModel{
      * @return a list of users with values for column that match value
      */
     @Override
-    public static List<User> getByValue(String colName, Object value)
+    public static List<User> getByValue(String colName, Object value) //check
 
     /**
      * Return all users where colName compares as specified to value.
@@ -201,7 +201,7 @@ public class User extends AbstractModel{
      *         specified.
      */
     @Override
-    public static List<User> getByValue(String colName, Object value, String comparator)
+    public static List<User> getByValue(String colName, Object value, String comparator) //check
 
     /**
      * Return the first user where colName matches value.
@@ -212,7 +212,7 @@ public class User extends AbstractModel{
      * @return the first User where colName matches value.
      */
     @Override
-    public static User getOneByValue(String colName, Object value)
+    public static User getOneByValue(String colName, Object value) //check
 
     /**
      * Return the first user where colName compares as specified to value.
@@ -225,7 +225,7 @@ public class User extends AbstractModel{
      *         specified.
      */
     @Override
-    public static User getOneByValue(String colName, Object value, String comparator)
+    public static User getOneByValue(String colName, Object value, String comparator) //check
 
     /**
      * Get a list of all users.
