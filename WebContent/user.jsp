@@ -12,14 +12,8 @@
 	<body>
 		<h1><%= user.getUserName() %></h1>
 		<ul>
-			<li>Full name: <%= user.getFullName() %></li>
-			<li><img src=<%= user.getPicURL() %>/></li>
-			<li>Friends:
-				<ul><% for (User f : user.getFriends()) { %>
-					<li><a href="/user/<%= f.getID() %>"><%= f.getFullName() %></a></li>
-					<% } %>
-				</ul>
-			</li>
+			<li>Full name: <%= user.getFullname() %></li>
 		</ul>
+		<a href="/stealthmode/users">See users</a>
 	</body>
 </html>

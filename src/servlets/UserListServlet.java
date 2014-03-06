@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class UserListServlet
  */
-@WebServlet("/UserListServlet")
+@WebServlet("/users")
 public class UserListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,7 +33,7 @@ public class UserListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<User> users = User.getAll();
+		List<User> users = User.findAll();
 		request.setAttribute("users", users);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/users.jsp");
 		dispatcher.forward(request, response);

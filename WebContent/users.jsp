@@ -12,7 +12,7 @@
 		<h1>Users</h1>
 		<ul>
 			<% for (User u : users) { %>
-			<li><a href="/user/<%= u.getID() %>"><%= u.getFullName() %></a></li>
+			<li><a href="/stealthmode/user?id=<%= u.getID() %>"><%= u.getFullname() %></a></li>
 			<% } %>
 		</ul>
 	</body>

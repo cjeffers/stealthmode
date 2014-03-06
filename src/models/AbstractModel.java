@@ -468,10 +468,10 @@ public class AbstractModel {
 	 */
 
 	// Database info
-	private static final String username = MyDBInfo.MYSQL_USERNAME;
-	private static final String password = MyDBInfo.MYSQL_PASSWORD;
-	private static final String dbName = MyDBInfo.MYSQL_DATABASE_NAME;
-	private static final String server = MyDBInfo.MYSQL_DATABASE_SERVER;
+	private static final String username = "ccs108jvangogh";
+	private static final String password = "ahweeyoi";
+	private static final String dbName = "c_cs108_jvangogh";
+	private static final String server = "mysql-user.stanford.edu";
 
 	// connection
 	private static Connection connection = null;
