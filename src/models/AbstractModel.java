@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -137,8 +138,9 @@ public class AbstractModel {
 	 * isInDatabase to be true.
 	 */
 	public void save() {
-		if(!isInDatabase) insert();
-		update();
+		int id = (Integer) valueMap.get("id");
+		if(!isInDatabase) insert(id);
+		update(id);
 	}
 	
 	/**
@@ -147,7 +149,12 @@ public class AbstractModel {
 	 * Only inserts the id field.  Other fields can then be
 	 * inserted via an update.
 	 */
-	private void insert() {
+	private void insert(int id) {
+		try {
+			state.executeUpdate("INSERT INTO " + instance_tableName + " SET id = " + id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -157,8 +164,28 @@ public class AbstractModel {
 	 * Therefore, an AbstractModel's id can not change or
 	 * be updated.
 	 */
-	private void update() {
-		
+	private void update(int id) {
+		Iterator<Map.Entry<String, Object>> it = valueMap.entrySet().iterator();
+		Map.Entry<String, Object> entry;
+		if (it.hasNext()) {
+			entry = it.next();
+			
+			String query = ("UPDATE " + instance_tableName + "SET " + 
+				entry.getKey() + AbstractModel.EQ + entry.getValue());
+			
+			while(it.hasNext()) {
+				entry = it.next();
+				query += (", " + entry.getKey() + AbstractModel.EQ + entry.getValue());
+			}
+			
+			query += AbstractModel.WHERE + "id = " + valueMap.get("id");
+			
+			try{
+				state.executeUpdate(query);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -224,8 +251,10 @@ public class AbstractModel {
 	/**
 	 * getAll
 	 * Returns all of the rows in the given table as a list
-	 * of AbstractModels.  Exceptions result in returning
+	 * of Abstract Models.  Exceptions result in returning
 	 * null.  Empty tables return empty lists.
+	 * @param table name
+	 * @return all rows as a list of Abstract Models
 	 */
 	public static List<AbstractModel> getAll(String theTableName) {
 		try {
@@ -241,8 +270,9 @@ public class AbstractModel {
 	 * getAll - defaulted table name
 	 * table name defaulted to the static variable
 	 * Returns all of the rows in the given table as a list
-	 * of AbstractModels.  Exceptions result in returning
+	 * of Abstract Models.  Exceptions result in returning
 	 * null.  Empty tables return empty lists.
+	 * @return all rows as a list of Abstract Models
 	 */
 	public static List<AbstractModel> getAll() {
 		return getAll(tableName);
@@ -387,6 +417,9 @@ public class AbstractModel {
 	/**
 	 * Returns a list of AbstractModels given a Result Set
 	 * and the table name
+	 * @param a result set
+	 * @param the table name
+	 * @return list of rows as Abstract Models
 	 */
 	private static List<AbstractModel> getFromRS(ResultSet rs, String theTableName) {
 		try {
