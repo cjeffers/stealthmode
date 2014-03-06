@@ -31,7 +31,7 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
-		User u = User.getByID(id);
+		User u = User.findByID(id);
 		request.setAttribute("user", u);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/user.jsp");
 		dispatcher.forward(request, response);

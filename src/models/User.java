@@ -553,12 +553,12 @@ public class User extends AbstractModel{
      * @param am the abstract model which will be turned into a user
      * @return the user representing the am
      */
-    public static User User(AbstractModel am){
-    	return (User) am;
-    }
+    //public static User User(AbstractModel am){
+        //return (User) am;
+    //}
 
-	public void commit(){
+	//public void commit(){
     //model.save();
-    }
+    //}
 
 }
