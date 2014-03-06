@@ -70,6 +70,23 @@ public class AbstractModelTest {
         assertTrue(newYork.getValue("metropolis").equals("Philadelphia"));
     }
 
+    @Test
+    public void testSave() {
+        // save new instance creates thing
+        // save old instance updates
+    }
+
+    @Test
+    public void testDelete() {
+        // delete new instance does nothing
+        // delete old instance removes from DB
+    }
+
+    @Test
+    public void testGetAll() {
+        // actually get all of them
+    }
+
 	@AfterClass
 	public static void tearDown() throws Exception {
         AbstractModel.closeConnection();
