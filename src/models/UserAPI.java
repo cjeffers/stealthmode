@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 import java.util.*;
 
-public class User extends AbstractModel{
+public class UserPoop extends AbstractModel{
 
     public static final String USER_TABLE = "users";
 

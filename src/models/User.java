@@ -31,11 +31,11 @@ public class User extends AbstractModel{
      * of AbstractModel.
      * @param am the AbstractModel to create the User from
      */
-    public User(AbstractModel am){	
+    public User(AbstractModel am){
     	super(AbstractModel.getConnection(), USERS_DATABASE, am.getMap(), true);
     }
-    
-    
+
+
     /**
      * Access a user based off its id
      * @param id the id associated with the user
@@ -77,7 +77,7 @@ public class User extends AbstractModel{
         }
         return friends;
     }
-    
+
     /**
      * Returns a list of all administrators.
      * @return a list of all Users who are administrators.
@@ -108,7 +108,7 @@ public class User extends AbstractModel{
         //newFriend.save();
         //reverseNewFriend.save;
     }
-    
+
 
 
     /**
@@ -249,8 +249,8 @@ public class User extends AbstractModel{
     public String getFullname(){
         return (String) getValue("Fullname");
     }
-    
-    
+
+
     /**
      * Find all users by the given full name.
      * @param fullname the full name to search for
@@ -262,8 +262,8 @@ public class User extends AbstractModel{
     	//Needs getAll functionality from AM.
     	return result;
     }
-    
-    
+
+
     /**
      * Turns the password into a hash and stores that hash
      * @param password the password, in string form.
@@ -283,7 +283,7 @@ public class User extends AbstractModel{
     public int getID(){
     	return (Integer) getValue("ID");
     }
-    
+
     /**
      * Set the URL for the user's profile picture.
      * @param url the url for the picture
@@ -291,8 +291,8 @@ public class User extends AbstractModel{
     public void setPicURL(String url){
     	setValue("PicURL", url);
     }
-    
-    
+
+
     /**
      * Get the URL for the user's profile picture.
      * @return the URL as a String
@@ -300,7 +300,7 @@ public class User extends AbstractModel{
     public String getPicURL(){
     	return (String) getValue("PicURL");
     }
-    
+
     /**
      * returns whether the user inputed the correct password or not
      * @param passwordAttempt the user's attempt at a password
@@ -422,7 +422,7 @@ public class User extends AbstractModel{
     public boolean hasWonPracticed(){
         return (Boolean) getValue("PracticePerfect");
     }
-    
+
 /*    *//**
      * Return all users where colName matches value.
      * Overrides the AbstractModel version in order to return Users
@@ -435,9 +435,9 @@ public class User extends AbstractModel{
     public static List<User> getByValue(String colName, Object value){
     	return getByValue(colname, value, "=");
     }
-    
-    
-    
+
+
+
     *//**
 	 * Returns the rows returned by the search parameters as a list of Users
 	 * Returns null if an exception is thrown
@@ -463,8 +463,8 @@ public class User extends AbstractModel{
 		}
 		return null;
 	}
-    
-    
+
+
     *//**
 	 * getOneByValue - all parameters
 	 * Returns the first row returned by the search parameters as an Abstract Model
@@ -488,7 +488,7 @@ public class User extends AbstractModel{
 		}
 		return null;
 	}
-	
+
 	*//**
      * Return the first user where colName matches value.
      * Overrides the AbstractModel version in order to return a User
@@ -501,7 +501,7 @@ public class User extends AbstractModel{
     public static User getOneByValue(String colName, Object value){
     	return getOneByValue(colname, value, "=");
     }
-	
+
     //Not implemented in AbstractModel yet
     *//**
      * Get a list of all users.
@@ -512,11 +512,11 @@ public class User extends AbstractModel{
     	List<User> result = new ArrayList<User>();
     	return result;
     }
-    
+
     private static String QUERY_BEGIN = "SELECT * FROM ";
 	private static String WHERE = " WHERE ";
 	private static Statement state;
-    
+
     *//**
      * Get a list of users filtered by an SQL query.
      * Returns the equivalent of the SQL statemtent
@@ -546,14 +546,14 @@ public class User extends AbstractModel{
 		}
 		return null;
     }*/
-    
-    
+
+
     /**
      * Casts an abstract model as a user
      * @param am the abstract model which will be turned into a user
      * @return the user representing the am
      */
-    public static User User(AbstractModel am){	
+    public static User User(AbstractModel am){
     	return (User) am;
     }
 
