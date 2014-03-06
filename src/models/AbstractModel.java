@@ -42,7 +42,6 @@ public class AbstractModel {
 	 */
 
 	private Map<String, Object> valueMap;
-    //private Connection connection;   // needed for save and delete
 	private String instance_tableName;        // needed for save and delete
 	private boolean isInDatabase;
 
@@ -56,8 +55,7 @@ public class AbstractModel {
 	 * @param theValueMap map from column names to values
 	 * @param theIsInDatabase boolean
 	 */
-	public AbstractModel(Connection theConnection, String theTableName, Map<String, Object> theValueMap, boolean theIsInDatabase) {
-		//instance_connection = theConnection;
+	public AbstractModel(String theTableName, Map<String, Object> theValueMap, boolean theIsInDatabase) {
 		instance_tableName = theTableName;
 		isInDatabase = theIsInDatabase;
 		valueMap = theValueMap;
@@ -69,8 +67,8 @@ public class AbstractModel {
 	 * @param theTableName name of the table in the database to use
 	 * @param theValueMap map from column names to values
 	 */
-	public AbstractModel(Connection theConnection, String theTableName, Map<String, Object> theValueMap) {
-		this(theConnection, theTableName, theValueMap, false);
+	public AbstractModel(String theTableName, Map<String, Object> theValueMap) {
+		this(theTableName, theValueMap, false);
 	}
 
 	/**
@@ -80,8 +78,8 @@ public class AbstractModel {
 	 * @param theConnection connection to the database server
 	 * @param theTableName name of the table in the database to use
 	 */
-	public AbstractModel(Connection theConnection, String theTableName) {
-		this(theConnection, theTableName, new HashMap<String, Object>(), false);
+	public AbstractModel(String theTableName) {
+		this(theTableName, new HashMap<String, Object>(), false);
 	}
 
 	/**
@@ -92,8 +90,8 @@ public class AbstractModel {
 	 * @param theTableName name of the table in the database to use
 	 * @param theRS result set from which to construct the value map
 	 */
-	public AbstractModel(Connection theConnection, String theTableName, ResultSet theRS) {
-		this(theConnection, theTableName, new HashMap<String, Object>(), true);
+	public AbstractModel(String theTableName, ResultSet theRS) {
+		this(theTableName, new HashMap<String, Object>(), true);
 		try {
 			java.sql.ResultSetMetaData rsmd = theRS.getMetaData();
 			int count = rsmd.getColumnCount();
@@ -316,7 +314,7 @@ public class AbstractModel {
 
 		try {
 			if(rs.next()) {
-				return(new AbstractModel(connection, theTableName, rs));
+				return(new AbstractModel(theTableName, rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -433,7 +431,7 @@ public class AbstractModel {
 		try {
 			List<AbstractModel> list = new ArrayList<AbstractModel>();
 			while(rs.next()) {
-				list.add(new AbstractModel(connection, theTableName, rs));
+				list.add(new AbstractModel(theTableName, rs));
 			}
 			return list;
 		} catch (SQLException e) {
@@ -484,7 +482,7 @@ public class AbstractModel {
 
 
 			while (rs.next()) {
-				list.add(new AbstractModel(connection, theTableName, rs));
+				list.add(new AbstractModel(theTableName, rs));
 			}
 			return list;
 

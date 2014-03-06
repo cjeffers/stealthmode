@@ -32,7 +32,7 @@ public class User extends AbstractModel{
      * @param am the AbstractModel to create the User from
      */
     public User(AbstractModel am){
-    	super(AbstractModel.getConnection(), USERS_DATABASE, am.getMap(), true);
+    	super(USERS_DATABASE, am.getMap(), true);
     }
 
 
@@ -54,7 +54,7 @@ public class User extends AbstractModel{
      * @param administrator
      */
     public User(String username, String password, String fullname, boolean administrator){
-        super(AbstractModel.getConnection(), USERS_DATABASE);
+        super(USERS_DATABASE);
         if(!nameInUse(username)){
             setUserName(username);
             setPassword(password);
@@ -99,10 +99,10 @@ public class User extends AbstractModel{
      * @param username The username of the new friend.
      */
     public void addFriend(String username){
-        AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), FRIENDS_DATABASE);
+        AbstractModel newFriend = new AbstractModel(FRIENDS_DATABASE);
         newFriend.setValue("FriendsWith", username);
         newFriend.setValue("MyName", getUserName());
-        AbstractModel reverseNewFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
+        AbstractModel reverseNewFriend = new AbstractModel("Friends");
         reverseNewFriend.setValue("FriendsWith", getUserName());
         reverseNewFriend.setValue("MyName", username);
         //newFriend.save();
@@ -136,7 +136,7 @@ public class User extends AbstractModel{
      * @param message What the message is
      */
     public void sendNote(String recipient, String message){
-        AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+        AbstractModel newNote = new AbstractModel("Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", message);
         newNote.setValue("SentBy", getUserName());
@@ -167,7 +167,7 @@ public class User extends AbstractModel{
      * @param quiz What the quiz is
      */
     public void sendChallenge(String recipient, String quiz){
-        AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+        AbstractModel newNote = new AbstractModel("Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", quiz);
         newNote.setValue("SentBy", getUserName());
@@ -453,7 +453,7 @@ public class User extends AbstractModel{
 		//List<User> list = new ArrayList<User>();
 		//try {
 			//while(rs.next()) {
-				//AbstractModel toAdd = new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs);
+				//AbstractModel toAdd = new AbstractModel("USER_DATABASE", rs);
 				//User newUser =  new User(toAdd);
 				//list.add(newUser);
 			//}
@@ -481,7 +481,7 @@ public class User extends AbstractModel{
 
 		//try {
 			//if(rs.next()) {
-				//return(new User(new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs)));
+				//return(new User(new AbstractModel("USER_DATABASE", rs)));
 			//}
 		//} catch (SQLException e) {
 			//e.printStackTrace();
@@ -540,7 +540,7 @@ public class User extends AbstractModel{
 
 
 			//while (rs.next()) {
-				//list.add(new User(new AbstractModel(AbstractModel.getConnection(), "USER_DATABASE", rs)));
+				//list.add(new User(new AbstractModel("USER_DATABASE", rs)));
 			//}
 			//return list;
 
