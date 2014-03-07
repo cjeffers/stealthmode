@@ -19,6 +19,11 @@ public class Question extends AbstractModel {
      */
     public static final String QUESTION_TABLENAME = "questions";
 
+    private static final String ID_COLNAME = "id";
+    private static final String QUIZID_COLNAME = "quiz_id";
+    private static final String TYPE_COLNAME = "q_type";
+    private static final String PROMPT_COLNAME = "prompt";
+    private static final String CONTENT_COLNAME_START = "content";
 
     /**
      * Creates Question from AbstractModel.
@@ -33,8 +38,8 @@ public class Question extends AbstractModel {
      */
     public Question(int quizID, String type, String prompt) {
         super(QUESTION_TABLENAME);
-        setValue("quiz_id", quizID);
-        setValue("type", type);
+        setValue(QUIZID_COLNAME, quizID);
+        setValue(TYPE_COLNAME, type);
         setPrompt(prompt);
     }
 
@@ -43,8 +48,8 @@ public class Question extends AbstractModel {
      */
     public Question(int quizID, String type) {
         super(QUESTION_TABLENAME);
-        setValue("quiz_id", quizID);
-        setValue("type", type);
+        setValue(QUIZID_COLNAME, quizID);
+        setValue(TYPE_COLNAME, type);
     }
 
 
@@ -64,7 +69,7 @@ public class Question extends AbstractModel {
      * Return a list of questions belonging to the specified quiz.
      */
     public static List<Question> findByQuizID(int quizID) {
-        List<AbstractModel> ams = AbstractModel.getByValue(QUESTION_TABLENAME, "quiz_id", quizID);
+        List<AbstractModel> ams = AbstractModel.getByValue(QUESTION_TABLENAME, QUIZID_COLNAME, quizID);
         return convertAMListToQuestions(ams);
     }
 
@@ -72,7 +77,7 @@ public class Question extends AbstractModel {
      * Return all questions with the specified type.
      */
     public static List<Question> findByType(String type) {
-        List<AbstractModel> ams = AbstractModel.getByValue(QUESTION_TABLENAME, "type", (Object)type);
+        List<AbstractModel> ams = AbstractModel.getByValue(QUESTION_TABLENAME, TYPE_COLNAME, (Object)type);
         return convertAMListToQuestions(ams);
     }
 
@@ -91,24 +96,30 @@ public class Question extends AbstractModel {
      * Get the id of the quiz this question belongs to.
      */
     public int getQuizID() {
-        return (Integer) getValue("quiz_id");
+        return (Integer) getValue(QUIZID_COLNAME);
+    }
+
+    public Integer getID() {
+        Object id = getValue(ID_COLNAME);
+        if (id != null) return (Integer) id;
+        return null;
     }
 
     /**
      * Get a string with the question's type.
      */
     public String getType() {
-        return (String) getValue("type");
+        return (String) getValue(TYPE_COLNAME);
     }
 
     /**
      * Get and set the prompt for this question.
      */
     public String getPrompt() {
-        return (String) getValue("prompt");
+        return (String) getValue(PROMPT_COLNAME);
     }
     public void setPrompt(String newPrompt) {
-        setValue("prompt", newPrompt);
+        setValue(PROMPT_COLNAME, newPrompt);
     }
 
 
@@ -118,72 +129,72 @@ public class Question extends AbstractModel {
      * Get and set the content strings (0-9) for this question.
      */
     public String getContent0() {
-        return (String) getValue("content_0");
+        return (String) getValue(CONTENT_COLNAME_START + "_0");
     }
     public void setContent0(String str) {
-        setValue("content_0", str);
+        setValue(CONTENT_COLNAME_START + "_0", str);
     }
 
     public String getContent1() {
-        return (String) getValue("content_1");
+        return (String) getValue(CONTENT_COLNAME_START + "_1");
     }
     public void setContent1(String str) {
-        setValue("content_1", str);
+        setValue(CONTENT_COLNAME_START + "_1", str);
     }
 
     public String getContent2() {
-        return (String) getValue("content_2");
+        return (String) getValue(CONTENT_COLNAME_START + "_2");
     }
     public void setContent2(String str) {
-        setValue("content_2", str);
+        setValue(CONTENT_COLNAME_START + "_2", str);
     }
 
     public String getContent3() {
-        return (String) getValue("content_3");
+        return (String) getValue(CONTENT_COLNAME_START + "_3");
     }
     public void setContent3(String str) {
-        setValue("content_3", str);
+        setValue(CONTENT_COLNAME_START + "_3", str);
     }
 
     public String getContent4() {
-        return (String) getValue("content_4");
+        return (String) getValue(CONTENT_COLNAME_START + "_4");
     }
     public void setContent4(String str) {
-        setValue("content_4", str);
+        setValue(CONTENT_COLNAME_START + "_4", str);
     }
 
     public String getContent5() {
-        return (String) getValue("content_5");
+        return (String) getValue(CONTENT_COLNAME_START + "_5");
     }
     public void setContent5(String str) {
-        setValue("content_5", str);
+        setValue(CONTENT_COLNAME_START + "_5", str);
     }
 
     public String getContent6() {
-        return (String) getValue("content_6");
+        return (String) getValue(CONTENT_COLNAME_START + "_6");
     }
     public void setContent6(String str) {
-        setValue("content_6", str);
+        setValue(CONTENT_COLNAME_START + "_6", str);
     }
 
     public String getContent7() {
-        return (String) getValue("content_7");
+        return (String) getValue(CONTENT_COLNAME_START + "_7");
     }
     public void setContent7(String str) {
-        setValue("content_7", str);
+        setValue(CONTENT_COLNAME_START + "_7", str);
     }
 
     public String getContent8() {
-        return (String) getValue("content_8");
+        return (String) getValue(CONTENT_COLNAME_START + "_8");
     }
     public void setContent8(String str) {
-        setValue("content_8", str);
+        setValue(CONTENT_COLNAME_START + "_8", str);
     }
 
     public String getContent9() {
-        return (String) getValue("content_9");
+        return (String) getValue(CONTENT_COLNAME_START + "_9");
     }
     public void setContent9(String str) {
-        setValue("content_9", str);
+        setValue(CONTENT_COLNAME_START + "_9", str);
     }
 }

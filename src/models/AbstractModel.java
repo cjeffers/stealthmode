@@ -153,11 +153,11 @@ public class AbstractModel {
 			entry = it.next();
 
 			String query = (cmd + instance_tableName + " SET " +
-				entry.getKey() + AbstractModel.EQ + "'" + entry.getValue() + "'");
+				entry.getKey() + AbstractModel.EQ + "\"" + entry.getValue() + "\"");
 
 			while(it.hasNext()) {
 				entry = it.next();
-				query += (", " + entry.getKey() + AbstractModel.EQ + "'" + entry.getValue()) + "'";
+				query += (", " + entry.getKey() + AbstractModel.EQ + "\"" + entry.getValue()) + "\"";
 			}
 
             if (isInDatabase) query += AbstractModel.WHERE + "id = " + valueMap.get("id");
