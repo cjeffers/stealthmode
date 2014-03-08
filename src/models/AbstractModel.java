@@ -50,7 +50,6 @@ public class AbstractModel {
 
 	/**
 	 * Full constructor
-	 * @param theConnection connection to the database server
 	 * @param theTableName name of the table in the database to use
 	 * @param theValueMap map from column names to values
 	 * @param theIsInDatabase boolean
@@ -63,7 +62,6 @@ public class AbstractModel {
 
 	/**
 	 * Not in database constructor - defaults isInDatabase to false
-	 * @param theConnection connection to the database server
 	 * @param theTableName name of the table in the database to use
 	 * @param theValueMap map from column names to values
 	 */
@@ -72,10 +70,9 @@ public class AbstractModel {
 	}
 
 	/**
-	 * Minimum constructor - requires a connection and a table name.
+	 * Minimum constructor.
 	 * Defaults isInDatabase to false.
 	 * Creates a new map for valueMap using a hash map implementation
-	 * @param theConnection connection to the database server
 	 * @param theTableName name of the table in the database to use
 	 */
 	public AbstractModel(String theTableName) {
@@ -86,7 +83,6 @@ public class AbstractModel {
 	 * ResultSet constructor - constructs using a SQL result set
 	 * Assumes the result set has already been moved to the correct row
 	 * Defaults isInDatabase to true
-	 * @param theConnection connection to the database server
 	 * @param theTableName name of the table in the database to use
 	 * @param theRS result set from which to construct the value map
 	 */
@@ -136,24 +132,12 @@ public class AbstractModel {
 	 * isInDatabase to be true.
 	 */
 	public void save() {
-		int id = (Integer) valueMap.get("id");
-		if(!isInDatabase) insert(id);
-		update(id);
-	}
-
-	/**
-	 * Inserts this AbstractModel's id into the database.
-	 * Assumes this model does not already exist in the table.
-	 * Only inserts the id field.  Other fields can then be
-	 * inserted via an update.
-	 */
-	private void insert(int id) {
-		try {
-			state.executeUpdate("INSERT INTO " + instance_tableName + " SET id = " + id);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		if(!isInDatabase) {
+            update("INSERT INTO ");
+            isInDatabase = true;
+        } else {
+            update("UPDATE ");
+        }
 	}
 
 	/**
@@ -162,23 +146,23 @@ public class AbstractModel {
 	 * Therefore, an AbstractModel's id can not change or
 	 * be updated.
 	 */
-	private void update(int id) {
+	private void update(String cmd) {
 		Iterator<Map.Entry<String, Object>> it = valueMap.entrySet().iterator();
 		Map.Entry<String, Object> entry;
 		if (it.hasNext()) {
 			entry = it.next();
 
-			String query = ("UPDATE " + instance_tableName + "SET " +
-				entry.getKey() + AbstractModel.EQ + entry.getValue());
+			String query = (cmd + instance_tableName + " SET " +
+				entry.getKey() + AbstractModel.EQ + "\"" + entry.getValue() + "\"");
 
 			while(it.hasNext()) {
 				entry = it.next();
-				query += (", " + entry.getKey() + AbstractModel.EQ + entry.getValue());
+				query += (", " + entry.getKey() + AbstractModel.EQ + "\"" + entry.getValue()) + "\"";
 			}
 
-			query += AbstractModel.WHERE + "id = " + valueMap.get("id");
+            if (isInDatabase) query += AbstractModel.WHERE + "id = " + valueMap.get("id");
 
-			try{
+			try {
 				state.executeUpdate(query);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -192,7 +176,16 @@ public class AbstractModel {
 	 * isInDatabase to be false.
 	 */
 	public void delete() {
-
+        if (isInDatabase) {
+            String query = "DELETE FROM " + instance_tableName +
+                            AbstractModel.WHERE + "id = " + valueMap.get("id");
+            try {
+                state.executeUpdate(query);
+                isInDatabase = false;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 
