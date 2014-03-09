@@ -381,7 +381,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProdigiousAuthor(boolean won){
-        setValue("AmateurAuthor", won);
+        setValue("ProdigiousAuthor", won);
     }
 
     /**
@@ -438,6 +438,17 @@ public class User extends AbstractModel{
      */
     public boolean hasWonPracticed(){
         return (Boolean) getValue("PracticePerfect");
+    }
+    
+    public List<String> seeAwardsWon(){
+    	List<String> result = new ArrayList<String>();
+    	if (hasWonIsGreatest()) result.add("I Am The Greatest");
+    	if (hasWonPracticed()) result.add("Practice Makes Perfect");
+    	if (hasWonQuizMachine()) result.add("Quiz Machine");
+    	if (hasWonProdigiousAuthor()) result.add("Prodigious Author");
+    	if (hasWonAmateurAuthor()) result.add("Amateur Author");
+    	if (hasWonProlificAuthor()) result.add("Prolific Author");
+    	return result;
     }
     
 /*    *//**
