@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class User extends AbstractModel{
 
@@ -269,9 +270,25 @@ public class User extends AbstractModel{
      * @param password the password, in string form.
      */
     public void setPassword(String password){
-        setValue("Password", generateHash(password));
+    	String Salt = makeSalt();
+    	setValue("Salt", Salt);
+        setValue("Password", generateHash(Salt + password));
     }
 
+    private static int SALT_LENGTH = 8;
+    private static String SALT_VALUES = "abcdefghijklmnopqrstuvwxyz1234567890";
+    
+    private String makeSalt(){
+        char[] text = new char[SALT_LENGTH];
+        Random rng = new Random();
+        for (int i = 0; i < SALT_LENGTH; i++)
+        {
+            text[i] = SALT_VALUES.charAt(rng.nextInt(SALT_VALUES.length()));
+        }
+        return new String(text);
+    }
+    
+    
     /**
      * Returns the correct password in hash form
      * @return the correct password in hash form
@@ -307,7 +324,7 @@ public class User extends AbstractModel{
      * @return whether the passwords match
      */
     public boolean correctPassword(String passwordAttempt){
-        return (getPasswordHash() == generateHash(passwordAttempt));
+        return (getPasswordHash() == generateHash((String) getValue("salt") + passwordAttempt));
     }
 
 
