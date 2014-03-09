@@ -1,0 +1,16 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Ignore Mac backups #
+.DS_Store
+/build
+
+# eclipse crap
+.classpath
+.project
+.settings/
+.gitignore
