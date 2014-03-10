@@ -1,9 +1,12 @@
 package models.test;
 
-import java.sql.Connection;
-import java.util.List;
+import java.util.*;
+import java.sql.*;
 
+import static org.junit.Assert.*;
 import models.AbstractModel;
+
+import org.junit.*;
 import models.User;
 
 public class UsersTest {
