@@ -70,10 +70,10 @@ public class User extends AbstractModel{
      */
     public List<User> getFriends(){
         List<User> friends = new ArrayList<User>();
-        List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "FriendsWith", getUserName(), "=");
+        List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "friends_with", getUserName(), "=");
         for (int i = 0; i < modelsOfFriends.size(); i++){
             AbstractModel currFriends = modelsOfFriends.get(i);
-            User toAdd = findByUsername((String)currFriends.getValue("MyName"));
+            User toAdd = findByUsername((String)currFriends.getValue("my_name"));
             friends.add(toAdd);
         }
         return friends;
@@ -83,12 +83,12 @@ public class User extends AbstractModel{
      * Returns a list of all administrators.
      * @return a list of all Users who are administrators.
      */
-    public List<User> findAdministrators(){
+    public static List<User> findAdministrators(){
         List<User> administrators = new ArrayList<User>();
-        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "Administrator", "true", "=");
+        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", "true", "=");
         for (int i = 0; i < modelsOfAdmins.size(); i++){
             AbstractModel currAdmin = modelsOfAdmins.get(i);
-            User toAdd = findByUsername((String)currAdmin.getValue("Username"));
+            User toAdd = findByUsername((String)currAdmin.getValue("username"));
             administrators.add(toAdd);
         }
         return administrators;
@@ -101,11 +101,11 @@ public class User extends AbstractModel{
      */
     public void addFriend(String username){
         AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), FRIENDS_DATABASE);
-        newFriend.setValue("FriendsWith", username);
-        newFriend.setValue("MyName", getUserName());
+        newFriend.setValue("friends_with", username);
+        newFriend.setValue("my_name", getUserName());
         AbstractModel reverseNewFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
-        reverseNewFriend.setValue("FriendsWith", getUserName());
-        reverseNewFriend.setValue("MyName", username);
+        reverseNewFriend.setValue("friends_with", getUserName());
+        reverseNewFriend.setValue("my_name", username);
         //newFriend.save();
         //reverseNewFriend.save;
     }
@@ -118,7 +118,7 @@ public class User extends AbstractModel{
      */
     public List<ArrayList<String>> seeNotes(){
         List<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
-        List<AbstractModel> notesSentToMe = getByValue("Notes", "SentTo", getUserName(), "=");
+        List<AbstractModel> notesSentToMe = getByValue("notes", "sentTo", getUserName(), "=");
         for (int i = 0; i < notesSentToMe.size(); i++){
             AbstractModel currNote = notesSentToMe.get(i);
             String sentBy = (String) currNote.getValue("SentBy");
@@ -182,10 +182,10 @@ public class User extends AbstractModel{
      */
     public List<String> seeQuizzesMade(){
         List<String> quizzesMadeByMe = new ArrayList<String>();
-        List<AbstractModel> myQuizzes = getByValue("Quizzes", "MadeBy", getUserName(), "=");
+        List<AbstractModel> myQuizzes = getByValue("quizzes", "made_by", getUserName(), "=");
         for (int i = 0; i < myQuizzes.size(); i++){
             AbstractModel currQuiz = myQuizzes.get(i);
-            String quizName = (String) currQuiz.getValue("Name");
+            String quizName = (String) currQuiz.getValue("name");
             quizzesMadeByMe.add(quizName);
         }
         return quizzesMadeByMe;
@@ -197,7 +197,7 @@ public class User extends AbstractModel{
      * @param isAdministrator whether the user is an administrator or not
      */
     public void setAdminPriveledge(boolean isAdmin){
-        setValue("Administrator", isAdmin);
+        setValue("administrator", isAdmin);
     }
 
     /**
@@ -205,7 +205,7 @@ public class User extends AbstractModel{
      * @return a boolean of whether the user is an administrator
      */
     public boolean isAdministrator(){
-        return (Boolean) getValue("Administrator");
+        return (Boolean) getValue("administrator");
     }
 
     /**
@@ -213,7 +213,7 @@ public class User extends AbstractModel{
      * @param username the name that will be checked
      * @return whether the name is in user
      */
-    public boolean nameInUse(String username){
+    public static boolean nameInUse(String username){
         return (findByUsername(username) != null);
     }
 
@@ -223,7 +223,7 @@ public class User extends AbstractModel{
      */
     public void setUserName(String username){
         if(nameInUse(username)){
-            setValue("Username", username);
+            setValue("username", username);
         }
     }
 
@@ -232,7 +232,7 @@ public class User extends AbstractModel{
      * @return the name of the user
      */
     public String getUserName(){
-        return (String) getValue("Username");
+        return (String) getValue("username");
     }
 
     /**
@@ -240,7 +240,7 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setFullname(String fullname){
-        setValue("Fullname", fullname);
+        setValue("fullname", fullname);
     }
 
     /**
@@ -248,7 +248,7 @@ public class User extends AbstractModel{
      * @return the name of the user
      */
     public String getFullname(){
-        return (String) getValue("Fullname");
+        return (String) getValue("fullname");
     }
     
     
@@ -271,8 +271,8 @@ public class User extends AbstractModel{
      */
     public void setPassword(String password){
     	String Salt = makeSalt();
-    	setValue("Salt", Salt);
-        setValue("Password", generateHash(Salt + password));
+    	setValue("salt", Salt);
+        setValue("password", generateHash(Salt + password));
     }
 
     private static int SALT_LENGTH = 8;
@@ -294,11 +294,11 @@ public class User extends AbstractModel{
      * @return the correct password in hash form
      */
     public byte[] getPasswordHash(){
-        return (byte[]) getValue("Password");
+        return (byte[]) getValue("password");
     }
 
     public int getID(){
-    	return (Integer) getValue("ID");
+    	return (Integer) getValue("id");
     }
     
     /**
@@ -306,7 +306,7 @@ public class User extends AbstractModel{
      * @param url the url for the picture
      */
     public void setPicURL(String url){
-    	setValue("PicURL", url);
+    	setValue("pic_url", url);
     }
     
     
@@ -315,7 +315,7 @@ public class User extends AbstractModel{
      * @return the URL as a String
      */
     public String getPicURL(){
-    	return (String) getValue("PicURL");
+    	return (String) getValue("pic_url");
     }
     
     /**
@@ -349,7 +349,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setAmateurAuthor(boolean won){
-        setValue("AmateurAuthor", won);
+        setValue("amateur_author", won);
     }
 
     /**
@@ -357,7 +357,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Amateur Author award.
      */
     public boolean hasWonAmateurAuthor(){
-        return (Boolean) getValue("AmateurAuthor");
+        return (Boolean) getValue("amateur_author");
     }
 
     /**
@@ -365,7 +365,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProlificAuthor(boolean won){
-        setValue("ProlificAuthor", won);
+        setValue("prolific_author", won);
     }
 
     /**
@@ -373,7 +373,7 @@ public class User extends AbstractModel{
      * @return if the user has won the prolific Author award.
      */
     public boolean hasWonProlificAuthor(){
-        return (Boolean) getValue("ProlificAuthor");
+        return (Boolean) getValue("prolific_author");
     }
 
     /**
@@ -381,7 +381,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProdigiousAuthor(boolean won){
-        setValue("ProdigiousAuthor", won);
+        setValue("prodigious_author", won);
     }
 
     /**
@@ -389,7 +389,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Prodigious Author award.
      */
     public boolean hasWonProdigiousAuthor(){
-        return (Boolean) getValue("ProdigiousAuthor");
+        return (Boolean) getValue("prodigious_author");
     }
 
     /**
@@ -397,7 +397,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setQuizMachine(boolean won){
-        setValue("QuizMachine", won);
+        setValue("quiz_machine", won);
     }
 
     /**
@@ -405,7 +405,7 @@ public class User extends AbstractModel{
      * @return if the user has won the QuizMachine award.
      */
     public boolean hasWonQuizMachine(){
-        return (Boolean) getValue("QuizMachine");
+        return (Boolean) getValue("quiz_machine");
     }
 
     /**
@@ -413,7 +413,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setIsGreatest(boolean won){
-        setValue("IsGreatest", won);
+        setValue("is_greatest", won);
     }
 
     /**
@@ -421,7 +421,7 @@ public class User extends AbstractModel{
      * @return if the user has won the I am the greatest award.
      */
     public boolean hasWonIsGreatest(){
-        return (Boolean) getValue("IsGreatest");
+        return (Boolean) getValue("is_greatest");
     }
 
     /**
@@ -429,7 +429,7 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setPracticed(boolean won){
-        setValue("PracticePerfect", won);
+        setValue("practice_perfect", won);
     }
 
     /**
@@ -437,7 +437,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Practice Makes Perfect award.
      */
     public boolean hasWonPracticed(){
-        return (Boolean) getValue("PracticePerfect");
+        return (Boolean) getValue("practice_perfect");
     }
     
     public List<String> seeAwardsWon(){
