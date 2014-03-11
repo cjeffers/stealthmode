@@ -33,7 +33,7 @@ public class User extends AbstractModel{
      * @param am the AbstractModel to create the User from
      */
     public User(AbstractModel am){	
-    	super(AbstractModel.getConnection(), USERS_DATABASE, am.getMap(), true);
+    	super(USERS_DATABASE, am.getMap(), true);
     }
     
     
@@ -55,12 +55,13 @@ public class User extends AbstractModel{
      * @param administrator
      */
     public User(String username, String password, String fullname, boolean administrator){
-        super(AbstractModel.getConnection(), USERS_DATABASE);
+        super(USERS_DATABASE);
         if(!nameInUse(username)){
             setUserName(username);
             setPassword(password);
             setAdminPriveledge(administrator);
             setFullname(fullname);
+            save();
         }
     }
 
@@ -100,14 +101,14 @@ public class User extends AbstractModel{
      * @param username The username of the new friend.
      */
     public void addFriend(String username){
-        AbstractModel newFriend = new AbstractModel(AbstractModel.getConnection(), FRIENDS_DATABASE);
+        AbstractModel newFriend = new AbstractModel(FRIENDS_DATABASE);
         newFriend.setValue("friends_with", username);
         newFriend.setValue("my_name", getUserName());
-        AbstractModel reverseNewFriend = new AbstractModel(AbstractModel.getConnection(), "Friends");
+        AbstractModel reverseNewFriend = new AbstractModel(FRIENDS_DATABASE);
         reverseNewFriend.setValue("friends_with", getUserName());
         reverseNewFriend.setValue("my_name", username);
-        //newFriend.save();
-        //reverseNewFriend.save;
+        newFriend.save();
+        reverseNewFriend.save();
     }
     
 
@@ -137,7 +138,7 @@ public class User extends AbstractModel{
      * @param message What the message is
      */
     public void sendNote(String recipient, String message){
-        AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+        AbstractModel newNote = new AbstractModel("Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", message);
         newNote.setValue("SentBy", getUserName());
@@ -168,7 +169,7 @@ public class User extends AbstractModel{
      * @param quiz What the quiz is
      */
     public void sendChallenge(String recipient, String quiz){
-        AbstractModel newNote = new AbstractModel(AbstractModel.getConnection(), "Notes");
+        AbstractModel newNote = new AbstractModel("Notes");
         newNote.setValue("SentTo", recipient);
         newNote.setValue("Message", quiz);
         newNote.setValue("SentBy", getUserName());
@@ -198,6 +199,7 @@ public class User extends AbstractModel{
      */
     public void setAdminPriveledge(boolean isAdmin){
         setValue("administrator", isAdmin);
+        save();
     }
 
     /**
@@ -222,8 +224,9 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setUserName(String username){
-        if(nameInUse(username)){
+        if(!nameInUse(username)){
             setValue("username", username);
+            save();
         }
     }
 
@@ -241,6 +244,7 @@ public class User extends AbstractModel{
      */
     public void setFullname(String fullname){
         setValue("fullname", fullname);
+        save();
     }
 
     /**
@@ -273,6 +277,7 @@ public class User extends AbstractModel{
     	String Salt = makeSalt();
     	setValue("salt", Salt);
         setValue("password", generateHash(Salt + password));
+        save();
     }
 
     private static int SALT_LENGTH = 8;
@@ -307,6 +312,7 @@ public class User extends AbstractModel{
      */
     public void setPicURL(String url){
     	setValue("pic_url", url);
+    	save();
     }
     
     
@@ -350,6 +356,7 @@ public class User extends AbstractModel{
      */
     public void setAmateurAuthor(boolean won){
         setValue("amateur_author", won);
+        save();
     }
 
     /**
@@ -366,6 +373,7 @@ public class User extends AbstractModel{
      */
     public void setProlificAuthor(boolean won){
         setValue("prolific_author", won);
+        save();
     }
 
     /**
@@ -382,6 +390,7 @@ public class User extends AbstractModel{
      */
     public void setProdigiousAuthor(boolean won){
         setValue("prodigious_author", won);
+        save();
     }
 
     /**
@@ -398,6 +407,7 @@ public class User extends AbstractModel{
      */
     public void setQuizMachine(boolean won){
         setValue("quiz_machine", won);
+        save();
     }
 
     /**
@@ -414,6 +424,7 @@ public class User extends AbstractModel{
      */
     public void setIsGreatest(boolean won){
         setValue("is_greatest", won);
+        save();
     }
 
     /**
@@ -430,6 +441,7 @@ public class User extends AbstractModel{
      */
     public void setPracticed(boolean won){
         setValue("practice_perfect", won);
+        save();
     }
 
     /**

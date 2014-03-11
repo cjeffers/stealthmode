@@ -15,7 +15,7 @@ public class Quiz {
 	 * @param givenDateMade the date the quiz was made
 	 */
 	public Quiz(String givenName, boolean givenTimed, boolean givenMultiplePages, long givenDateMade){
-		model = new AbstractModel(AbstractModel.getConnection(), "quizzes");
+		model = new AbstractModel("quizzes");
 		setTimed(givenTimed);
 		setMultiplePages(givenMultiplePages);
 		setDateMade(givenDateMade);
