@@ -12,8 +12,8 @@ public class AbstractModelTest {
 
     static Connection con;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
         con = AbstractModel.getConnection();
 	}
 
