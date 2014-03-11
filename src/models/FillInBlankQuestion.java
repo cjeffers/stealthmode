@@ -16,6 +16,7 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "Fill in the blank.";
 	private final String HUMAN_READABLE = "Fill In The Blank";
+	public static final String TYPE = "fill_in_blank";
 	
 	
 	/*

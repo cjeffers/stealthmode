@@ -225,7 +225,7 @@ public class Question extends AbstractModel {
      * @return boolean
      */
     public boolean checkAnswer(ServletRequest request) {
-    	return (request.getParameter("answer").toLowerCase().equals(getContent0()));
+    	return (request.getParameter("answer").toLowerCase().equals(getContent0().toLowerCase()));
     }
     
 }

@@ -22,6 +22,7 @@ public class MultipleChoiceQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "Choose the correct option";
 	private final String HUMAN_READABLE = "Multiple Choice";
+	public static final String TYPE = "multiple_choice";
 	
 	
 	/*
