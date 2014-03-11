@@ -168,7 +168,7 @@ public class AbstractModel {
             if (isInDatabase) query += AbstractModel.WHERE + "id = " + valueMap.get("id");
 
 			try {
-				state.executeUpdate(query);
+				state.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 				
 				// get the generated id
 				ResultSet gk = state.getGeneratedKeys();

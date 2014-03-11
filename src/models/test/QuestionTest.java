@@ -146,7 +146,8 @@ public class QuestionTest {
     @Test
     public void testSaveNew() {
         assertTrue(Question.findByID(9) == null);
-        q.save();
+        int id = q.save();
+        System.out.println(id);
         q = Question.findByID(9);
         assertTrue(q.getContent1().equals("You're awesome!"));
         q.delete();
