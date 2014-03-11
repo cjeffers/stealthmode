@@ -22,7 +22,12 @@ public class User extends AbstractModel{
      * @return User instance corresponding to username
      */
     public static User findByUsername(String theUsername){
-        User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "username", (Object)theUsername);
+        AbstractModel am = AbstractModel.getOneByValue(USERS_DATABASE, "username", (Object)theUsername);
+        if (am == null){
+        	System.out.println("Fail");
+        	return null;
+        }
+        User user = new User(am);
         return user;
     }
 
@@ -56,11 +61,41 @@ public class User extends AbstractModel{
      */
     public User(String username, String password, String fullname, boolean administrator){
         super(USERS_DATABASE);
+        //if(!nameInUse(username)){
+            setUserName(username);
+            setPassword(password);
+            setPicURL("");
+            setAdminPriveledge(administrator);
+            setFullname(fullname);
+            setIsGreatest(false);
+        	setPracticed(false);
+        	setQuizMachine(false);
+        	setProdigiousAuthor(false);
+        	setAmateurAuthor(false);
+        	setProlificAuthor(false);
+            save();
+       // }
+    }
+    
+    /**
+     * Creates a new user
+     * @param username
+     * @param password
+     * @param administrator
+     */
+    public User(String username, String password, String fullname, boolean administrator, Map<String, Object> theMap, boolean exists){
+        super(USERS_DATABASE, theMap,  false);
         if(!nameInUse(username)){
             setUserName(username);
             setPassword(password);
             setAdminPriveledge(administrator);
             setFullname(fullname);
+            setIsGreatest(false);
+        	setPracticed(false);
+        	setQuizMachine(false);
+        	setProdigiousAuthor(false);
+        	setAmateurAuthor(false);
+        	setProlificAuthor(false);
             save();
         }
     }
@@ -72,6 +107,7 @@ public class User extends AbstractModel{
     public List<User> getFriends(){
         List<User> friends = new ArrayList<User>();
         List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "friends_with", getUserName(), "=");
+        System.out.println(modelsOfFriends.size());
         for (int i = 0; i < modelsOfFriends.size(); i++){
             AbstractModel currFriends = modelsOfFriends.get(i);
             User toAdd = findByUsername((String)currFriends.getValue("my_name"));
@@ -224,10 +260,10 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setUserName(String username){
-        if(!nameInUse(username)){
+     //   if(!nameInUse(username)){
             setValue("username", username);
             save();
-        }
+      //  }
     }
 
     /**
@@ -301,6 +337,46 @@ public class User extends AbstractModel{
     public byte[] getPasswordHash(){
         return (byte[]) getValue("password");
     }
+    
+    
+    /**
+     * returns whether the user inputed the correct password or not
+     * @param passwordAttempt the user's attempt at a password
+     * @return whether the passwords match
+     */
+    public boolean correctPassword(String passwordAttempt){
+    	String Salt = (String) getValue("salt");
+        return (hexToString(getPasswordHash()).equals(hexToString(generateHash((String) getValue("salt") + passwordAttempt))));
+    }
+
+
+    /**
+     * Encrypts a password
+     * @param password the string that needs to be encrypted
+     * @return the encrypted password, in bytes.
+     */
+    public byte[] generateHash(String password){
+        MessageDigest md = null;
+        try{
+            md = MessageDigest.getInstance("SHA");
+        } catch(NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(password.getBytes());
+        return md.digest();
+    }
+    
+    
+    private static String hexToString(byte[] bytes) {
+    	StringBuffer buff = new StringBuffer();
+    	for (int i=0; i<bytes.length; i++) {
+    		int val = bytes[i];
+    		val = val & 0xff;  // remove higher bits, sign
+    		if (val<16) buff.append('0'); // leading 0
+    		buff.append(Integer.toString(val, 16));
+    	}
+    	return buff.toString();
+    }
 
     public int getID(){
     	return (Integer) getValue("id");
@@ -324,31 +400,7 @@ public class User extends AbstractModel{
     	return (String) getValue("pic_url");
     }
     
-    /**
-     * returns whether the user inputed the correct password or not
-     * @param passwordAttempt the user's attempt at a password
-     * @return whether the passwords match
-     */
-    public boolean correctPassword(String passwordAttempt){
-        return (getPasswordHash() == generateHash((String) getValue("salt") + passwordAttempt));
-    }
 
-
-    /**
-     * Encrypts a password
-     * @param password the string that needs to be encrypted
-     * @return the encrypted password, in bytes.
-     */
-    public byte[] generateHash(String password){
-        MessageDigest md = null;
-        try{
-            md = MessageDigest.getInstance("SHA");
-        } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        md.update(password.getBytes());
-        return md.digest();
-    }
 
     /**
      * Turns the user into a winner of the amateur author award

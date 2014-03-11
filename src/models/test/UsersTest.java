@@ -26,13 +26,13 @@ public class UsersTest {
         am.setPicURL("testing");
         assertTrue(am.isAdministrator());
         assertTrue(am.getUserName().equals("ben_test"));
+        assertTrue(am.correctPassword("cheese"));
         assertTrue(am.getPicURL().equals("testing"));
         assertTrue(am.getFullname().equals("Ben Ulmer"));
         am.setAdminPriveledge(false);
         assertTrue(!am.isAdministrator());
         am.setUserName("Bob");
         assertTrue(am.getUserName().equals("Bob"));
-        assertTrue(am.correctPassword("cheese"));
         am.setAmateurAuthor(true);
         assertTrue(am.hasWonAmateurAuthor());
         List<String> awardsWon = am.seeAwardsWon();
