@@ -209,4 +209,29 @@ public class Quiz extends AbstractModel{
         }
         return quizzes;
 	}
+	
+	/**
+	 * Overrides toString()
+	 * Format:
+	 * id OR "not saved"
+	 * name - # of questions
+	 * description
+	 * timed - true/false
+	 * multiple pages - true/false
+	 */
+	@Override
+	public String toString() {
+		String str;
+		Integer id = getID();
+		if (id.equals(null)) {
+			str = "not saved"; 
+		} else {
+			str = id.toString();
+		}
+		str += "\n" + getName() + " - " + getQuestions().size();
+		str += "\n" + getDescription();
+		str += "\n" + "timed - " + isTimed();
+		str += "\n" + "multiple pages = " + hasMultiplePages();
+		return str;
+	}
 }
