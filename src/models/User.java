@@ -22,7 +22,7 @@ public class User extends AbstractModel{
      * @return User instance corresponding to username
      */
     public static User findByUsername(String theUsername){
-        User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "name", (Object)theUsername);
+        User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "username", (Object)theUsername);
         return user;
     }
 

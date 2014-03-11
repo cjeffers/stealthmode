@@ -13,5 +13,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="/afs/ir.stanford.edu/users/u/l/ulmerb/Desktop/junit-4.10.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
