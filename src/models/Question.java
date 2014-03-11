@@ -2,6 +2,8 @@ package models;
 
 import java.util.*;
 
+import javax.servlet.ServletRequest;
+
 
 /**
  * Question superclass, for use in Quizzes.
@@ -197,6 +199,33 @@ public class Question extends AbstractModel {
     }
     public void setContent9(String str) {
         setValue(CONTENT_COLNAME_START + "_9", str);
+    }
+    
+    /*
+     * Default answer-handling methods.  Override these
+     * if these implementations are incorrect for your
+     * specific sub-class
+     */
+    
+    /**
+     * Returns the answer as a String
+     * Assumes the answer is in the first
+     * general-purpose column
+     * @return answer
+     */
+    public String getAnswer() {
+    	return getContent0();
+    }
+    
+    /**
+     * Checks the answer against a request
+     * Assumes the answer is in the first
+     * general-purpose column and that the
+     * parameter is called "answer"
+     * @return boolean
+     */
+    public boolean checkAnswer(ServletRequest request) {
+    	return (request.getParameter("answer").toLowerCase().equals(getContent0()));
     }
     
 }

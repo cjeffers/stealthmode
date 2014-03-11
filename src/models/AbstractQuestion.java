@@ -1,33 +1,37 @@
 package models;
 
-import javax.servlet.ServletRequest;
-
-
-/**
- * Question types should use this class as their superclass
- * This enforces that all question types implement the abstract
- * methods outlined here.
- */
 public abstract class AbstractQuestion extends Question {
 	
-	/*
-	 * Constructors do not change
-	 */
+	// constructors
 	public AbstractQuestion(AbstractModel am) {
 		super(am);
 	}
 	
-	// These methods must be implemented by all questions
+	/**
+     * Creates new Question from scratch.
+     */
+    public AbstractQuestion(int quizID, String type, String prompt) {
+        super(quizID, type, prompt);
+    }
+
+    /**
+     * Creates a new Question from scratch without a prompt.
+     */
+    public AbstractQuestion(int quizID, String type) {
+        super(quizID, type);
+    }
 	
 	/**
-	 * Checks to see if the answer is correct based on a request
-	 * @param ServletRequest
-	 * @return boolean
+	 * @return the type of the question
+	 * in human-readable format
 	 */
-	public abstract boolean checkAnswer(ServletRequest request);
-	
+	public abstract String getHumanText();
+
 	/**
-	 * Returns the question's answer
+	 * @return the default prompt for the
+	 * question
 	 */
-	public abstract String getAnswer();
+	public abstract String getDefaultPrompt();
+	
+	
 }
