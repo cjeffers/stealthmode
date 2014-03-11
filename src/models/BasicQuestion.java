@@ -19,6 +19,18 @@ public class BasicQuestion extends AbstractQuestion {
 	
 	
 	/*
+	 * Get question info
+	 */
+	
+	/**
+	 * Returns the question's question
+	 * @return question
+	 */
+	public String getQuestion() {
+		return getContent1();
+	}
+	
+	/*
 	 * Constructors:
 	 * AbstractModel is same as super
 	 * No prompt - uses default prompt
