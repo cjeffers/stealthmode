@@ -17,11 +17,11 @@ public class QuestionTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-        Question.getConnection();
 	}
 
     @Before
     public void setUp() {
+        AbstractModel.getConnection();
         q = new Question(3, "basic", "Answer the question.");
         q.setValue("content_0", "Who's awesome?");
         q.setValue("content_1", "You're awesome!");
@@ -29,7 +29,7 @@ public class QuestionTest {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-        Question.closeConnection();
+        AbstractModel.closeConnection();
 	}
 
     // constructors
