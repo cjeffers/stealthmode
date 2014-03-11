@@ -129,24 +129,29 @@ public class AbstractModel {
 	 * Saves this AbstractModel's data in the database.
 	 * If it is not already in the table, it is added.
 	 * Otherwise, the values are simply updated.  Sets
-	 * isInDatabase to be true.
+	 * isInDatabase to be true. Returns the entry's id.
+	 * Any errors or exceptions return -1.
 	 */
-	public void save() {
+	public int save() {
+		int id = -1;
 		if(!isInDatabase) {
-            update("INSERT INTO ");
+            id = update("INSERT INTO ");
             isInDatabase = true;
         } else {
-            update("UPDATE ");
+            id = update("UPDATE ");
         }
+		return id;
 	}
 
 	/**
 	 * Updates this AbstractModel's data in the database.
 	 * Uses the model's id to identify the row to update.
 	 * Therefore, an AbstractModel's id can not change or
-	 * be updated.
+	 * be updated. This id is returned.
+	 * Returns -1 if there is any error.
+	 * @return id
 	 */
-	private void update(String cmd) {
+	private int update(String cmd) {
 		Iterator<Map.Entry<String, Object>> it = valueMap.entrySet().iterator();
 		Map.Entry<String, Object> entry;
 		if (it.hasNext()) {
@@ -164,10 +169,18 @@ public class AbstractModel {
 
 			try {
 				state.executeUpdate(query);
+				
+				// get the generated id
+				ResultSet gk = state.getGeneratedKeys();
+				if (gk.next()) {
+					return gk.getInt(1);
+				}
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		return -1;
 	}
 
 	/**
