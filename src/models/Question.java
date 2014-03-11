@@ -2,6 +2,7 @@ package models;
 
 import java.util.*;
 
+
 /**
  * Question superclass, for use in Quizzes.
  * Stores a prompt, the id of the quiz it belongs to, and its type
@@ -197,4 +198,5 @@ public class Question extends AbstractModel {
     public void setContent9(String str) {
         setValue(CONTENT_COLNAME_START + "_9", str);
     }
+    
 }
