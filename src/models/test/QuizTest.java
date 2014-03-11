@@ -42,8 +42,8 @@ public class QuizTest {
 	@Test
 	public void testAbstractModel() {
 		AbstractModel am = new AbstractModel("quizzes");
-		am.setValue(Quiz.DESCRIPTION_COLNAME, "hi there");
-		am.setValue(Quiz.NAME_COLNAME, "oh, hello");
+		am.setValue("description", "hi there");
+		am.setValue("name", "oh, hello");
 		q = new Quiz(am);
 		assertEquals(q.getDescription(), "hi there");
 		assertEquals(q.getName(), "oh, hello");
