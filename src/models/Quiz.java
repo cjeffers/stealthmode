@@ -20,12 +20,12 @@ public class Quiz extends AbstractModel{
 	 */
 	public static final String QUIZ_TABLENAME = "quizzes";
 	
-	private static final String ID_COLNAME = "id";
-	private static final String NAME_COLNAME = "name";
-	private static final String DESCRIPTION_COLNAME = "description";
-	private static final String TIMED_COLNAME = "timed";
-	private static final String MULTIPLEPAGES_COLNAME = "multiple_pages";
-	private static final String DATE_COLNAME = "date";
+	public static final String ID_COLNAME = "id";
+	public static final String NAME_COLNAME = "name";
+	public static final String DESCRIPTION_COLNAME = "description";
+	public static final String TIMED_COLNAME = "timed";
+	public static final String MULTIPLEPAGES_COLNAME = "multiple_pages";
+	public static final String DATE_COLNAME = "date";
 	
 	
 	/**
@@ -214,7 +214,8 @@ public class Quiz extends AbstractModel{
 	 * Overrides toString()
 	 * Format:
 	 * id OR "not saved"
-	 * name - # of questions
+	 * name - date made
+	 * # of questions
 	 * description
 	 * timed - true/false
 	 * multiple pages - true/false
@@ -228,7 +229,8 @@ public class Quiz extends AbstractModel{
 		} else {
 			str = id.toString();
 		}
-		str += "\n" + getName() + " - " + getQuestions().size();
+		str += "\n" + getName() + " - " + getDateMade(); 
+		str += "\n" + "# of questions - " + getQuestions().size();
 		str += "\n" + getDescription();
 		str += "\n" + "timed - " + isTimed();
 		str += "\n" + "multiple pages = " + hasMultiplePages();
