@@ -3,7 +3,7 @@ package models;
 import javax.servlet.ServletRequest;
 
 public class FillInBlankQuestion extends AbstractQuestion {
-	
+
 	/*
 	 * Request Parameter Names:
 	 */
@@ -11,17 +11,17 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	private static final String REQUEST_BEFORE = "question_before";
 	private static final String REQUEST_BLANK = "question_blank";
 	private static final String REQUEST_AFTER = "question_after";
-	
+
 	// constants
-	
+
 	private final String DEFAULT_PROMPT = "Fill in the blank.";
-	private final String HUMAN_READABLE = "Fill In The Blank";
+	public static final String HUMAN_READABLE = "Fill In The Blank";
 	public static final String TYPE = "fill_in_blank";
-	
+
 	/*
 	 * Get question info
 	 */
-	
+
 	/**
 	 * Returns the text before the blank
 	 * @return String
@@ -29,7 +29,7 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	public String getBefore() {
 		return getContent1();
 	}
-	
+
 	/**
 	 * Returns the text after the blank
 	 * @return String
@@ -37,20 +37,20 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	public String getAfter() {
 		return getContent0();
 	}
-	
+
 	/*
 	 * Constructors:
 	 * AbstractModel is same as super
 	 * No prompt - uses default prompt
 	 */
-	
+
 	/**
 	 * Creates Image Question from AbstractModel
 	 */
 	public FillInBlankQuestion(AbstractModel am) {
 		super(am);
 	}
-	
+
 	/**
 	 * Creates Image Question from:
 	 * QuizID, question, prompt

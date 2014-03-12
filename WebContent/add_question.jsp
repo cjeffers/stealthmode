@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="models.QuestionFactory" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -7,7 +7,7 @@
         <title>Add question</title>
     </head>
     <body>
-        <h1>Add a <%= request.getParameter("type") %> question</h1>
+        <h1>Add a <%= QuestionFactory.getHumanType(request.getParameter("type")) %> Question</h1>
         <form action="/stealthmode/quiz/add_question" method="post">
             <% String type_jsp = request.getAttribute("type") + "_question_create.jsp"; %>
             <jsp:include page="<%= type_jsp %>" flush="true" />

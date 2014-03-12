@@ -1,12 +1,12 @@
 package models;
 
 public abstract class AbstractQuestion extends Question {
-	
+
 	// constructors
 	public AbstractQuestion(AbstractModel am) {
 		super(am);
 	}
-	
+
 	/**
      * Creates new Question from scratch.
      */
@@ -20,18 +20,20 @@ public abstract class AbstractQuestion extends Question {
     public AbstractQuestion(int quizID, String type) {
         super(quizID, type);
     }
-	
+
 	/**
 	 * @return the type of the question
 	 * in human-readable format
 	 */
-	public abstract String getHumanText();
+    public String getHumanText() {
+        return "Question";
+    }
 
 	/**
 	 * @return the default prompt for the
 	 * question
 	 */
 	public abstract String getDefaultPrompt();
-	
-	
+
+
 }

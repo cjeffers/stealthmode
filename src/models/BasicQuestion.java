@@ -3,25 +3,25 @@ package models;
 import javax.servlet.ServletRequest;
 
 public class BasicQuestion extends AbstractQuestion {
-	
+
 	/*
 	 * Request Parameter Names:
 	 */
 	private static final String REQUEST_PROMPT = "question_prompt";
 	private static final String REQUEST_ANSWER = "question_answer";
 	private static final String REQUEST_QUESTION = "question_question";
-	
+
 	// constants
-	
+
 	private final String DEFAULT_PROMPT = "Answer the question.";
-	private final String HUMAN_READABLE = "Basic";
+	public static final String HUMAN_READABLE = "Basic";
 	public static final String TYPE = "basic";
-	
-	
+
+
 	/*
 	 * Get question info
 	 */
-	
+
 	/**
 	 * Returns the question's question
 	 * @return question
@@ -29,20 +29,20 @@ public class BasicQuestion extends AbstractQuestion {
 	public String getQuestion() {
 		return getContent1();
 	}
-	
+
 	/*
 	 * Constructors:
 	 * AbstractModel is same as super
 	 * No prompt - uses default prompt
 	 */
-	
+
 	/**
 	 * Creates Image Question from AbstractModel
 	 */
 	public BasicQuestion(AbstractModel am) {
 		super(am);
 	}
-	
+
 	/**
 	 * Creates Image Question from:
 	 * QuizID, question, prompt
