@@ -132,11 +132,13 @@ public class AbstractModel {
 	 * isInDatabase to be true.
 	 */
 	public void save() {
+		int id = -1;
 		if(!isInDatabase) {
-            update("INSERT INTO ");
+            id = update("INSERT INTO ");
+            setValue("id", id);
             isInDatabase = true;
         } else {
-            update("UPDATE ");
+            id = update("UPDATE ");
         }
 	}
 
@@ -146,7 +148,7 @@ public class AbstractModel {
 	 * Therefore, an AbstractModel's id can not change or
 	 * be updated.
 	 */
-	private void update(String cmd) {
+	private int update(String cmd) {
 		Iterator<Map.Entry<String, Object>> it = valueMap.entrySet().iterator();
 		Map.Entry<String, Object> entry;
 		if (it.hasNext()) {
@@ -163,11 +165,18 @@ public class AbstractModel {
             if (isInDatabase) query += AbstractModel.WHERE + "id = " + valueMap.get("id");
 
 			try {
-				state.executeUpdate(query);
+				state.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+				
+				// get the generated id
+				ResultSet gk = state.getGeneratedKeys();
+				if (gk.next()) {
+					return gk.getInt(1);
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		return -1;
 	}
 
 	/**
@@ -468,6 +477,7 @@ public class AbstractModel {
 	 */
 	public static List<AbstractModel> getWhere(String sqlQuery, String theTableName) {
 		String query = QUERY_BEGIN + theTableName + WHERE + sqlQuery;
+		System.out.println(query);
 		List<AbstractModel> list = new ArrayList<AbstractModel>();
 
 		try {

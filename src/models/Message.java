@@ -44,7 +44,7 @@ public class Message extends AbstractModel{
 	 */
 	public static List<Message> findMessagesSentByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND type='m';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND typem='m';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -56,9 +56,9 @@ public class Message extends AbstractModel{
 	 * @param string that is the username of the sender
 	 * @return List of message instances corresponding to the message, or null if it doesn't exist
 	 */
-	public static List<Message> findMessagesRecievedByUser(String user){
+	public static List<Message> findMessagesReceivedByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND type='m';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND typem='m';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -72,7 +72,7 @@ public class Message extends AbstractModel{
 	 */
 	public static List<Message> findRequestsSentByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND type='f';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND typem='f';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -86,7 +86,7 @@ public class Message extends AbstractModel{
 	 */
 	public static List<Message> findRequestsRecievedByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND type='f';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND typem='f';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -100,7 +100,7 @@ public class Message extends AbstractModel{
 	 */
 	public static List<Message> findChallengesSentByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND type='c';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("sender='" + user + "' AND typem='c';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -114,7 +114,7 @@ public class Message extends AbstractModel{
 	 */
 	public static List<Message> findChallengesRecievedByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
-		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND type='c';", MESSAGES_DATABASE);
+		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND typem='c';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
 			returnL.add(new Message(am));
 		}
@@ -123,7 +123,7 @@ public class Message extends AbstractModel{
 
 
 	/**
-	 * Creates a new user
+	 * Creates a new user (used typically for challenge)
 	 * @param string sender
 	 * @param string receiver
 	 * @param string administrator
@@ -138,9 +138,28 @@ public class Message extends AbstractModel{
 		setSender(sender);           
 		setReceiver(receiver);
 		setMessageText(text);
+		save();
 
 	}
 
+	/**
+	 * Creates a new user
+	 * @param string sender
+	 * @param string receiver
+	 * @param string administrator
+	 * @param char type (m=message, f=friend request, c=challenge)
+	 */
+
+
+	public Message(String sender, String receiver, String text, char type){
+		super(MESSAGES_DATABASE);
+		setSender(sender);    
+		setType(type);
+		setReceiver(receiver);
+		setMessageText(text);
+		save();
+
+	}
 
 
 
@@ -150,6 +169,7 @@ public class Message extends AbstractModel{
 	 */
 	public void setSender(String username){
 		setValue("sender", username);
+		//save();
 	}
 
 	/**
@@ -158,6 +178,7 @@ public class Message extends AbstractModel{
 	 */
 	public void setReceiver(String username){
 		setValue("receiver", username);
+		//save();
 	}
 
 	/**
@@ -166,6 +187,7 @@ public class Message extends AbstractModel{
 	 */
 	public void setMessageText(String text){
 		setValue("text", text);
+		//save();
 	}
 	
 	/**
@@ -173,7 +195,8 @@ public class Message extends AbstractModel{
 	 * @param char the desired message type
 	 */
 	public void setType(char type){
-		setValue("type", type);
+		setValue("typem", type);
+		//save();
 	}
 	
 	/**
@@ -182,6 +205,7 @@ public class Message extends AbstractModel{
 	 */
 	public void setQuiz(int id){
 		setValue("quiz", id);
+		//save();
 	}
 	
 	 /**
@@ -201,6 +225,20 @@ public class Message extends AbstractModel{
         return (String) getValue("receiver");
     }
     
+    /*
+     * Gets all Messages
+     *
+     */
+    
+    public static List<Message> getAllMessages(){
+    	List<Message> returnL = new ArrayList<Message>();
+		List<AbstractModel> result = AbstractModel.getAll(MESSAGES_DATABASE);
+		for (AbstractModel am : result) {
+			returnL.add(new Message(am));
+		}
+		return returnL;
+    }
+    
     /**
      * Gets the name of the receiver
      * @return the name of the receiver
@@ -209,6 +247,8 @@ public class Message extends AbstractModel{
     public String getText(){
         return (String) getValue("text");
     }
+    
+
 
 
 
