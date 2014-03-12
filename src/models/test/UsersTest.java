@@ -55,6 +55,7 @@ public class UsersTest {
     	User am1 = new User("ben_test", "cheese", "Ben", true);
     	User am2 = new User("ben_test_friend", "cheese", "Ninja", true);
     	List<User> admins = User.findAdministrators();
+    	System.out.println(admins.size());
     	assertTrue(admins.size() == 2);
     	am1.setAdminPriveledge(false);
     	List<User> admins2 = User.findAdministrators();

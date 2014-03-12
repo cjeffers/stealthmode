@@ -47,7 +47,11 @@ public class User extends AbstractModel{
      * @return User instance corresponding to the user, or null if it doesn't exist
      */
     public static User findByID(int id){
-        User user = (User) AbstractModel.getOneByValue(USERS_DATABASE, "id", (Object)id);
+        AbstractModel am = AbstractModel.getOneByValue(USERS_DATABASE, "id", (Object)id, "=");
+        if (am == null){
+        	return null;
+        }
+        User user = new User(am);
         return user;
     }
 
@@ -122,7 +126,8 @@ public class User extends AbstractModel{
      */
     public static List<User> findAdministrators(){
         List<User> administrators = new ArrayList<User>();
-        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", "true", "=");
+        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", 1, "=");
+        System.out.println(modelsOfAdmins.size());
         for (int i = 0; i < modelsOfAdmins.size(); i++){
             AbstractModel currAdmin = modelsOfAdmins.get(i);
             User toAdd = findByUsername((String)currAdmin.getValue("username"));
@@ -235,7 +240,11 @@ public class User extends AbstractModel{
      * @param isAdministrator whether the user is an administrator or not
      */
     public void setAdminPriveledge(boolean isAdmin){
-        setValue("administrator", isAdmin);
+    	if (isAdmin){
+    		setValue("administrator", 1);
+    	} else{
+    		setValue("administrator", 0);
+    	}
         save();
     }
 
@@ -244,7 +253,8 @@ public class User extends AbstractModel{
      * @return a boolean of whether the user is an administrator
      */
     public boolean isAdministrator(){
-        return (Boolean) getValue("administrator");
+    	int admin = (Integer) getValue("administrator");
+        return admin == 1;
     }
 
     /**
