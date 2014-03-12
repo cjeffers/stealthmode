@@ -78,7 +78,8 @@ public class AbstractModelTest {
         greeley.setValue("metropolis", "Greeley");
         greeley.setValue("continent", "North America");
         greeley.setValue("population", 100000);
-        greeley.save();
+        int greeleyID = greeley.save();
+        assertTrue(greeleyID == 17);
         AbstractModel g = AbstractModel.getOneByValue("metropolises", "metropolis", (Object) "Greeley");
         assertTrue(g.getValue("metropolis").equals("Greeley"));
         g.delete();

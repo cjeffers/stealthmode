@@ -22,6 +22,51 @@ public class MultipleChoiceQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "Choose the correct option";
 	private final String HUMAN_READABLE = "Multiple Choice";
+	public static final String TYPE = "multiple_choice";
+	
+	/*
+	 * Get question info
+	 */
+	
+	/**
+	 * Returns the first option
+	 * @return String
+	 */
+	public String getOption1() {
+		return getContent1();
+	}
+	
+	/**
+	 * Returns the second option
+	 * @return String
+	 */
+	public String getOption2() {
+		return getContent2();
+	}
+	
+	/**
+	 * Returns the third option
+	 * @return String
+	 */
+	public String getOption3() {
+		return getContent3();
+	}
+	
+	/**
+	 * Returns the fourth option
+	 * @return String
+	 */
+	public String getOption4() {
+		return getContent4();
+	}
+	
+	/**
+	 * Returns the question's question
+	 * @return question
+	 */
+	public String getQuestion() {
+		return getContent5();
+	}
 	
 	
 	/*

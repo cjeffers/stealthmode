@@ -15,7 +15,20 @@ public class BasicQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "Answer the question.";
 	private final String HUMAN_READABLE = "Basic";
+	public static final String TYPE = "basic";
 	
+	
+	/*
+	 * Get question info
+	 */
+	
+	/**
+	 * Returns the question's question
+	 * @return question
+	 */
+	public String getQuestion() {
+		return getContent1();
+	}
 	
 	/*
 	 * Constructors:

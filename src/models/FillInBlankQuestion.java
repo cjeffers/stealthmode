@@ -16,7 +16,27 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "Fill in the blank.";
 	private final String HUMAN_READABLE = "Fill In The Blank";
+	public static final String TYPE = "fill_in_blank";
 	
+	/*
+	 * Get question info
+	 */
+	
+	/**
+	 * Returns the text before the blank
+	 * @return String
+	 */
+	public String getBefore() {
+		return getContent1();
+	}
+	
+	/**
+	 * Returns the text after the blank
+	 * @return String
+	 */
+	public String getAfter() {
+		return getContent0();
+	}
 	
 	/*
 	 * Constructors:

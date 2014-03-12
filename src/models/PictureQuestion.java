@@ -15,7 +15,19 @@ public class PictureQuestion extends AbstractQuestion {
 	
 	private final String DEFAULT_PROMPT = "What is this a picture of?";
 	private final String HUMAN_READABLE = "Picture";
+	public static final String TYPE = "picture";
 	
+	/*
+	 * Get Question info
+	 */
+	
+	/**
+	 * Returns the picture's url
+	 * @return String
+	 */
+	public String getURL() {
+		return getContent1();
+	}
 	
 	/*
 	 * Constructors:
