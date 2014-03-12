@@ -61,7 +61,7 @@ public class QuizCreate extends HttpServlet {
                                     isMultiPage, System.currentTimeMillis());
             int quizID = newQuiz.save();
 
-            // repeat with next question's type
+            // show the form for the first question
             request.getSession().setAttribute("quiz_id", quizID);
             response.sendRedirect("/stealthmode/quiz/add_question?type=" + questionType);
 

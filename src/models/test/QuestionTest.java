@@ -148,7 +148,7 @@ public class QuestionTest {
         assertTrue(Question.findByID(9) == null);
         int id = q.save();
         System.out.println(id);
-        q = Question.findByID(9);
+        q = Question.findByID(id);
         assertTrue(q.getContent1().equals("You're awesome!"));
         q.delete();
     }
@@ -176,7 +176,7 @@ public class QuestionTest {
         assertTrue(basic.size() == 3);
         q.save();
     }
-    
+
     @Test
     public void testGetIDFromSave() {
     	q = new Question(1, "basic");
@@ -184,6 +184,7 @@ public class QuestionTest {
     	int id = q.save();
     	Question newq = Question.findByID(id);
     	assertEquals(newq.getContent1(), "please work");
+        newq.delete();
     }
 
 }

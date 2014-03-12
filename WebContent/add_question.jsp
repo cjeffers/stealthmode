@@ -21,7 +21,6 @@
                 </select>
             </p>
             <input type="hidden" name="question_type" value='<%= request.getAttribute("type") %>'>
-            <input type="hidden" name="quiz_id" value='<%= request.getAttribute("quiz_id") %>'>
             <input type="submit" name="add_question" value="Add a question" />
             <input type="submit" name="cancel" value="Cancel" />
             <input type="submit" name="finish" value="Save and finish" />
