@@ -43,11 +43,11 @@ public class UsersTest {
     public void testFriends() {
     	User am1 = new User("ben_test", "cheese", "Ben", true);
     	User am2 = new User("ben_test_friend", "cheese", "Ninja", true);
-    	am1.addFriend("Ninja");
+    	am1.addFriend("ben_test_friend");
     	List<User> benFriends = am1.getFriends();
-    	assertTrue(benFriends.get(0).getUserName().equals("Ninja"));
+    	assertTrue(benFriends.get(0).getUserName().equals("ben_test_friend"));
     	List<User> ninjaFriends = am2.getFriends();
-    	assertTrue(ninjaFriends.get(0).getUserName().equals("Ben"));
+    	assertTrue(ninjaFriends.get(0).getUserName().equals("ben_test"));
     }
     
     @Test

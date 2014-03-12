@@ -22,9 +22,8 @@ public class User extends AbstractModel{
      * @return User instance corresponding to username
      */
     public static User findByUsername(String theUsername){
-        AbstractModel am = AbstractModel.getOneByValue(USERS_DATABASE, "username", (Object)theUsername);
+        AbstractModel am = AbstractModel.getOneByValue(USERS_DATABASE, "username", (Object)theUsername, "=");
         if (am == null){
-        	System.out.println("Fail");
         	return null;
         }
         User user = new User(am);
@@ -107,11 +106,12 @@ public class User extends AbstractModel{
     public List<User> getFriends(){
         List<User> friends = new ArrayList<User>();
         List<AbstractModel> modelsOfFriends = getByValue(FRIENDS_DATABASE, "friends_with", getUserName(), "=");
-        System.out.println(modelsOfFriends.size());
         for (int i = 0; i < modelsOfFriends.size(); i++){
-            AbstractModel currFriends = modelsOfFriends.get(i);
-            User toAdd = findByUsername((String)currFriends.getValue("my_name"));
-            friends.add(toAdd);
+            AbstractModel currFriend = modelsOfFriends.get(i);
+            User toAdd = findByUsername((String)currFriend.getValue("my_name"));
+            if(toAdd != null){
+            	friends.add(toAdd);
+            }
         }
         return friends;
     }
@@ -137,6 +137,7 @@ public class User extends AbstractModel{
      * @param username The username of the new friend.
      */
     public void addFriend(String username){
+    	//if (AbstractModel.getOneByValue(FRIENDS_DATABASE, "friends_with", username, "my_name", getUsername) != null) return;
         AbstractModel newFriend = new AbstractModel(FRIENDS_DATABASE);
         newFriend.setValue("friends_with", username);
         newFriend.setValue("my_name", getUserName());
