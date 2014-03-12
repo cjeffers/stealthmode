@@ -176,5 +176,14 @@ public class QuestionTest {
         assertTrue(basic.size() == 3);
         q.save();
     }
+    
+    @Test
+    public void testGetIDFromSave() {
+    	q = new Question(1, "basic");
+    	q.setContent1("please work");
+    	int id = q.save();
+    	Question newq = Question.findByID(id);
+    	assertEquals(newq.getContent1(), "please work");
+    }
 
 }
