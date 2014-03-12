@@ -8,11 +8,11 @@
     </head>
     <body>
         <h1>New Quiz</h1>
-        <form action="add_question.jsp" method="post">
+        <form action="/stealthmode/quiz/create" method="post">
             <p>Quiz title: <input type="text" name="quiz_title" /></p>
             <p>Description: <textarea name="quiz_description"></textarea></p>
             <p>Check if timed: <input type="checkbox" name="quiz_timed" /></p>
-            <p>Check if displayed on multiple pages: <input type="checkbox" name="quiz_mult_pages" /></p>
+            <p>Check if displayed on multiple pages: <input type="checkbox" name="quiz_multi_pages" /></p>
             <p>
                 Question type:
                 <select name="question_type">
@@ -22,7 +22,7 @@
                     <option value="picture">Picture</option>
                 </select>
             </p>
-            <input type="submit" value="Add a question" />
+            <input type="submit" name="add" value="Add a question" />
             <input type="submit" name="cancel" value="Cancel" />
         </form>
     </body>

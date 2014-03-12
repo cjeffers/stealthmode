@@ -25,7 +25,7 @@ public class Quiz extends AbstractModel{
 	private static final String DESCRIPTION_COLNAME = "description";
 	private static final String TIMED_COLNAME = "timed";
 	private static final String MULTIPLEPAGES_COLNAME = "multiple_pages";
-	private static final String DATE_COLNAME = "date";
+	private static final String DATE_COLNAME = "creation_time";
 
 
 	/**
@@ -83,15 +83,16 @@ public class Quiz extends AbstractModel{
 	 * @return whether or not the quiz is timed
 	 */
 	public boolean isTimed() {
-		return (Boolean) getValue(TIMED_COLNAME);
-
+        if (((Integer)getValue(TIMED_COLNAME)) == 0) return false;
+        return true;
 	}
 
 	/**
 	 * @return whether or not to display on multiple pages
 	 */
 	public boolean hasMultiplePages() {
-		return (Boolean) getValue(MULTIPLEPAGES_COLNAME);
+        if (((Integer)getValue(MULTIPLEPAGES_COLNAME)) == 0) return false;
+        return true;
 	}
 
 	/**
@@ -135,14 +136,22 @@ public class Quiz extends AbstractModel{
 	 * @param whether or not the quiz is timed
 	 */
 	public void setTimed(boolean timed) {
-		setValue(TIMED_COLNAME, timed);
+        if (timed) {
+            setValue(TIMED_COLNAME, 1);
+        } else {
+            setValue(TIMED_COLNAME, 0);
+        }
 	}
 
 	/**
 	 * @param whether or not to display the quiz on multiple pages
 	 */
 	public void setMultiplePages(boolean multPages) {
-		setValue(MULTIPLEPAGES_COLNAME, multPages);
+        if (multPages) {
+            setValue(MULTIPLEPAGES_COLNAME, "1");
+        } else {
+            setValue(MULTIPLEPAGES_COLNAME, "0");
+        }
 	}
 
 	/**
