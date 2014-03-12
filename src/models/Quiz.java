@@ -44,7 +44,12 @@ public class Quiz extends AbstractModel{
 	 * @param givenMultiplePages whether the quiz consists of multiple pages
 	 * @param givenDateMade the date the quiz was made
 	 */
+<<<<<<< HEAD
 	public Quiz(String theName, String theDescription, boolean theTimed, boolean theMultiplePages, long theDateMade){
+=======
+
+	public Quiz(String givenName, boolean theTimed, boolean theMultiplePages, long theDateMade){
+>>>>>>> Ben/QuizClass2
 		super("quizzes");
 		setName(theName);
 		setDescription(theDescription);
