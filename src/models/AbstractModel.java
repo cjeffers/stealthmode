@@ -137,6 +137,7 @@ public class AbstractModel {
 		if(!isInDatabase) {
             id = update("INSERT INTO ");
             isInDatabase = true;
+            setValue("id", id);
         } else {
             id = update("UPDATE ");
         }

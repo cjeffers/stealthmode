@@ -3,6 +3,8 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
+
 /**
  * Quiz superclass
  * Stores:
@@ -45,7 +47,7 @@ public class Quiz extends AbstractModel{
 	 * @param givenDateMade the date the quiz was made
 	 */
 	public Quiz(String theName, String theDescription, boolean theTimed, boolean theMultiplePages, long theDateMade){
-		super("quizzes");
+		super(QUIZ_TABLENAME);
 		setName(theName);
 		setDescription(theDescription);
 		setTimed(theTimed);
@@ -217,6 +219,21 @@ public class Quiz extends AbstractModel{
             quizzes.add(new Quiz(am));
         }
         return quizzes;
+	}
+	
+	/**
+	 * Given a ServletRequest, checks the score
+	 * of the quiz
+	 */
+	public int checkScore(ServletRequest request) {
+		int score = 0;
+		
+		List<Question> questions = getQuestions();
+		for (Question question : questions) {
+			if (question.checkAnswer(request)) score++;
+		}
+		
+		return score;
 	}
 
 	/**
