@@ -306,8 +306,17 @@ public class User extends AbstractModel{
     public void setPassword(String password){
     	String Salt = makeSalt();
     	setValue("salt", Salt);
-        setValue("password", generateHash(Salt + password));
+        setValue("password", hexToString(generateHash(Salt + password)));
         save();
+    }
+    
+    public static boolean validateLogin(String user, String password){
+    	User tryUser = findByUsername(user);
+    	if(tryUser == null) return false;
+    	if(tryUser.correctPassword(password)){
+    		return true;
+    	}
+    	return false;
     }
 
     private static int SALT_LENGTH = 8;
@@ -341,8 +350,8 @@ public class User extends AbstractModel{
      * Returns the correct password in hash form
      * @return the correct password in hash form
      */
-    public byte[] getPasswordHash(){
-        return (byte[]) getValue("password");
+    public String getPasswordHash(){
+        return (String) getValue("password");
     }
     
 
@@ -353,7 +362,7 @@ public class User extends AbstractModel{
      */
     public boolean correctPassword(String passwordAttempt){
     	String Salt = (String) getValue("salt");
-        return (hexToString(getPasswordHash()).equals(hexToString(generateHash((String) getValue("salt") + passwordAttempt))));
+        return (getPasswordHash().equals(hexToString(generateHash((String) getValue("salt") + passwordAttempt))));
     }
 
 
@@ -618,6 +627,22 @@ public class User extends AbstractModel{
         //return getOneByValue(colname, value, "=");
     //}
 
+    /**
+     * Returns a list of all administrators.
+     * @return a list of all Users who are administrators.
+     */
+    public static List<User> findAdministrators(){
+        List<User> administrators = new ArrayList<User>();
+        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", 1, "=");
+        System.out.println(modelsOfAdmins.size());
+        for (int i = 0; i < modelsOfAdmins.size(); i++){
+            AbstractModel currAdmin = modelsOfAdmins.get(i);
+            User toAdd = findByUsername((String)currAdmin.getValue("username"));
+            administrators.add(toAdd);
+        }
+        return administrators;
+    }
+    
     /**
      * Get a list of all users.
      * @return a list containing all users in the database
