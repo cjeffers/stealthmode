@@ -30,6 +30,7 @@ public class Quiz extends AbstractModel{
 	private static final String TIMED_COLNAME = "timed";
 	private static final String MULTIPLEPAGES_COLNAME = "multiple_pages";
 	private static final String DATE_COLNAME = "creation_time";
+	private static final String CREATOR_ID_COLNAME = "creator_id";
 
 
 	/**
@@ -48,13 +49,14 @@ public class Quiz extends AbstractModel{
 	 * @param givenMultiplePages whether the quiz consists of multiple pages
 	 * @param givenDateMade the date the quiz was made
 	 */
-	public Quiz(String theName, String theDescription, boolean theTimed, boolean theMultiplePages, long theDateMade){
+	public Quiz(String theName, String theDescription, boolean theTimed, boolean theMultiplePages, long theDateMade, int creatorID){
 		super(QUIZ_TABLENAME);
 		setName(theName);
 		setDescription(theDescription);
 		setTimed(theTimed);
 		setMultiplePages(theMultiplePages);
 		setDateMade(theDateMade);
+        setCreatorID(creatorID);
 	}
 
 
@@ -68,6 +70,13 @@ public class Quiz extends AbstractModel{
         if (id != null) return (Integer) id;
         return null;
 	}
+
+    /**
+     * @return creator_id
+     */
+    public Integer getCreatorID() {
+        return (Integer) getValue(CREATOR_ID_COLNAME);
+    }
 
 	/**
 	 * @return quiz name
@@ -129,6 +138,13 @@ public class Quiz extends AbstractModel{
 	public void setName(String name) {
 		setValue(NAME_COLNAME, name);
 	}
+
+    /**
+     * @param creatorID
+     */
+    public void setCreatorID(int creatorID) {
+        setValue(CREATOR_ID_COLNAME, creatorID);
+    }
 
 	/**
 	 * @param description
@@ -228,19 +244,19 @@ public class Quiz extends AbstractModel{
         }
         return quizzes;
 	}
-	
+
 	/**
 	 * Given a ServletRequest, checks the score
 	 * of the quiz
 	 */
 	public int checkScore(ServletRequest request) {
 		int score = 0;
-		
+
 		List<Question> questions = getQuestions();
 		for (Question question : questions) {
 			if (question.checkAnswer(request)) score++;
 		}
-		
+
 		return score;
 	}
 
@@ -270,51 +286,51 @@ public class Quiz extends AbstractModel{
 		str += "\n" + "multiple pages = " + hasMultiplePages();
 		return str;
 	}
-	
-	
-    static final Comparator<Result> TIME_SORT = 
+
+
+    static final Comparator<Result> TIME_SORT =
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
    	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
    	 		}
    };
-   	
+
    	/**
    	 * Returns all results of a quiz, sorted by time taken last (latest results first in list).
    	 * @return a sorted list of results
    	 */
-   	
+
    	public List<Result> getRecentResults(){
    		List<Result> result = Result.findByQuiz(getID());
    		Collections.sort(result, TIME_SORT);
    		return result;
    	}
-	
- static final Comparator<Result> SCORE_SORT = 
+
+ static final Comparator<Result> SCORE_SORT =
          new Comparator<Result>() {
 	 		public int compare(Result e1, Result e2) {
 	 		return e1.getScore() - e2.getScore();
 	 		}
 };
-	
+
 	/**
 	 * Returns all results of a quiz, sorted by score (highest scores first).
 	 * @return a sorted list of results
 	 */
-	
+
 	public List<Result> getScores(){
 		List<Result> result = Result.findByQuiz(getID());
 		Collections.sort(result, SCORE_SORT);
 		return result;
 	}
-	
-	
-   	
+
+
+
    	/**
    	 * Returns average score on a quiz.
    	 * @return the average score
    	 */
-   	
+
    	public int averageScore(){
    		List<Result> results = Result.findByQuiz(getID());
    		if (results.size() == 0) return 0;
@@ -325,12 +341,12 @@ public class Quiz extends AbstractModel{
    		}
    		return totalScore/results.size();
    	}
-   	
+
    	/**
    	 * Returns average time taken on a quiz.
    	 * @return the average time
    	 */
-   	
+
    	public int averageTime(){
    		List<Result> results = Result.findByQuiz(getID());
    		if (results.size() == 0) return 0;
@@ -341,31 +357,31 @@ public class Quiz extends AbstractModel{
    		}
    		return totalTime/results.size();
    	}
-   	
+
    	private static int getPopularity(int quizID){
    		return Result.findByQuiz(quizID).size();
    	}
-   	
-    static final Comparator<Quiz> POPULARITY_SORT = 
+
+    static final Comparator<Quiz> POPULARITY_SORT =
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
    	 		return getPopularity(e1.getID()) - getPopularity(e2.getID());
    	 		}
    };
-   	
+
    	public static List<Quiz> getTopQuizzes(){
    		List<Quiz> quizzes = findAll();
    		Collections.sort(quizzes, POPULARITY_SORT);
    		return quizzes;
    	}
-   	
-    static final Comparator<Quiz> CREATION_TIME_SORT = 
+
+    static final Comparator<Quiz> CREATION_TIME_SORT =
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
    	 		return (int) (e1.getDateMade() - e2.getDateMade());
    	 		}
    };
-   	
+
    	public static List<Quiz> recentlyCreatedQuizzes(){
    		List<Quiz> quizzes = findAll();
    		Collections.sort(quizzes, CREATION_TIME_SORT);
