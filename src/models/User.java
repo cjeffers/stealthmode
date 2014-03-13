@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+
 public class User extends AbstractModel{
 
     private static String USERS_DATABASE = "users";
@@ -141,102 +142,63 @@ public class User extends AbstractModel{
        reverseNewFriend.save();
     }
 
-
-
     /**
-     * Sees a list of notes sent to this user.
-     * @return returns an array of notes. Each note is a list of strings with two values-the person who sent it, and the message.
+     * Sees a list of messages sent to this user.
+     * @return returns an array of messages. Each note is a message object
      */
-    public List<ArrayList<String>> seeNotes(){
-        List<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
-        List<AbstractModel> notesSentToMe = getByValue("notes", "sentTo", getUserName(), "=");
-        for (int i = 0; i < notesSentToMe.size(); i++){
-            AbstractModel currNote = notesSentToMe.get(i);
-            String sentBy = (String) currNote.getValue("SentBy");
-            String message = (String) currNote.getValue("Message");
-            ArrayList<String> note = new ArrayList<String>();
-            note.add(sentBy);
-            note.add(message);
-            notes.add(note);
-        }
+    public List<Message> seeMessages(){
+        List<Message> notes = Message.findMessagesReceivedByUser(getUserName());
         return notes;
     }
 
     /**
-     * Sends a note to someone
+     * Sends a message to someone
      * @param recipient Who the message is sent to
      * @param message What the message is
      */
     public void sendNote(String recipient, String message){
-        AbstractModel newNote = new AbstractModel("Notes");
-        newNote.setValue("SentTo", recipient);
-        newNote.setValue("Message", message);
-        newNote.setValue("SentBy", getUserName());
+        Message newNote = new Message(getUserName(), recipient, message, 'm');
     }
 
     //Needs to be changed to a quiz once quiz functionality is made
+
     /**
      * Sees a list of challenges sent to this user.
-     * @return returns an array of challenges. Each challenge is a list of strings with two values-the person who sent it, and the quiz.
+     * @return returns an array of challenges. Each challenge is a message object
      */
-    public List<HashMap<String, String>> seeChallenges(){
-        List<HashMap<String, String>> challenges = new ArrayList<HashMap<String, String>>();
-        List<AbstractModel> challengesSentToMe = getByValue("Challenges", "SentTo", getUserName(), "=");
-        for (int i = 0; i < challengesSentToMe.size(); i++){
-            AbstractModel currChallenge = challengesSentToMe.get(i);
-            String sentBy = (String) currChallenge.getValue("SentBy");
-            String quiz = (String) currChallenge.getValue("Quiz");
-            HashMap<String, String> challenge = new HashMap<String, String>();
-            challenge.put(sentBy, quiz);
-            challenges.add(challenge);
-        }
-        return challenges;
+    public List<Message> seeChallenges(){
+        List<Message> notes = Message.findChallengesReceivedByUser(getUserName());
+        return notes;
     }
 
     /**
-     * Sends a challenge to someone
-     * @param recipient Who the challenge is sent to
-     * @param quiz What the quiz is
+     * Sends a message to someone
+     * @param recipient Who the message is sent to
+     * @param message What the message is
      */
-    public void sendChallenge(String recipient, String quiz){
-        AbstractModel newNote = new AbstractModel("Notes");
-        newNote.setValue("SentTo", recipient);
-        newNote.setValue("Message", quiz);
-        newNote.setValue("SentBy", getUserName());
+    public void sendChallenge(String recipient, String message, int id){
+        Message newNote = new Message(getUserName(), recipient, message, 'c', id);
     }
 
 
     //Once the quiz class is made, change String quizName into a quiz type.
+
     /**
-     * Returns the quizzes that this user has made.
-     * @return A list of strings, where each string represents a quiz this user has made.
+     * Sees a list of friend requests sent to this user.
+     * @return returns an array of friend requests. Each friend request is a message object
      */
-    public List<String> seeQuizzesMade(){
-        List<String> quizzesMadeByMe = new ArrayList<String>();
-        List<AbstractModel> myQuizzes = getByValue("quizzes", "made_by", getUserName(), "=");
-        for (int i = 0; i < myQuizzes.size(); i++){
-            AbstractModel currQuiz = myQuizzes.get(i);
-            String quizName = (String) currQuiz.getValue("name");
-            quizzesMadeByMe.add(quizName);
-        }
-        return quizzesMadeByMe;
+    public List<Message> seeRequests(){
+        List<Message> notes = Message.findRequestsReceivedByUser(getUserName());
+        return notes;
     }
 
-    
     /**
-     * Returns a list of all administrators.
-     * @return a list of all Users who are administrators.
+     * Sends a message to someone
+     * @param recipient Who the message is sent to
+     * @param message What the message is
      */
-    public static List<User> findAdministrators(){
-        List<User> administrators = new ArrayList<User>();
-        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", 1, "=");
-        System.out.println(modelsOfAdmins.size());
-        for (int i = 0; i < modelsOfAdmins.size(); i++){
-            AbstractModel currAdmin = modelsOfAdmins.get(i);
-            User toAdd = findByUsername((String)currAdmin.getValue("username"));
-            administrators.add(toAdd);
-        }
-        return administrators;
+    public void sendRequest(String recipient, String message){
+        Message newNote = new Message(getUserName(), recipient, message, 'r');
     }
 
 
