@@ -278,9 +278,25 @@ public class User extends AbstractModel{
      */
     public static List<User> findByName(String fullname){
     	List<User> result = new ArrayList<User>();
-    	//Needs getAll functionality from AM.
+    	List<AbstractModel> named = AbstractModel.getByValue("users", "fullname", (Object) fullname);
+    	for (AbstractModel n : named) {
+    		result.add(new User(n));
+    	}
     	return result;
     }
+    
+    /**
+     * Find all users who are administrators.
+     */
+    public static List<User> findAdministrators() {
+    	List<User> result = new ArrayList<User>();
+    	List<AbstractModel> ams = AbstractModel.getByValue("users", "administrator", 1);
+    	for (AbstractModel am : ams) {
+    		result.add(new User(am));
+    	}
+    	return result;
+    }
+    
 
 
     /**
@@ -602,7 +618,6 @@ public class User extends AbstractModel{
         //return getOneByValue(colname, value, "=");
     //}
 
-    //Not implemented in AbstractModel yet
     /**
      * Get a list of all users.
      * @return a list containing all users in the database

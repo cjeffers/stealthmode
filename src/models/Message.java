@@ -84,7 +84,7 @@ public class Message extends AbstractModel{
 	 * @param string that is the username of the sender
 	 * @return List of message instances corresponding to the message, or null if it doesn't exist
 	 */
-	public static List<Message> findRequestsRecievedByUser(String user){
+	public static List<Message> findRequestsReceivedByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
 		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND typem='f';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
@@ -112,7 +112,7 @@ public class Message extends AbstractModel{
 	 * @param string that is the username of the sender
 	 * @return List of message instances corresponding to the message, or null if it doesn't exist
 	 */
-	public static List<Message> findChallengesRecievedByUser(String user){
+	public static List<Message> findChallengesReceivedByUser(String user){
 		List<Message> returnL = new ArrayList<Message>();
 		List<AbstractModel> result = AbstractModel.getWhere("receiver='" + user + "' AND typem='c';", MESSAGES_DATABASE);
 		for (AbstractModel am : result) {
