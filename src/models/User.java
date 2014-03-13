@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ public class User extends AbstractModel{
 
     private static String USERS_DATABASE = "users";
     private static String FRIENDS_DATABASE = "friends";
+    private static String ACHIEVEMENTS_DATABASE = "achievements";
     
 
     /**
@@ -535,84 +538,7 @@ public class User extends AbstractModel{
     	return result;
     }
 
-    /**
-     * Return all users where colName matches value.
-     * Overrides the AbstractModel version in order to return Users
-     * instead of AbstractModels.
-     * @param colName a String that matches the column to filter by
-     * @param value the value to look for in the column
-     * @return a list of users with values for column that match value
-     */
-    //@Override
-    //public static List<User> getByValue(String colName, Object value){
-        //return getByValue(colname, value, "=");
-    //}
-
-
-
-    /**
-	 * Returns the rows returned by the search parameters as a list of Users
-	 * Returns null if an exception is thrown
-	 * @param the table name
-	 * @param the column name
-	 * @param value
-	 * @param comparator
-	 * @return list of rows returned by search as Abstract Models
-	 */
-    //@Override
-	//public static List<User> getByValue(String colName, Object value, String comparator) {
-		//ResultSet rs = getResultSet("USER_DATABASE", colName, value, comparator);
-		//List<User> list = new ArrayList<User>();
-		//try {
-			//while(rs.next()) {
-				//AbstractModel toAdd = new AbstractModel("USER_DATABASE", rs);
-				//User newUser =  new User(toAdd);
-				//list.add(newUser);
-			//}
-			//return list;
-		//} catch (SQLException e) {
-			//e.printStackTrace();
-		//}
-		//return null;
-	//}
-
-
-    /**
-	 * getOneByValue - all parameters
-	 * Returns the first row returned by the search parameters as an Abstract Model
-	 * Returns null if an exception is thrown or the search returns zero results
-	 * @param the table name
-	 * @param the column name
-	 * @param value
-	 * @param comparator
-	 * @return row as an Abstract Model
-	 */
-    //@Override
-	//public static User getOneByValue(String colName, Object value, String comparator) {
-		//ResultSet rs = getResultSet("USER_DATABASE", colName, value, comparator);
-
-		//try {
-			//if(rs.next()) {
-				//return(new User(new AbstractModel("USER_DATABASE", rs)));
-			//}
-		//} catch (SQLException e) {
-			//e.printStackTrace();
-		//}
-		//return null;
-	//}
-
-	/**
-     * Return the first user where colName matches value.
-     * Overrides the AbstractModel version in order to return a User
-     * instead of AbstractModels.
-     * @param colName a String that matches the column to filter by
-     * @param value the value to look for in the column
-     * @return the first User where colName matches value.
-     */
-    //@Override
-    //public static User getOneByValue(String colName, Object value){
-        //return getOneByValue(colname, value, "=");
-    //}
+  
     
     /**
      * Find all users who are administrators.
@@ -640,52 +566,44 @@ public class User extends AbstractModel{
     	return result;
     }
 
-    private static String QUERY_BEGIN = "SELECT * FROM ";
-	private static String WHERE = " WHERE ";
-	private static Statement state;
-
-    /**
-     * Get a list of users filtered by an SQL query.
-     * Returns the equivalent of the SQL statemtent
-     * <code>"SELECT * FROM users WHERE " + sqlQuery;</code>
-     * IMPORTANT:
-     * Prepared statements are not used so do not make this method
-     * available to website users in any way.
-     * @param sqlQuery a String with the filtering conditions formatted as SQL
-     * @return a list of Users that match the specified query string
-     */
-    //@Override
-    //public static List<User> getWhere(String sqlQuery){
-    	//String query = QUERY_BEGIN + sqlQuery;
-		//List<User> list = new ArrayList<User>();
-
-		//try {
-			//ResultSet rs = state.executeQuery(query);
-
-
-			//while (rs.next()) {
-				//list.add(new User(new AbstractModel("USER_DATABASE", rs)));
-			//}
-			//return list;
-
-		//} catch (SQLException e) {
-			//e.printStackTrace();
-		//}
-		//return null;
-    //}
-
-
-    /**
-     * Casts an abstract model as a user
-     * @param am the abstract model which will be turned into a user
-     * @return the user representing the am
-     */
-    //public static User User(AbstractModel am){
-        //return (User) am;
-    //}
-
-	//public void commit(){
-    //model.save();
-    //}
+    static final Comparator<Result> TIME_SORT = 
+            new Comparator<Result>() {
+   	 		public int compare(Result e1, Result e2) {
+   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		}
+   };
+   	
+   	/**
+   	 * Returns all results of a quiz, sorted by time taken last (latest results first in list).
+   	 * @return a sorted list of results
+   	 */
+   	
+   	public List<Result> getRecentResults(){
+   		List<Result> result = Result.findByUser(getID());
+   		Collections.sort(result, TIME_SORT);
+   		return result;
+   	}
+   	
+   	
+    static final Comparator<Result> SCORE_SORT = 
+            new Comparator<Result>() {
+   	 		public int compare(Result e1, Result e2) {
+   	 		return e1.getScore() - e2.getScore();
+   	 		}
+   };
+   	
+   	/**
+   	 * Returns all results of a quiz, sorted by score (highest scores first).
+   	 * @return a sorted list of results
+   	 */
+   	
+   	public List<Result> getScores(int quizID){
+   		List<Result> result = Result.findByQuizAndUser(quizID, getID());
+   		Collections.sort(result, SCORE_SORT);
+   		return result;
+   	}
+   	
+   	
+   	
 
 }

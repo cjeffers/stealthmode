@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Result extends AbstractModel {
 	
 	/**
@@ -23,6 +25,8 @@ public class Result extends AbstractModel {
 	public Result(AbstractModel am) {
 		super(RESULT_TABLENAME, am.getMap(), true);
 	}
+	
+
 
 	/**
 	 * Creates a Result from all given parameters
