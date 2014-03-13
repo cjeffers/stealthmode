@@ -208,6 +208,11 @@ public class Quiz extends AbstractModel{
 		return convertAMListToQuizzes(ams);
 	}
 
+    public static List<Quiz> findAll() {
+        List<AbstractModel> ams = AbstractModel.getAll(QUIZ_TABLENAME);
+        return convertAMListToQuizzes(ams);
+    }
+
 	/**
 	 * Converts a list of AbstractModels to a list of Quizzes
 	 */
