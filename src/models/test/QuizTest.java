@@ -21,7 +21,7 @@ public class QuizTest {
 	
 	@Before
 	public void setUp() {
-		q = new Quiz("test name", "test description", true, true, 100);
+		q = new Quiz("test name", "test description", true, true, 100, 1);
 	}
 	
 	@AfterClass

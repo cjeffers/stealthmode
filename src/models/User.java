@@ -241,10 +241,10 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setUserName(String username){
-      //  if(!nameInUse(username)){
+      // if(!nameInUse(username)){
             setValue("username", username);
             save();
-      //  }
+       // }
     }
 
     /**
@@ -603,7 +603,23 @@ public class User extends AbstractModel{
    		return result;
    	}
    	
+    static final Comparator<Quiz> CREATION_TIME_SORT =
+            new Comparator<Quiz>() {
+   	 		public int compare(Quiz e1, Quiz e2) {
+   	 		return (int) (e2.getDateMade() - e1.getDateMade());
+   	 		}
+   };
    	
+   
+   /**
+    * Shows all the quizzes a user has made, in order sorted by creation time
+    * @return the list of quizzes made
+    */
+   	public List<Quiz> recentlyCreatedQuizzes(){
+   		List<Quiz> quizzes = Quiz.findByCreator(getID());
+   		Collections.sort(quizzes, CREATION_TIME_SORT);
+   		return quizzes;
+   	}
    	
 
 }

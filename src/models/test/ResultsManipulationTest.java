@@ -50,6 +50,17 @@ public class ResultsManipulationTest {
         for (int i = 0; i < topScores.size(); i++){
         	System.out.println("Username: " + User.findByID(topScores.get(i).getUserID()).getUserName());
         }
+        List<Quiz> recentlyMadeQuizzes = Quiz.recentlyCreatedQuizzes();
+        System.out.println("Recently made quizzes");
+        for (int i = 0; i < recentlyMadeQuizzes.size(); i++){
+        	System.out.println("Quiz name: " + recentlyMadeQuizzes.get(i).getName());
+        }
+        System.out.println("The average score for quiz 1 is: " + Quiz.findByID(1).averageScore());
+        List<Quiz> recentlyMadeByUserOne = User.findByID(1).recentlyCreatedQuizzes();
+        System.out.println("Recently made quizzes by user 1");
+        for (int i = 0; i < recentlyMadeByUserOne.size(); i++){
+        	System.out.println("Quiz name: " + recentlyMadeByUserOne.get(i).getName());
+        }
 	}
 
     @Test

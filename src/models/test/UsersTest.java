@@ -32,12 +32,11 @@ public class UsersTest {
         assertTrue(am.getFullname().equals("Ben Ulmer"));
         am.setAdminPriveledge(false);
         assertTrue(!am.isAdministrator());
-        am.setUserName("Bob");
-        assertTrue(am.getUserName().equals("Bob"));
         am.setAmateurAuthor(true);
         assertTrue(am.hasWonAmateurAuthor());
         List<String> awardsWon = am.seeAwardsWon();
         assertTrue(awardsWon.size() == 1);
+        am.delete();
     }
 
     @Test
