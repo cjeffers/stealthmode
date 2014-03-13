@@ -284,19 +284,6 @@ public class User extends AbstractModel{
     	}
     	return result;
     }
-    
-    /**
-     * Find all users who are administrators.
-     */
-    public static List<User> findAdministrators() {
-    	List<User> result = new ArrayList<User>();
-    	List<AbstractModel> ams = AbstractModel.getByValue("users", "administrator", 1);
-    	for (AbstractModel am : ams) {
-    		result.add(new User(am));
-    	}
-    	return result;
-    }
-    
 
 
     /**
@@ -626,22 +613,19 @@ public class User extends AbstractModel{
     //public static User getOneByValue(String colName, Object value){
         //return getOneByValue(colname, value, "=");
     //}
-
+    
     /**
-     * Returns a list of all administrators.
-     * @return a list of all Users who are administrators.
+     * Find all users who are administrators.
      */
-    public static List<User> findAdministrators(){
-        List<User> administrators = new ArrayList<User>();
-        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", 1, "=");
-        System.out.println(modelsOfAdmins.size());
-        for (int i = 0; i < modelsOfAdmins.size(); i++){
-            AbstractModel currAdmin = modelsOfAdmins.get(i);
-            User toAdd = findByUsername((String)currAdmin.getValue("username"));
-            administrators.add(toAdd);
-        }
-        return administrators;
+    public static List<User> findAdministrators() {
+    	List<User> result = new ArrayList<User>();
+    	List<AbstractModel> ams = AbstractModel.getByValue("users", "administrator", 1);
+    	for (AbstractModel am : ams) {
+    		result.add(new User(am));
+    	}
+    	return result;
     }
+    
     
     /**
      * Get a list of all users.

@@ -24,6 +24,8 @@
                     </li>
                 <% }%>
                 </ul>
+                <input type="hidden" name="quiz_id" value="<%= quiz.getID() %>" />
+                <input type="submit" name="submit" value="Submit Answers" />
             </form>
         </div>
     </body>

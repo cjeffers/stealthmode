@@ -53,7 +53,25 @@ public class QuizTake extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        int id = Integer.parseInt(request.getParameter("quiz_id"));
+        Quiz quiz = Quiz.findByID(id);
+        List<Question> questions = quiz.getQuestions();
+
+        if (quiz.hasMultiplePages()) {  // mutli-page
+            // TODO get index from form
+            // TODO stuff
+        } else {
+            Integer score = quiz.checkScore(request);
+            System.out.println("Score:" + score);
+
+            //request.getSession().removeAttribute("score");
+            //request.getSession().removeAttribute("quiz_id");
+
+            request.getSession().setAttribute("score", score);
+            request.getSession().setAttribute("quiz_id", id);
+
+            response.sendRedirect("/stealthmode/quiz/result");
+        }
 	}
 
 }
