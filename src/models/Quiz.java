@@ -275,7 +275,7 @@ public class Quiz extends AbstractModel{
     static final Comparator<Result> TIME_SORT = 
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		return (int) (e2.getTakenAt() - e1.getTakenAt());
    	 		}
    };
    	
@@ -293,7 +293,7 @@ public class Quiz extends AbstractModel{
  static final Comparator<Result> SCORE_SORT = 
          new Comparator<Result>() {
 	 		public int compare(Result e1, Result e2) {
-	 		return e1.getScore() - e2.getScore();
+	 		return e2.getScore() - e1.getScore();
 	 		}
 };
 	
@@ -349,7 +349,7 @@ public class Quiz extends AbstractModel{
     static final Comparator<Quiz> POPULARITY_SORT = 
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
-   	 		return getPopularity(e1.getID()) - getPopularity(e2.getID());
+   	 		return getPopularity(e2.getID()) - getPopularity(e1.getID());
    	 		}
    };
    	
@@ -362,7 +362,7 @@ public class Quiz extends AbstractModel{
     static final Comparator<Quiz> CREATION_TIME_SORT = 
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
-   	 		return (int) (e1.getDateMade() - e2.getDateMade());
+   	 		return (int) (e2.getDateMade() - e1.getDateMade());
    	 		}
    };
    	

@@ -569,7 +569,7 @@ public class User extends AbstractModel{
     static final Comparator<Result> TIME_SORT = 
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		return (int) (e2.getTakenAt() - e1.getTakenAt());
    	 		}
    };
    	
@@ -588,7 +588,7 @@ public class User extends AbstractModel{
     static final Comparator<Result> SCORE_SORT = 
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return e1.getScore() - e2.getScore();
+   	 		return e2.getScore() - e1.getScore();
    	 		}
    };
    	
@@ -597,7 +597,7 @@ public class User extends AbstractModel{
    	 * @return a sorted list of results
    	 */
    	
-   	public List<Result> getScores(int quizID){
+   	public List<Result> getScoresForQuiz(int quizID){
    		List<Result> result = Result.findByQuizAndUser(quizID, getID());
    		Collections.sort(result, SCORE_SORT);
    		return result;
