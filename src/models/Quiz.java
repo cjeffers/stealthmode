@@ -91,8 +91,9 @@ public class Quiz extends AbstractModel{
 	 * @return whether or not to display on multiple pages
 	 */
 	public boolean hasMultiplePages() {
-        if (((Integer)getValue(MULTIPLEPAGES_COLNAME)) == 0) return false;
-        return true;
+        //if (((Integer)getValue(MULTIPLEPAGES_COLNAME)) == 0) return false;
+        //return true;
+        return (Boolean)getValue(MULTIPLEPAGES_COLNAME);
 	}
 
 	/**
@@ -148,9 +149,9 @@ public class Quiz extends AbstractModel{
 	 */
 	public void setMultiplePages(boolean multPages) {
         if (multPages) {
-            setValue(MULTIPLEPAGES_COLNAME, "1");
+            setValue(MULTIPLEPAGES_COLNAME, 1);
         } else {
-            setValue(MULTIPLEPAGES_COLNAME, "0");
+            setValue(MULTIPLEPAGES_COLNAME, 0);
         }
 	}
 

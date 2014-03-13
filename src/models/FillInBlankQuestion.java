@@ -35,7 +35,7 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	 * @return String
 	 */
 	public String getAfter() {
-		return getContent0();
+		return getContent2();
 	}
 
 	/*

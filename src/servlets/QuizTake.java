@@ -2,6 +2,7 @@ package servlets;
 
 import models.*;
 
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,16 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class QuizDisplay
+ * Servlet implementation class QuizTake
  */
-@WebServlet("/quiz")
-public class QuizDisplay extends HttpServlet {
+@WebServlet("/quiz/take")
+public class QuizTake extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public QuizDisplay() {
+    public QuizTake() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,13 +30,23 @@ public class QuizDisplay extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Quiz quiz = Quiz.findByID(Integer.parseInt(request.getParameter("id")));
-        int numQuestions = quiz.getQuestions().size();
-        request.setAttribute("quiz", quiz);
-        request.setAttribute("num_questions", numQuestions);
+        int id = Integer.parseInt(request.getParameter("quiz_id"));
+        Quiz quiz = Quiz.findByID(id);
+        List<Question> questions = quiz.getQuestions();
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("quiz_display.jsp");
-        dispatcher.forward(request, response);
+        if (quiz.hasMultiplePages()) {  // mutli-page
+            // TODO get index from form
+            // TODO stick question and next index on request
+            // TODO forward to multi-page JSP
+        } else {  // single-page
+            RequestDispatcher dispatcher;
+
+            request.setAttribute("quiz", quiz);
+            request.setAttribute("questions", questions);
+            dispatcher = request.getRequestDispatcher("/quiz_take_single.jsp");
+
+            dispatcher.forward(request, response);
+        }
 	}
 
 	/**
@@ -44,4 +55,5 @@ public class QuizDisplay extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
+
 }

@@ -15,9 +15,10 @@
             <h1><%= quiz.getName() %></h1>
             <p><%= quiz.getDescription() %></p>
             <p>Number of questions: <%= numQuestions %></p>
-            <% String take_url = "/stealthmode/quiz/take?id=" + quiz.getID(); %>
-            <form action="<%= take_url %>" method="get">
-                <input type="submit" value="Take Quiz">
+            <% request.setAttribute("id", quiz.getID()); %>
+            <form action="/stealthmode/quiz/take" method="get">
+                <input type="submit" value="Take Quiz" />
+                <input type="hidden" name="quiz_id" value="<%= quiz.getID() %>" />
             </form>
             <a href="/stealthmode/quizzes">Browse quizzes</a>
         </div>
