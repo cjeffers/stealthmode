@@ -270,6 +270,8 @@ public class AbstractModel {
 			return null;
 		}
 	}
+	
+	
 
 	/**
 	 * getAll - defaulted table name
@@ -282,6 +284,8 @@ public class AbstractModel {
 	public static List<AbstractModel> getAll() {
 		return getAll(tableName);
 	}
+	
+
 
 	/*
 	 * getOneByValue/getByValue
