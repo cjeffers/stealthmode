@@ -241,7 +241,7 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setUserName(String username){
-     //   if(!nameInUse(username)){
+      //  if(!nameInUse(username)){
             setValue("username", username);
             save();
       //  }
