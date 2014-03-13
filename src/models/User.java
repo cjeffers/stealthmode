@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+
 public class User extends AbstractModel{
 
     private static String USERS_DATABASE = "users";
     private static String FRIENDS_DATABASE = "friends";
+    
 
     /**
      * Access a user based off its username
@@ -67,17 +69,17 @@ public class User extends AbstractModel{
     public User(String username, String password, String fullname, boolean administrator){
         super(USERS_DATABASE);
         //if(!nameInUse(username)){
+        	setFullname(fullname);
             setUserName(username);
-            setPassword(password);
             setPicURL("");
             setAdminPriveledge(administrator);
-            setFullname(fullname);
             setIsGreatest(false);
         	setPracticed(false);
         	setQuizMachine(false);
         	setProdigiousAuthor(false);
         	setAmateurAuthor(false);
         	setProlificAuthor(false);
+            setPassword(password);
             save();
        // }
     }
@@ -140,102 +142,63 @@ public class User extends AbstractModel{
        reverseNewFriend.save();
     }
 
-
-
     /**
-     * Sees a list of notes sent to this user.
-     * @return returns an array of notes. Each note is a list of strings with two values-the person who sent it, and the message.
+     * Sees a list of messages sent to this user.
+     * @return returns an array of messages. Each note is a message object
      */
-    public List<ArrayList<String>> seeNotes(){
-        List<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
-        List<AbstractModel> notesSentToMe = getByValue("notes", "sentTo", getUserName(), "=");
-        for (int i = 0; i < notesSentToMe.size(); i++){
-            AbstractModel currNote = notesSentToMe.get(i);
-            String sentBy = (String) currNote.getValue("SentBy");
-            String message = (String) currNote.getValue("Message");
-            ArrayList<String> note = new ArrayList<String>();
-            note.add(sentBy);
-            note.add(message);
-            notes.add(note);
-        }
+    public List<Message> seeMessages(){
+        List<Message> notes = Message.findMessagesReceivedByUser(getUserName());
         return notes;
     }
 
     /**
-     * Sends a note to someone
+     * Sends a message to someone
      * @param recipient Who the message is sent to
      * @param message What the message is
      */
     public void sendNote(String recipient, String message){
-        AbstractModel newNote = new AbstractModel("Notes");
-        newNote.setValue("SentTo", recipient);
-        newNote.setValue("Message", message);
-        newNote.setValue("SentBy", getUserName());
+        Message newNote = new Message(getUserName(), recipient, message, 'm');
     }
 
     //Needs to be changed to a quiz once quiz functionality is made
+
     /**
      * Sees a list of challenges sent to this user.
-     * @return returns an array of challenges. Each challenge is a list of strings with two values-the person who sent it, and the quiz.
+     * @return returns an array of challenges. Each challenge is a message object
      */
-    public List<HashMap<String, String>> seeChallenges(){
-        List<HashMap<String, String>> challenges = new ArrayList<HashMap<String, String>>();
-        List<AbstractModel> challengesSentToMe = getByValue("Challenges", "SentTo", getUserName(), "=");
-        for (int i = 0; i < challengesSentToMe.size(); i++){
-            AbstractModel currChallenge = challengesSentToMe.get(i);
-            String sentBy = (String) currChallenge.getValue("SentBy");
-            String quiz = (String) currChallenge.getValue("Quiz");
-            HashMap<String, String> challenge = new HashMap<String, String>();
-            challenge.put(sentBy, quiz);
-            challenges.add(challenge);
-        }
-        return challenges;
+    public List<Message> seeChallenges(){
+        List<Message> notes = Message.findChallengesReceivedByUser(getUserName());
+        return notes;
     }
 
     /**
-     * Sends a challenge to someone
-     * @param recipient Who the challenge is sent to
-     * @param quiz What the quiz is
+     * Sends a message to someone
+     * @param recipient Who the message is sent to
+     * @param message What the message is
      */
-    public void sendChallenge(String recipient, String quiz){
-        AbstractModel newNote = new AbstractModel("Notes");
-        newNote.setValue("SentTo", recipient);
-        newNote.setValue("Message", quiz);
-        newNote.setValue("SentBy", getUserName());
+    public void sendChallenge(String recipient, String message, int id){
+        Message newNote = new Message(getUserName(), recipient, message, 'c', id);
     }
 
 
     //Once the quiz class is made, change String quizName into a quiz type.
+
     /**
-     * Returns the quizzes that this user has made.
-     * @return A list of strings, where each string represents a quiz this user has made.
+     * Sees a list of friend requests sent to this user.
+     * @return returns an array of friend requests. Each friend request is a message object
      */
-    public List<String> seeQuizzesMade(){
-        List<String> quizzesMadeByMe = new ArrayList<String>();
-        List<AbstractModel> myQuizzes = getByValue("quizzes", "made_by", getUserName(), "=");
-        for (int i = 0; i < myQuizzes.size(); i++){
-            AbstractModel currQuiz = myQuizzes.get(i);
-            String quizName = (String) currQuiz.getValue("name");
-            quizzesMadeByMe.add(quizName);
-        }
-        return quizzesMadeByMe;
+    public List<Message> seeRequests(){
+        List<Message> notes = Message.findRequestsReceivedByUser(getUserName());
+        return notes;
     }
 
-    
     /**
-     * Returns a list of all administrators.
-     * @return a list of all Users who are administrators.
+     * Sends a message to someone
+     * @param recipient Who the message is sent to
+     * @param message What the message is
      */
-    public static List<User> findAdministrators(){
-        List<User> administrators = new ArrayList<User>();
-        List<AbstractModel> modelsOfAdmins = getByValue(USERS_DATABASE, "administrator", 1, "=");
-        System.out.println(modelsOfAdmins.size());
-        for (int i = 0; i < modelsOfAdmins.size(); i++){
-            AbstractModel currAdmin = modelsOfAdmins.get(i);
-            User toAdd = findByUsername((String)currAdmin.getValue("username"));
-            administrators.add(toAdd);
-        }
-        return administrators;
+    public void sendRequest(String recipient, String message){
+        Message newNote = new Message(getUserName(), recipient, message, 'r');
     }
 
 
@@ -422,7 +385,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setAmateurAuthor(boolean won){
-        setValue("amateur_author", won);
+    	if (won){
+    		setValue("amateur_author", 1);
+    	} else{
+    		setValue("amateur_author", 0);
+    	}
         save();
     }
 
@@ -431,7 +398,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Amateur Author award.
      */
     public boolean hasWonAmateurAuthor(){
-        return (Boolean) getValue("amateur_author");
+    	if((Integer)getValue("amateur_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -439,7 +407,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProlificAuthor(boolean won){
-        setValue("prolific_author", won);
+    	if (won){
+    		setValue("prolific_author", 1);
+    	} else{
+    		setValue("prolific_author", 0);
+    	}
         save();
     }
 
@@ -448,7 +420,8 @@ public class User extends AbstractModel{
      * @return if the user has won the prolific Author award.
      */
     public boolean hasWonProlificAuthor(){
-        return (Boolean) getValue("prolific_author");
+    	if((Integer)getValue("prolific_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -456,7 +429,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProdigiousAuthor(boolean won){
-        setValue("prodigious_author", won);
+    	if (won){
+    		setValue("prodigious_author", 1);
+    	} else{
+    		setValue("prodigious_author", 0);
+    	}
         save();
     }
 
@@ -465,7 +442,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Prodigious Author award.
      */
     public boolean hasWonProdigiousAuthor(){
-        return (Boolean) getValue("prodigious_author");
+    	if((Integer)getValue("prodigious_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -473,7 +451,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setQuizMachine(boolean won){
-        setValue("quiz_machine", won);
+    	if (won){
+    		setValue("quiz_machine", 1);
+    	} else{
+    		setValue("quiz_machine", 0);
+    	}
         save();
     }
 
@@ -482,7 +464,8 @@ public class User extends AbstractModel{
      * @return if the user has won the QuizMachine award.
      */
     public boolean hasWonQuizMachine(){
-        return (Boolean) getValue("quiz_machine");
+    	if((Integer)getValue("quiz_machine") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -490,7 +473,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setIsGreatest(boolean won){
-        setValue("is_greatest", won);
+    	if (won){
+    		setValue("is_greatest", 1);
+    	} else{
+    		setValue("is_greatest", 0);
+    	}
         save();
     }
 
@@ -499,7 +486,8 @@ public class User extends AbstractModel{
      * @return if the user has won the I am the greatest award.
      */
     public boolean hasWonIsGreatest(){
-        return (Boolean) getValue("is_greatest");
+    	if((Integer)getValue("is_greatest") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -507,7 +495,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setPracticed(boolean won){
-        setValue("practice_perfect", won);
+    	if (won){
+    		setValue("practice_perfect", 1);
+    	} else{
+    		setValue("practice_perfect", 0);
+    	}
         save();
     }
 
@@ -516,7 +508,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Practice Makes Perfect award.
      */
     public boolean hasWonPracticed(){
-        return (Boolean) getValue("practice_perfect");
+    	if((Integer)getValue("practice_perfect") == 1) return true;
+    	else return false;
     }
     
     public List<String> seeAwardsWon(){

@@ -5,23 +5,20 @@ DROP TABLE IF EXISTS users;
  -- remove table if it already exists and start from scratch
 
 CREATE TABLE users (
-    id INT,
+    id INT NOT NULL AUTO_INCREMENT,
     username CHAR(64),
-    Fullname CHAR(64),
-    password CHAR(64)
-    -- Administrator BIT,
-    -- AmateurAuthor BIT,
-    -- ProlificAuthor BIT,
-    -- ProdigiousAuthor BIT,
-    -- QuizMachine BIT,
-    -- IsGreatest BIT,
-    -- PracticePerfect BIT
+    fullname CHAR(64),
+    password CHAR(64),
+    pic_url CHAR(128),
+    salt CHAR(128),
+    administrator INT(1),
+    amateur_author INT(1),
+    prolific_author INT(1),
+    prodigious_author INT(1),
+    quiz_machine INT(1),
+    is_greatest INT(1),
+    practice_perfect INT(1),
+    PRIMARY KEY(id)
 
 );
 
-INSERT INTO users VALUES
-	(1, "cam", "Cameron","rootbeer"),
-    (2, "jedidiah", "Jed","lazy"),
-	(3, "ben", "Ben","soccer"),
-	(4, "juicy", "Jacob","vincent"),
-	(5, "pat", "Patrick","youngpatrick");

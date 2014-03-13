@@ -170,13 +170,13 @@ public class AbstractModel {
 
 			try {
 				state.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-				
+
 				// get the generated id
 				ResultSet gk = state.getGeneratedKeys();
 				if (gk.next()) {
 					return gk.getInt(1);
 				}
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
