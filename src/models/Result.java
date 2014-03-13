@@ -1,9 +1,9 @@
 package models;
 
-import java.util.List;
+import java.util.*;
 
 public class Result extends AbstractModel {
-	
+
 	/**
 	 * Name of the MySQL table that holds the quizzes
 	 */
@@ -25,7 +25,7 @@ public class Result extends AbstractModel {
 	public Result(AbstractModel am) {
 		super(RESULT_TABLENAME, am.getMap(), true);
 	}
-	
+
 
 
 	/**
@@ -45,6 +45,48 @@ public class Result extends AbstractModel {
 		setNumQuestions(numQuestions);
 		setTakenAt(takenAt);
 		setDuration(duration);
+	}
+
+    // finders
+    /**
+     * Find all results for the given user.
+     * @param userID the id of the user to get results for.
+     * @return a list of results for the given user, not necessarily sorted.
+     */
+    public static List<Result> findByUser(int userID) {
+        List<AbstractModel> ams = AbstractModel.getByValue(RESULT_TABLENAME, USER_ID_COLNAME, userID);
+        return convertAMListToResults(ams);
+    }
+
+    /**
+     * Find all results for the given quiz.
+     * @param quizID the id of the quiz to get results for
+     * @return a list of the results for the given quiz, not necessarily sorted.
+     */
+    public static List<Result> findByQuiz(int quizID) {
+        List<AbstractModel> ams = AbstractModel.getByValue(RESULT_TABLENAME, QUIZ_ID_COLNAME, quizID);
+        return convertAMListToResults(ams);
+    }
+
+    /**
+     * Find all results for the given quiz and user.
+     * @param quizID the quiz to get results for
+     * @param userID the user to get results for
+     * @return a list of all results which are the given user taking the given quiz.
+     */
+    public static List<Result> findByQuizAndUser(int quizID, int userID) {
+        String whereQuery = QUIZ_ID_COLNAME + "=" + quizID + " AND " +
+                            USER_ID_COLNAME + "=" + userID;
+        List<AbstractModel> ams = AbstractModel.getWhere(whereQuery, RESULT_TABLENAME);
+        return convertAMListToResults(ams);
+    }
+
+	private static List<Result> convertAMListToResults(List<AbstractModel> ams) {
+		List<Result> results = new ArrayList<Result>(ams.size());
+        for (AbstractModel am : ams) {
+            results.add(new Result(am));
+        }
+        return results;
 	}
 
 	// setters
@@ -69,7 +111,7 @@ public class Result extends AbstractModel {
 	public void setScore(int score) {
 		setValue(SCORE_COLNAME, score);
 	}
-	
+
 	/**
 	 * @param number of questions
 	 */
@@ -90,9 +132,9 @@ public class Result extends AbstractModel {
 	public void setDuration(long duration) {
 		setValue(DURATION_COLNAME, duration);
 	}
-	
+
 	//getters
-	
+
 	/**
 	 * @return quiz id
 	 */
@@ -120,7 +162,7 @@ public class Result extends AbstractModel {
 	public int getScore() {
 		return (Integer) getValue(SCORE_COLNAME);
 	}
-	
+
 	/**
 	 * @return number of questions
 	 */
@@ -141,6 +183,4 @@ public class Result extends AbstractModel {
 	public long getDuration() {
 		return (Long) getValue(DURATION_COLNAME);
 	}
-
-
 }
