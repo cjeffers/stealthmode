@@ -19,6 +19,7 @@
             <form action="/stealthmode/quiz/take" method="get">
                 <input type="submit" value="Take Quiz" />
                 <input type="hidden" name="quiz_id" value="<%= quiz.getID() %>" />
+                <input type="hidden" name="question_index" value="0" />
             </form>
             <a href="/stealthmode/quizzes">Browse quizzes</a>
         </div>

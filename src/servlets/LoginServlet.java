@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(User.validateLogin(request.getParameter("username"), request.getParameter("password"))){
 			User newUser = User.findByUsername(request.getParameter("username"));
 			request.getSession().setAttribute("user", newUser);
@@ -47,10 +47,10 @@ public class LoginServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
 		    dispatcher.forward(request, response);
 		}
-		
+
 		//getSession().setAttribute
-		
-		
+
+
 
 
 	}
