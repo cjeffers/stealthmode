@@ -322,6 +322,7 @@ public class Quiz extends AbstractModel{
  static final Comparator<Result> SCORE_SORT =
          new Comparator<Result>() {
 	 		public int compare(Result e1, Result e2) {
+	 			if (e1.getScore() == e2.getScore()) return (int) (e1.getDuration() - e2.getDuration());
 	 		return e2.getScore() - e1.getScore();
 	 		}
 };

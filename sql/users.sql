@@ -10,14 +10,8 @@ CREATE TABLE users (
     fullname CHAR(64),
     password CHAR(64),
     pic_url CHAR(128),
-    salt CHAR(128),
     administrator INT(1),
-    amateur_author INT(1),
-    prolific_author INT(1),
-    prodigious_author INT(1),
-    quiz_machine INT(1),
-    is_greatest INT(1),
-    practice_perfect INT(1),
+    salt CHAR(128),
     PRIMARY KEY(id)
 
 );
