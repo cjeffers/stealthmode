@@ -1,6 +1,8 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
@@ -268,4 +270,105 @@ public class Quiz extends AbstractModel{
 		str += "\n" + "multiple pages = " + hasMultiplePages();
 		return str;
 	}
+	
+	
+    static final Comparator<Result> TIME_SORT = 
+            new Comparator<Result>() {
+   	 		public int compare(Result e1, Result e2) {
+   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		}
+   };
+   	
+   	/**
+   	 * Returns all results of a quiz, sorted by time taken last (latest results first in list).
+   	 * @return a sorted list of results
+   	 */
+   	
+   	public List<Result> getRecentResults(){
+   		List<Result> result = Result.findByQuiz(getID());
+   		Collections.sort(result, TIME_SORT);
+   		return result;
+   	}
+	
+ static final Comparator<Result> SCORE_SORT = 
+         new Comparator<Result>() {
+	 		public int compare(Result e1, Result e2) {
+	 		return e1.getScore() - e2.getScore();
+	 		}
+};
+	
+	/**
+	 * Returns all results of a quiz, sorted by score (highest scores first).
+	 * @return a sorted list of results
+	 */
+	
+	public List<Result> getScores(){
+		List<Result> result = Result.findByQuiz(getID());
+		Collections.sort(result, SCORE_SORT);
+		return result;
+	}
+	
+	
+   	
+   	/**
+   	 * Returns average score on a quiz.
+   	 * @return the average score
+   	 */
+   	
+   	public int averageScore(){
+   		List<Result> results = Result.findByQuiz(getID());
+   		if (results.size() == 0) return 0;
+   		int totalScore = 0;
+   		for (int i = 0; i < results.size(); i++){
+   			Result curr = results.get(i);
+   			totalScore += curr.getScore();
+   		}
+   		return totalScore/results.size();
+   	}
+   	
+   	/**
+   	 * Returns average time taken on a quiz.
+   	 * @return the average time
+   	 */
+   	
+   	public int averageTime(){
+   		List<Result> results = Result.findByQuiz(getID());
+   		if (results.size() == 0) return 0;
+   		int totalTime = 0;
+   		for (int i = 0; i < results.size(); i++){
+   			Result curr = results.get(i);
+   			totalTime += curr.getDuration();
+   		}
+   		return totalTime/results.size();
+   	}
+   	
+   	private static int getPopularity(int quizID){
+   		return Result.findByQuiz(quizID).size();
+   	}
+   	
+    static final Comparator<Quiz> POPULARITY_SORT = 
+            new Comparator<Quiz>() {
+   	 		public int compare(Quiz e1, Quiz e2) {
+   	 		return getPopularity(e1.getID()) - getPopularity(e2.getID());
+   	 		}
+   };
+   	
+   	public static List<Quiz> getTopQuizzes(){
+   		List<Quiz> quizzes = findAll();
+   		Collections.sort(quizzes, POPULARITY_SORT);
+   		return quizzes;
+   	}
+   	
+    static final Comparator<Quiz> CREATION_TIME_SORT = 
+            new Comparator<Quiz>() {
+   	 		public int compare(Quiz e1, Quiz e2) {
+   	 		return (int) (e1.getDateMade() - e2.getDateMade());
+   	 		}
+   };
+   	
+   	public static List<Quiz> recentlyCreatedQuizzes(){
+   		List<Quiz> quizzes = findAll();
+   		Collections.sort(quizzes, CREATION_TIME_SORT);
+   		return quizzes;
+   	}
 }
