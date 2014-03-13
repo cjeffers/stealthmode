@@ -400,14 +400,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setAmateurAuthor(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("amateur_author", 1);
     		achievements.setValue("amateur_author_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("amateur_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -415,7 +415,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Amateur Author award.
      */
     public boolean hasWonAmateurAuthor(){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if((Integer)achievements.getValue("amateur_author") == 1) return true;
     	else return false;
     }
@@ -425,14 +425,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProlificAuthor(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("prolific_author", 1);
     		achievements.setValue("prolific_author_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("prolific_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -450,14 +450,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProdigiousAuthor(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("prodigious_author", 1);
     		achievements.setValue("prodigious_author_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("prodigious_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -475,14 +475,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setQuizMachine(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("quiz_machine", 1);
     		achievements.setValue("quiz_machine_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("quiz_machine", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -500,14 +500,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setIsGreatest(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("is_greatest", 1);
     		achievements.setValue("is_greatest_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("is_greatest", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -515,7 +515,7 @@ public class User extends AbstractModel{
      * @return if the user has won the I am the greatest award.
      */
     public boolean hasWonIsGreatest(){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if((Integer)achievements.getValue("is_greatest") == 1) return true;
     	else return false;
     }
@@ -525,14 +525,14 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setPracticed(boolean won){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if (won){
     		achievements.setValue("practice_perfect", 1);
     		achievements.setValue("practice_perfect_time", System.currentTimeMillis());
     	} else{
     		achievements.setValue("practice_perfect", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -540,7 +540,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Practice Makes Perfect award.
      */
     public boolean hasWonPracticed(){
-    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "ID", getID());
+    	AbstractModel achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", getID());
     	if((Integer)achievements.getValue("practice_perfect") == 1) return true;
     	else return false;
     }
