@@ -248,6 +248,9 @@ public class Message extends AbstractModel{
         return (String) getValue("text");
     }
     
+    public int getQuiz(){
+    	return (Integer) getValue("quiz");
+    }
 
 
 
