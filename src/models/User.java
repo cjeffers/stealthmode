@@ -15,6 +15,7 @@ public class User extends AbstractModel{
 
     private static String USERS_DATABASE = "users";
     private static String FRIENDS_DATABASE = "friends";
+    
 
     /**
      * Access a user based off its username
@@ -67,17 +68,17 @@ public class User extends AbstractModel{
     public User(String username, String password, String fullname, boolean administrator){
         super(USERS_DATABASE);
         //if(!nameInUse(username)){
+        	setFullname(fullname);
             setUserName(username);
-            setPassword(password);
             setPicURL("");
             setAdminPriveledge(administrator);
-            setFullname(fullname);
             setIsGreatest(false);
         	setPracticed(false);
         	setQuizMachine(false);
         	setProdigiousAuthor(false);
         	setAmateurAuthor(false);
         	setProlificAuthor(false);
+            setPassword(password);
             save();
        // }
     }
@@ -422,7 +423,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setAmateurAuthor(boolean won){
-        setValue("amateur_author", won);
+    	if (won){
+    		setValue("amateur_author", 1);
+    	} else{
+    		setValue("amateur_author", 0);
+    	}
         save();
     }
 
@@ -431,7 +436,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Amateur Author award.
      */
     public boolean hasWonAmateurAuthor(){
-        return (Boolean) getValue("amateur_author");
+    	if((Integer)getValue("amateur_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -439,7 +445,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProlificAuthor(boolean won){
-        setValue("prolific_author", won);
+    	if (won){
+    		setValue("prolific_author", 1);
+    	} else{
+    		setValue("prolific_author", 0);
+    	}
         save();
     }
 
@@ -448,7 +458,8 @@ public class User extends AbstractModel{
      * @return if the user has won the prolific Author award.
      */
     public boolean hasWonProlificAuthor(){
-        return (Boolean) getValue("prolific_author");
+    	if((Integer)getValue("prolific_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -456,7 +467,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setProdigiousAuthor(boolean won){
-        setValue("prodigious_author", won);
+    	if (won){
+    		setValue("prodigious_author", 1);
+    	} else{
+    		setValue("prodigious_author", 0);
+    	}
         save();
     }
 
@@ -465,7 +480,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Prodigious Author award.
      */
     public boolean hasWonProdigiousAuthor(){
-        return (Boolean) getValue("prodigious_author");
+    	if((Integer)getValue("prodigious_author") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -473,7 +489,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setQuizMachine(boolean won){
-        setValue("quiz_machine", won);
+    	if (won){
+    		setValue("quiz_machine", 1);
+    	} else{
+    		setValue("quiz_machine", 0);
+    	}
         save();
     }
 
@@ -482,7 +502,8 @@ public class User extends AbstractModel{
      * @return if the user has won the QuizMachine award.
      */
     public boolean hasWonQuizMachine(){
-        return (Boolean) getValue("quiz_machine");
+    	if((Integer)getValue("quiz_machine") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -490,7 +511,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setIsGreatest(boolean won){
-        setValue("is_greatest", won);
+    	if (won){
+    		setValue("is_greatest", 1);
+    	} else{
+    		setValue("is_greatest", 0);
+    	}
         save();
     }
 
@@ -499,7 +524,8 @@ public class User extends AbstractModel{
      * @return if the user has won the I am the greatest award.
      */
     public boolean hasWonIsGreatest(){
-        return (Boolean) getValue("is_greatest");
+    	if((Integer)getValue("is_greatest") == 1) return true;
+    	else return false;
     }
 
     /**
@@ -507,7 +533,11 @@ public class User extends AbstractModel{
      * @param won whether the user has won it.
      */
     public void setPracticed(boolean won){
-        setValue("practice_perfect", won);
+    	if (won){
+    		setValue("practice_perfect", 1);
+    	} else{
+    		setValue("practice_perfect", 0);
+    	}
         save();
     }
 
@@ -516,7 +546,8 @@ public class User extends AbstractModel{
      * @return if the user has won the Practice Makes Perfect award.
      */
     public boolean hasWonPracticed(){
-        return (Boolean) getValue("practice_perfect");
+    	if((Integer)getValue("practice_perfect") == 1) return true;
+    	else return false;
     }
     
     public List<String> seeAwardsWon(){
