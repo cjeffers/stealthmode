@@ -32,13 +32,24 @@ public class QuizTake extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("quiz_id"));
         Quiz quiz = Quiz.findByID(id);
-        List<Question> questions = quiz.getQuestions();
+        List<Question> questions;
 
         if (quiz.hasMultiplePages()) {  // mutli-page
             // TODO get index from form
+            int index = Integer.parseInt(request.getParameter("next_index"));
+            int quizID = Integer.parseInt(request.getParameter("quiz_id"));
+            if (index == 0) {  // initialize question array
+                questions = quiz.getQuestions();
+            } else {
+                questions = (List<Question>) request.getSession().getAttribute("questions");
+            }
+            Question question = questions.get(index);
+            int nextIndex = index + 1;
             // TODO stick question and next index on request
             // TODO forward to multi-page JSP
         } else {  // single-page
+            questions = quiz.getQuestions();
+
             RequestDispatcher dispatcher;
 
             request.setAttribute("quiz", quiz);
@@ -63,9 +74,6 @@ public class QuizTake extends HttpServlet {
         } else {
             Integer score = quiz.checkScore(request);
             System.out.println("Score:" + score);
-
-            //request.getSession().removeAttribute("score");
-            //request.getSession().removeAttribute("quiz_id");
 
             request.getSession().setAttribute("score", score);
             request.getSession().setAttribute("quiz_id", id);
