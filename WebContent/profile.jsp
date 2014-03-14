@@ -10,6 +10,7 @@
 <title>Profile</title>
 </head>
 <body>
+<%@ include file="jquery.jsp" %>
 <%User me = (User)request.getSession().getAttribute("user");
 List<Quiz> quizzesMade = Quiz.findByCreator(me.getID());
 List<Quiz> recentQuizzes = me.recentlyCreatedQuizzes();
@@ -60,10 +61,13 @@ for (Quiz quiz: recentQuizzes){
 
 </div>
 <div id="friendsRecent"></div>
+<div >
+<button class="expand">+</button>
 <div id="friendsList">
 <%for(User friend:friends){%>
 <a href=""><%=friend.getUserName() %></a>
 <%}%>
+</div>
 </div>
 <div id="inbox">
 <% if(inboxmessage != null){
@@ -110,5 +114,7 @@ for(Message a:inboxrequests){ %>
 <%}%></div>
 <div id="newQuiz"><a href="create_quiz.jsp" > Create A New Quiz</a></div>
 </div>
+<script src="scripts/profile.js">
+</script>
 </body>
 </html>
