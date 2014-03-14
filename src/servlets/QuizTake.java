@@ -39,15 +39,15 @@ public class QuizTake extends HttpServlet {
             // get stuff from form
             if (index == 0) {  // initialize question array
                 questions = quiz.getQuestions();
+                request.getSession().setAttribute("score", 0);
             } else {
                 questions = (List<Question>) request.getSession().getAttribute("questions");
             }
             Question question = questions.get(index);
-            int nextIndex = index + 1;
 
             // stick question and next index on request
             request.setAttribute("question", question);
-            request.setAttribute("next_index", nextIndex);
+            request.getSession().setAttribute("index", index);
 
             // TODO forward to multi-page JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("/quiz_take_multi.jsp");
@@ -70,16 +70,34 @@ public class QuizTake extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = (Integer) request.getSession().getAttribute("quiz_id");
-        int index = (Integer) request.getSession().getAttribute("next_index");
         Quiz quiz = Quiz.findByID(id);
         List<Question> questions = quiz.getQuestions();
 
         if (quiz.hasMultiplePages()) {  // mutli-page
-            // TODO get index from form
-            // TODO stuff
+            // get index of question, question, and current score
+            int index = (Integer) request.getSession().getAttribute("index");
+            Question question = questions.get(index);
+            int score = (Integer) request.getSession().getAttribute("score");
+
+            // set score + 1 if correct
+            if (question.checkAnswer(request)) {
+                score += 1;
+            }
+            request.getSession().setAttribute("score", score);
+            request.getSession().setAttribute("questions", questions);
+
+            int nextIndex = index + 1;
+
+            if (nextIndex == questions.size()) {  // the quiz is over!
+                request.getSession().setAttribute("quiz_id", id);
+                response.sendRedirect("/stealthmode/quiz/result");
+            } else {
+                request.getSession().setAttribute("next_index", nextIndex);
+                response.sendRedirect("/stealthmode/quiz/take");
+            }
+
         } else {
             Integer score = quiz.checkScore(request);
-            System.out.println("Score:" + score);
 
             request.getSession().setAttribute("score", score);
             request.getSession().setAttribute("quiz_id", id);

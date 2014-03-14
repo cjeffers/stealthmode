@@ -11,14 +11,19 @@ import models.User;
 import models.Message;
 
 public class UsersTest {
-	
-	
+
+
 	static Connection con;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
         con = AbstractModel.getConnection();
 	}
+
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception {
+        AbstractModel.closeConnection();
+    }
 
     /*@Test
     public void testBasicFunctionality() {
@@ -53,7 +58,7 @@ public class UsersTest {
     	List<User> newBenFriends = am1.getFriends();
     	assertTrue(newBenFriends.size() == 0);
     }
-    
+
     @Test
     public void testAdmin() {
     	User am1 = new User("ben_test", "cheese", "Ben", true);
@@ -64,7 +69,7 @@ public class UsersTest {
     	List<User> admins2 = User.findAdministrators();
     	System.out.println("Amount of admins are: " + admins2.size());
     }
-    
+
     @Test
     public void testMessages(){
     /*	User am1 = new User("jed", "bleh", "Jed", false);
@@ -72,15 +77,15 @@ public class UsersTest {
     	for(Message a:notes){
     		System.out.println(a.getText());
     	}*/
-    }
-    
+    //}
+
     @Test
     public void testPassword(){
     	User am1 = new User("james", "johnson", "Jed", false);
     	assertTrue(User.validateLogin("james", "johnson") == true);
     	assertTrue(User.validateLogin("james", "jones") == false);
-    }*/
-    
+    }
+
     @Test
     public void findAll(){
     	System.out.print(User.findAll().size());
