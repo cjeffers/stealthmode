@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 		if(User.validateLogin(request.getParameter("username"), request.getParameter("password"))){
 			User newUser = User.findByUsername(request.getParameter("username"));
 			request.getSession().setAttribute("user", newUser);
-			response.sendRedirect("inbox.jsp");
+			response.sendRedirect("profile.jsp");
 		}
 		else{
 			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");

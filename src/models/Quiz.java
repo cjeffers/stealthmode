@@ -355,8 +355,7 @@ public class Quiz extends AbstractModel{
 		Collections.sort(result, SCORE_SORT);
 		return result;
 	}
-
-
+	
 
    	/**
    	 * Returns average score on a quiz.

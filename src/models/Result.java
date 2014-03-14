@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+import models.Quiz;
 
 public class Result extends AbstractModel {
 
@@ -161,6 +162,13 @@ public class Result extends AbstractModel {
 	 */
 	public int getQuizID() {
 		return (Integer) getValue(QUIZ_ID_COLNAME);
+	}
+	
+	/**
+	 * @return quiz
+	 */
+	public Quiz getQuiz() {
+		return (Quiz) Quiz.findByID((Integer) getValue(QUIZ_ID_COLNAME));
 	}
 
 	/**
