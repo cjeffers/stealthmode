@@ -2,6 +2,7 @@ package servlets;
 
 import models.*;
 
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,10 +32,24 @@ public class QuizDisplay extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Quiz quiz = Quiz.findByID(Integer.parseInt(request.getParameter("id")));
         int numQuestions = quiz.getQuestions().size();
+        User creator = User.findByID(quiz.getCreatorID());
+        User me = (User) request.getSession().getAttribute("user");
+
+        if (me != null) {
+            List<Result> myResults = Result.findByQuizAndUser(quiz.getID(), me.getID());
+            Collections.sort(myResults, Quiz.SCORE_SORT);
+            request.setAttribute("my_results", myResults);
+        }
+
         request.getSession().setAttribute("quiz_id", quiz.getID());
         request.getSession().setAttribute("next_index", 0);
         request.setAttribute("quiz", quiz);
         request.setAttribute("num_questions", numQuestions);
+        request.setAttribute("creator", creator);
+        request.setAttribute("top_results", quiz.getScores());
+        request.setAttribute("recent_results", quiz.getRecentResults());
+        request.setAttribute("average_score", quiz.averageScore());
+        request.setAttribute("average_time", quiz.averageTime());
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("quiz_display.jsp");
         dispatcher.forward(request, response);

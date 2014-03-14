@@ -192,19 +192,19 @@ public class Quiz extends AbstractModel{
 	public static int getTotalQuizzesTaken(){
 		return Result.findAll().size();
 	}
-	
+
 	public void clearHistory(){
 		List<Result> toDelete = Result.findByQuiz(getID());
 		for (int i = 0; i < toDelete.size(); i++){
 			toDelete.get(i).delete();
 		}
 	}
-	
+
 	public static void clearHistoryByID(int ID){
 		Quiz toDeleteHistory = Quiz.findByID(ID);
 		toDeleteHistory.clearHistory();
 	}
-	    
+
 	    public static void deleteQuiz(int ID){
 	    	Quiz toDelete = Quiz.findByID(ID);
 	    	toDelete.delete();
@@ -221,7 +221,7 @@ public class Quiz extends AbstractModel{
         if (am != null) return new Quiz(am);
         return null;
 	}
-	
+
 
 	/**
 	 * Given a question, find the quiz associated with it
@@ -248,7 +248,7 @@ public class Quiz extends AbstractModel{
 		return convertAMListToQuizzes(ams);
 	}
 
-	
+
 	/**
 	 * Returns all quizzes made by a certain user
 	 * Returns an empty list if none match the date
@@ -259,7 +259,7 @@ public class Quiz extends AbstractModel{
 		List<AbstractModel> ams = AbstractModel.getByValue(QUIZ_TABLENAME, CREATOR_ID_COLNAME, id);
 		return convertAMListToQuizzes(ams);
 	}
-	
+
     public static List<Quiz> findAll() {
         List<AbstractModel> ams = AbstractModel.getAll(QUIZ_TABLENAME);
         return convertAMListToQuizzes(ams);
@@ -337,7 +337,7 @@ public class Quiz extends AbstractModel{
    		return result;
    	}
 
- static final Comparator<Result> SCORE_SORT =
+ public static final Comparator<Result> SCORE_SORT =
          new Comparator<Result>() {
 	 		public int compare(Result e1, Result e2) {
 	 			if (e1.getScore() == e2.getScore()) return (int) (e1.getDuration() - e2.getDuration());
@@ -355,7 +355,7 @@ public class Quiz extends AbstractModel{
 		Collections.sort(result, SCORE_SORT);
 		return result;
 	}
-	
+
 
    	/**
    	 * Returns average score on a quiz.
@@ -378,10 +378,10 @@ public class Quiz extends AbstractModel{
    	 * @return the average time
    	 */
 
-   	public int averageTime(){
+   	public long averageTime(){
    		List<Result> results = Result.findByQuiz(getID());
    		if (results.size() == 0) return 0;
-   		int totalTime = 0;
+   		long totalTime = 0;
    		for (int i = 0; i < results.size(); i++){
    			Result curr = results.get(i);
    			totalTime += curr.getDuration();
@@ -400,7 +400,7 @@ public class Quiz extends AbstractModel{
    	 		}
    };
 
-   
+
    /**
     * Shows all the quizzes, sorted by most popular
     * @return a list of quizzes
@@ -417,8 +417,8 @@ public class Quiz extends AbstractModel{
    	 		return (int) (e2.getDateMade() - e1.getDateMade());
    	 		}
    };
-   
-   
+
+
    /**
     * Shows all the quizzes made, in order sorted by time made
     * @return a sorted list of quizzes
