@@ -23,6 +23,21 @@ $(function(){
          });
     });
     
+    $(".deleteUserButton").click(function(){
+    	event.preventDefault();
+        $.ajax({ 
+               context:this,
+               url: 'DeleteUser',
+               type: 'POST',
+               cache: false, 
+               data: { id:$(this).attr('id') }, 
+               success: function(data){
+            	   alert($(this).attr('id'));
+            	   $(this).closest('li').remove();
+            }
+         });
+    });
+    
     
     
 });

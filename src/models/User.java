@@ -412,11 +412,21 @@ public class User extends AbstractModel{
     public static void deleteUser(String username){
     	User toDelete = User.findByUsername(username);
     	toDelete.delete();
+    	List<User> allusers = User.findAll();
+    	for(User oneuser:allusers ){
+    		oneuser.removeFriend(username);
+    	}
+    	
     }
     
     public static void deleteUser(int ID){
     	User toDelete = User.findByID(ID);
     	toDelete.delete();
+    	List<User> allusers = User.findAll();
+    	for(User oneuser:allusers ){
+    		oneuser.removeFriend(toDelete.getUserName());
+    	}
+    	
     }
 
     /**

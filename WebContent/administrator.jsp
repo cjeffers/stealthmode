@@ -29,7 +29,7 @@ Announcement Text: <input type="text" id="announcement"></input><br>
 <h4> Remove User Accounts </h4> <button class="expand">+</button>
 <div id="userremove"><ul>
 <% for (User person:users){ %>
-<li><%=person.getUserName() %> <a href= "#" class ="deleteuser" id="<%= person.getID() %>">Delete User</a></li>
+<li><button id='<%=person.getID()%>' class='deleteUserButton'>Delete User</button><%=person.getUserName() %> </li>
 <%} %>
 </ul></div></div>
 
