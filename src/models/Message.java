@@ -131,11 +131,11 @@ public class Message extends AbstractModel{
 	 */
 
 
-	public void makeAnnouncement(String adminName, String message){
+	public static void makeAnnouncement(String adminName, String message){
 		Message announcement = new Message(adminName, "Announcement", message, 'm', 1);
 	}
 	
-	public List<Message> seeAnnouncements(){
+	public static List<Message> seeAnnouncements(){
 		return findMessagesReceivedByUser("Announcement");
 	}
 	

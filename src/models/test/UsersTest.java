@@ -72,24 +72,19 @@ public class UsersTest {
     	for(Message a:notes){
     		System.out.println(a.getText());
     	}*/
-    }
+    
     
     @Test
     public void testPassword(){
-<<<<<<< HEAD
-    	User am1 = new User("ramdomTest", "johnson", "justChecking", false);
-    	assertTrue(User.validateLogin("randomTest", "johnson") == true);
-    	assertTrue(User.validateLogin("randomTest", "jones") == false);
-=======
+
     	User am1 = new User("james", "johnson", "Jed", false);
     	assertTrue(User.validateLogin("james", "johnson") == true);
     	assertTrue(User.validateLogin("james", "jones") == false);
-    }*/
+    }
     
     @Test
     public void findAll(){
     	System.out.print(User.findAll().size());
->>>>>>> cam/frontend_quiz
     }
 
 }
