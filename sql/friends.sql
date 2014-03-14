@@ -6,8 +6,8 @@ DROP TABLE IF EXISTS friends;
 
 CREATE TABLE friends (
     id INT NOT NULL AUTO_INCREMENT,
-    friends_with CHAR(64);
-    my_name CHAR(64);
+    friends_with CHAR(64),
+    my_name CHAR(64),
     PRIMARY KEY(id)
 
 );
