@@ -189,8 +189,21 @@ public class Quiz extends AbstractModel{
 	//save();
 	}
 
-	// Database searching static methods
-
+	public static int getTotalQuizzesTaken(){
+		return Result.findAll().size();
+	}
+	
+	public void clearHistory(){
+		List<Result> toDelete = Result.findByQuiz(getID());
+		for (int i = 0; i < toDelete.size(); i++){
+			toDelete.get(i).delete();
+		}
+	}
+	    
+	    public static void deleteQuiz(int ID){
+	    	Quiz toDelete = Quiz.findByID(ID);
+	    	toDelete.delete();
+	    }
 
 	/**
 	 * Returns a quiz with the given id

@@ -50,7 +50,7 @@ public class Message extends AbstractModel{
 		}
 		return returnL;
 	}
-
+	
 	/**
 	 * Access all messages recieved by a user
 	 * @param string that is the username of the sender
@@ -131,6 +131,14 @@ public class Message extends AbstractModel{
 	 */
 
 
+	public static void makeAnnouncement(String adminName, String message){
+		Message announcement = new Message(adminName, "Announcement", message, 'm', 1);
+	}
+	
+	public static List<Message> seeAnnouncements(){
+		return findMessagesReceivedByUser("Announcement");
+	}
+	
 	public Message(String sender, String receiver, String text, char type, int id){
 		super(MESSAGES_DATABASE);
 		if(type=='c') setQuiz(id);

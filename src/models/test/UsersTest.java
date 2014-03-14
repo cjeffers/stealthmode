@@ -20,7 +20,7 @@ public class UsersTest {
         con = AbstractModel.getConnection();
 	}
 
-    /*@Test
+    @Test
     public void testBasicFunctionality() {
         User am = new User("ben_test", "cheese", "Ben Ulmer", true);
         assertTrue(User.nameInUse("ben_test"));
@@ -67,15 +67,18 @@ public class UsersTest {
     
     @Test
     public void testMessages(){
-    /*	User am1 = new User("jed", "bleh", "Jed", false);
+    User am1 = new User("jed", "bleh", "Jed", false);
     	List<Message> notes = am1.seeMessages();
     	for(Message a:notes){
     		System.out.println(a.getText());
+
     	}
-    }*/
+    }
     
+
     @Test
     public void testPassword(){
+
     	User am1 = new User("james", "johnson", "Jed", false);
     	assertTrue(User.validateLogin("james", "johnson") == true);
     	assertTrue(User.validateLogin("james", "jones") == false);

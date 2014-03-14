@@ -28,6 +28,20 @@ public class Result extends AbstractModel {
 
 
 
+    /**
+     * Get a list of all users.
+     * @return a list containing all users in the database
+     */
+    public static List<Result> findAll(){
+    	List<Result> result = new ArrayList<Result>();
+        List<AbstractModel> all = AbstractModel.getAll(RESULT_TABLENAME);
+        for (AbstractModel am : all) {
+            result.add(new Result(am));
+        }
+    	return result;
+    }
+	
+	
 	/**
 	 * Creates a Result from all given parameters
 	 * @param quiz id
