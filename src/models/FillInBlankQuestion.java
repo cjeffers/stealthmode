@@ -108,9 +108,9 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	 */
 	public void setAfter(String after) {
 		if (after.equals(null)) {
-			setContent1("");
+			setContent2("");
 		} else {
-			setContent1(after);
+			setContent2(after);
 		}
 	}
 }
