@@ -146,6 +146,17 @@ public class User extends AbstractModel{
        reverseNewFriend.save();
     }
 
+    public void removeFriend(String username){
+    	List<AbstractModel> oldFriends = AbstractModel.getWhere("friends_with=\""+username+"\" AND my_name=\""+getUserName()+"\"", FRIENDS_DATABASE);
+    	for (int i = 0; i < oldFriends.size(); i++){
+    		oldFriends.get(i).delete();
+    	}
+    	List<AbstractModel> reverseFriends = AbstractModel.getWhere("friends_with=\""+getUserName()+"\" AND my_name=\""+username+"\"", FRIENDS_DATABASE);
+    	for (int i = 0; i < reverseFriends.size(); i++){
+    		reverseFriends.get(i).delete();
+    	}
+    }
+    
     /**
      * Sees a list of messages sent to this user.
      * @return returns an array of messages. Each note is a message object
