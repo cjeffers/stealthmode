@@ -55,7 +55,6 @@ public class UsersTest {
     	User am1 = new User("ben_test", "cheese", "Ben", true);
     	User am2 = new User("ben_test_friend", "cheese", "Ninja", true);
     	List<User> admins = User.findAdministrators();
-    	System.out.println(admins.size());
     	assertTrue(admins.size() == 4);
     	am1.setAdminPriveledge(false);
     	List<User> admins2 = User.findAdministrators();
@@ -64,11 +63,11 @@ public class UsersTest {
     
     @Test
     public void testMessages(){
-    	User am1 = new User("jed", "bleh", "Jed", false);
+    /*	User am1 = new User("jed", "bleh", "Jed", false);
     	List<Message> notes = am1.seeMessages();
     	for(Message a:notes){
     		System.out.println(a.getText());
-    	}
+    	}*/
     }
     
     @Test
