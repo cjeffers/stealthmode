@@ -8,6 +8,7 @@
         <title>Take Quiz</title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <% Quiz quiz = (Quiz) request.getAttribute("quiz"); %>
         <% List<Question> questions = (List<Question>) request.getAttribute("questions"); %>
         <div class="container">

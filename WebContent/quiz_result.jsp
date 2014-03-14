@@ -13,6 +13,7 @@
         <title>Results for <%= quiz.getName() %></title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <div class="container">
             <h1>Results for <a href="<%= quizURL %>"><%= quiz.getName() %></a></h1>
             <p>Congratulations on finishing the quiz! Here are your results:</p>

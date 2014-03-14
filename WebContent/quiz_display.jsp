@@ -10,6 +10,7 @@
         <title><%= quiz.getName() %></title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <div class="container">
             <% List<Quiz> quizzes = (List<Quiz>) request.getAttribute("quizzes"); %>
             <h1><%= quiz.getName() %></h1>

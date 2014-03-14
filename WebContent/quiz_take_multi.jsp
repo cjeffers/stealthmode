@@ -8,6 +8,7 @@
         <title>Take Quiz</title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <% Question question = (Question) request.getAttribute("question"); %>
         <% String include_str = question.getType() + "_question_display.jsp"; %>
         <div class="container">
