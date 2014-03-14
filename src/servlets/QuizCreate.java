@@ -58,7 +58,7 @@ public class QuizCreate extends HttpServlet {
 
             // make and save the quiz
             Quiz newQuiz = new Quiz(quizTitle, quizDescription, isTimed,
-                                    isMultiPage, System.currentTimeMillis());
+                                    isMultiPage, System.currentTimeMillis(), -1);
             int quizID = newQuiz.save();
 
             // show the form for the first question

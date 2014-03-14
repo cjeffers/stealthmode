@@ -19,7 +19,7 @@ public class User extends AbstractModel{
     private static String USERS_DATABASE = "users";
     private static String FRIENDS_DATABASE = "friends";
     private static String ACHIEVEMENTS_DATABASE = "achievements";
-    
+    private AbstractModel achievements;
 
     /**
      * Access a user based off its username
@@ -43,8 +43,8 @@ public class User extends AbstractModel{
      */
 
     public User(AbstractModel am){	
-
     	super(USERS_DATABASE, am.getMap(), true);
+    	achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", am.getValue("user_id"));
     }
 
 
@@ -71,10 +71,11 @@ public class User extends AbstractModel{
      */
     public User(String username, String password, String fullname, boolean administrator){
         super(USERS_DATABASE);
-        //if(!nameInUse(username)){
         	setFullname(fullname);
             setUserName(username);
             setPicURL("");
+            achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
+            achievements.setValue("user_id", getID());
             setAdminPriveledge(administrator);
             setIsGreatest(false);
         	setPracticed(false);
@@ -84,7 +85,6 @@ public class User extends AbstractModel{
         	setProlificAuthor(false);
             setPassword(password);
             save();
-       // }
     }
     
     /**
@@ -99,6 +99,8 @@ public class User extends AbstractModel{
             setUserName(username);
             setPassword(password);
             setAdminPriveledge(administrator);
+            achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
+            achievements.setValue("user_id", getID());
             setFullname(fullname);
             setIsGreatest(false);
         	setPracticed(false);
@@ -130,11 +132,10 @@ public class User extends AbstractModel{
 
     /**
      * Makes the current user friends with another user. Works both ways, if user1 becomes friends with user2, user2
-     * automatically becomes friends with user1.
+     * automatically becomes friends with user1. Need to check that they aren't already friends before doing this.
      * @param username The username of the new friend.
      */
     public void addFriend(String username){
-    	//if (AbstractModel.getOneByValue(FRIENDS_DATABASE, "friends_with", username, "my_name", getUsername) != null) return;
         AbstractModel newFriend = new AbstractModel(FRIENDS_DATABASE);
         newFriend.setValue("friends_with", username);
         newFriend.setValue("my_name", getUserName());
@@ -145,6 +146,17 @@ public class User extends AbstractModel{
        reverseNewFriend.save();
     }
 
+    public void removeFriend(String username){
+    	List<AbstractModel> oldFriends = AbstractModel.getWhere("friends_with=\""+username+"\" AND my_name=\""+getUserName()+"\"", FRIENDS_DATABASE);
+    	for (int i = 0; i < oldFriends.size(); i++){
+    		oldFriends.get(i).delete();
+    	}
+    	List<AbstractModel> reverseFriends = AbstractModel.getWhere("friends_with=\""+getUserName()+"\" AND my_name=\""+username+"\"", FRIENDS_DATABASE);
+    	for (int i = 0; i < reverseFriends.size(); i++){
+    		reverseFriends.get(i).delete();
+    	}
+    }
+    
     /**
      * Sees a list of messages sent to this user.
      * @return returns an array of messages. Each note is a message object
@@ -163,7 +175,6 @@ public class User extends AbstractModel{
         Message newNote = new Message(getUserName(), recipient, message, 'm');
     }
 
-    //Needs to be changed to a quiz once quiz functionality is made
 
     /**
      * Sees a list of challenges sent to this user.
@@ -241,10 +252,10 @@ public class User extends AbstractModel{
      * @param username the desired username
      */
     public void setUserName(String username){
-      //  if(!nameInUse(username)){
+      // if(!nameInUse(username)){
             setValue("username", username);
             save();
-      //  }
+       // }
     }
 
     /**
@@ -401,11 +412,12 @@ public class User extends AbstractModel{
      */
     public void setAmateurAuthor(boolean won){
     	if (won){
-    		setValue("amateur_author", 1);
+    		achievements.setValue("amateur_author", 1);
+    		achievements.setValue("amateur_author_time", System.currentTimeMillis());
     	} else{
-    		setValue("amateur_author", 0);
+    		achievements.setValue("amateur_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -413,7 +425,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Amateur Author award.
      */
     public boolean hasWonAmateurAuthor(){
-    	if((Integer)getValue("amateur_author") == 1) return true;
+    	if((Integer)achievements.getValue("amateur_author") == 1) return true;
     	else return false;
     }
 
@@ -423,11 +435,12 @@ public class User extends AbstractModel{
      */
     public void setProlificAuthor(boolean won){
     	if (won){
-    		setValue("prolific_author", 1);
+    		achievements.setValue("prolific_author", 1);
+    		achievements.setValue("prolific_author_time", System.currentTimeMillis());
     	} else{
-    		setValue("prolific_author", 0);
+    		achievements.setValue("prolific_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -435,7 +448,7 @@ public class User extends AbstractModel{
      * @return if the user has won the prolific Author award.
      */
     public boolean hasWonProlificAuthor(){
-    	if((Integer)getValue("prolific_author") == 1) return true;
+    	if((Integer)achievements.getValue("prolific_author") == 1) return true;
     	else return false;
     }
 
@@ -445,11 +458,12 @@ public class User extends AbstractModel{
      */
     public void setProdigiousAuthor(boolean won){
     	if (won){
-    		setValue("prodigious_author", 1);
+    		achievements.setValue("prodigious_author", 1);
+    		achievements.setValue("prodigious_author_time", System.currentTimeMillis());
     	} else{
-    		setValue("prodigious_author", 0);
+    		achievements.setValue("prodigious_author", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -457,7 +471,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Prodigious Author award.
      */
     public boolean hasWonProdigiousAuthor(){
-    	if((Integer)getValue("prodigious_author") == 1) return true;
+    	if((Integer)achievements.getValue("prodigious_author") == 1) return true;
     	else return false;
     }
 
@@ -467,11 +481,12 @@ public class User extends AbstractModel{
      */
     public void setQuizMachine(boolean won){
     	if (won){
-    		setValue("quiz_machine", 1);
+    		achievements.setValue("quiz_machine", 1);
+    		achievements.setValue("quiz_machine_time", System.currentTimeMillis());
     	} else{
-    		setValue("quiz_machine", 0);
+    		achievements.setValue("quiz_machine", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -479,7 +494,7 @@ public class User extends AbstractModel{
      * @return if the user has won the QuizMachine award.
      */
     public boolean hasWonQuizMachine(){
-    	if((Integer)getValue("quiz_machine") == 1) return true;
+    	if((Integer)achievements.getValue("quiz_machine") == 1) return true;
     	else return false;
     }
 
@@ -489,11 +504,12 @@ public class User extends AbstractModel{
      */
     public void setIsGreatest(boolean won){
     	if (won){
-    		setValue("is_greatest", 1);
+    		achievements.setValue("is_greatest", 1);
+    		achievements.setValue("is_greatest_time", System.currentTimeMillis());
     	} else{
-    		setValue("is_greatest", 0);
+    		achievements.setValue("is_greatest", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -501,7 +517,7 @@ public class User extends AbstractModel{
      * @return if the user has won the I am the greatest award.
      */
     public boolean hasWonIsGreatest(){
-    	if((Integer)getValue("is_greatest") == 1) return true;
+    	if((Integer)achievements.getValue("is_greatest") == 1) return true;
     	else return false;
     }
 
@@ -511,11 +527,12 @@ public class User extends AbstractModel{
      */
     public void setPracticed(boolean won){
     	if (won){
-    		setValue("practice_perfect", 1);
+    		achievements.setValue("practice_perfect", 1);
+    		achievements.setValue("practice_perfect_time", System.currentTimeMillis());
     	} else{
-    		setValue("practice_perfect", 0);
+    		achievements.setValue("practice_perfect", 0);
     	}
-        save();
+        achievements.save();
     }
 
     /**
@@ -523,7 +540,7 @@ public class User extends AbstractModel{
      * @return if the user has won the Practice Makes Perfect award.
      */
     public boolean hasWonPracticed(){
-    	if((Integer)getValue("practice_perfect") == 1) return true;
+    	if((Integer)achievements.getValue("practice_perfect") == 1) return true;
     	else return false;
     }
     
@@ -569,7 +586,7 @@ public class User extends AbstractModel{
     static final Comparator<Result> TIME_SORT = 
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		return (int) (e2.getTakenAt() - e1.getTakenAt());
    	 		}
    };
    	
@@ -588,7 +605,7 @@ public class User extends AbstractModel{
     static final Comparator<Result> SCORE_SORT = 
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return e1.getScore() - e2.getScore();
+   	 		return e2.getScore() - e1.getScore();
    	 		}
    };
    	
@@ -597,13 +614,29 @@ public class User extends AbstractModel{
    	 * @return a sorted list of results
    	 */
    	
-   	public List<Result> getScores(int quizID){
+   	public List<Result> getScoresForQuiz(int quizID){
    		List<Result> result = Result.findByQuizAndUser(quizID, getID());
    		Collections.sort(result, SCORE_SORT);
    		return result;
    	}
    	
+    static final Comparator<Quiz> CREATION_TIME_SORT =
+            new Comparator<Quiz>() {
+   	 		public int compare(Quiz e1, Quiz e2) {
+   	 		return (int) (e2.getDateMade() - e1.getDateMade());
+   	 		}
+   };
    	
+   
+   /**
+    * Shows all the quizzes a user has made, in order sorted by creation time
+    * @return the list of quizzes made
+    */
+   	public List<Quiz> recentlyCreatedQuizzes(){
+   		List<Quiz> quizzes = Quiz.findByCreator(getID());
+   		Collections.sort(quizzes, CREATION_TIME_SORT);
+   		return quizzes;
+   	}
    	
 
 }

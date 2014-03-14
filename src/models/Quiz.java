@@ -203,6 +203,7 @@ public class Quiz extends AbstractModel{
         if (am != null) return new Quiz(am);
         return null;
 	}
+	
 
 	/**
 	 * Given a question, find the quiz associated with it
@@ -229,6 +230,18 @@ public class Quiz extends AbstractModel{
 		return convertAMListToQuizzes(ams);
 	}
 
+	
+	/**
+	 * Returns all quizzes made by a certain user
+	 * Returns an empty list if none match the date
+	 * @param user's id
+	 * @return list of quizzes
+	 */
+	public static List<Quiz> findByCreator(int id) {
+		List<AbstractModel> ams = AbstractModel.getByValue(QUIZ_TABLENAME, CREATOR_ID_COLNAME, id);
+		return convertAMListToQuizzes(ams);
+	}
+	
     public static List<Quiz> findAll() {
         List<AbstractModel> ams = AbstractModel.getAll(QUIZ_TABLENAME);
         return convertAMListToQuizzes(ams);
@@ -291,7 +304,7 @@ public class Quiz extends AbstractModel{
     static final Comparator<Result> TIME_SORT =
             new Comparator<Result>() {
    	 		public int compare(Result e1, Result e2) {
-   	 		return (int) (e1.getTakenAt() - e2.getTakenAt());
+   	 		return (int) (e2.getTakenAt() - e1.getTakenAt());
    	 		}
    };
 
@@ -309,7 +322,8 @@ public class Quiz extends AbstractModel{
  static final Comparator<Result> SCORE_SORT =
          new Comparator<Result>() {
 	 		public int compare(Result e1, Result e2) {
-	 		return e1.getScore() - e2.getScore();
+	 			if (e1.getScore() == e2.getScore()) return (int) (e1.getDuration() - e2.getDuration());
+	 		return e2.getScore() - e1.getScore();
 	 		}
 };
 
@@ -331,10 +345,10 @@ public class Quiz extends AbstractModel{
    	 * @return the average score
    	 */
 
-   	public int averageScore(){
+   	public double averageScore(){
    		List<Result> results = Result.findByQuiz(getID());
    		if (results.size() == 0) return 0;
-   		int totalScore = 0;
+   		double totalScore = 0;
    		for (int i = 0; i < results.size(); i++){
    			Result curr = results.get(i);
    			totalScore += curr.getScore();
@@ -365,10 +379,15 @@ public class Quiz extends AbstractModel{
     static final Comparator<Quiz> POPULARITY_SORT =
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
-   	 		return getPopularity(e1.getID()) - getPopularity(e2.getID());
+   	 		return getPopularity(e2.getID()) - getPopularity(e1.getID());
    	 		}
    };
 
+   
+   /**
+    * Shows all the quizzes, sorted by most popular
+    * @return a list of quizzes
+    */
    	public static List<Quiz> getTopQuizzes(){
    		List<Quiz> quizzes = findAll();
    		Collections.sort(quizzes, POPULARITY_SORT);
@@ -378,10 +397,15 @@ public class Quiz extends AbstractModel{
     static final Comparator<Quiz> CREATION_TIME_SORT =
             new Comparator<Quiz>() {
    	 		public int compare(Quiz e1, Quiz e2) {
-   	 		return (int) (e1.getDateMade() - e2.getDateMade());
+   	 		return (int) (e2.getDateMade() - e1.getDateMade());
    	 		}
    };
-
+   
+   
+   /**
+    * Shows all the quizzes made, in order sorted by time made
+    * @return a sorted list of quizzes
+    */
    	public static List<Quiz> recentlyCreatedQuizzes(){
    		List<Quiz> quizzes = findAll();
    		Collections.sort(quizzes, CREATION_TIME_SORT);
