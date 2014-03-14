@@ -56,6 +56,7 @@ public class UserCreate extends HttpServlet {
             User newUser = new User(username, password, fullname, false);
             newUser.setPicURL(picURL);
             newUser.save();
+            request.getSession().removeAttribute("user");
             request.getSession().setAttribute("user", newUser);
             response.sendRedirect("/stealthmode/user?id=" + newUser.getID());
         }
