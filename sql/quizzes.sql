@@ -21,4 +21,5 @@ INSERT INTO quizzes (name, description, timed, multiple_pages, creation_time, cr
 ("Led Zep", "Rock and roll", 0, 0, 1394686353303, 3),
 ("Caitlin's Quiz", "for PHEs", 0, 0, 1394698037642, 3),
 ("Deal With It", "GIFs", 0, 0, 1394698235739, 1),
-("Ben's Quiz", "a quiz by Cameron, about Ben", 0, 0, 1394741845564, 5);
+("Ben's Quiz", "a quiz by Cameron, about Ben", 0, 0, 1394741845564, 5),
+("Led Zep Multi", "Rock and roll", 0, 1, 1394686353303, 3);

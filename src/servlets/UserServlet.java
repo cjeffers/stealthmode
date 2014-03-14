@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -30,11 +30,18 @@ public class UserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User me = (User) request.getSession().getAttribute("user");
 		int id = Integer.parseInt(request.getParameter("id"));
 		User u = User.findByID(id);
-		request.setAttribute("user", u);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/user.jsp");
-		dispatcher.forward(request, response);
+        String forwardURL;
+        if (me != null && me.getID() == u.getID()) {
+            forwardURL = "/profile.jsp";
+        } else {
+            request.setAttribute("user", u);
+            forwardURL = "/user.jsp";
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher(forwardURL);
+        dispatcher.forward(request, response);
 	}
 
 	/**

@@ -47,9 +47,16 @@ public class QuizTake extends HttpServlet {
             request.setAttribute("question", question);
             request.getSession().setAttribute("index", index);
 
+            // if final question, add boolean
+            if (index == questions.size() - 1) {
+                request.setAttribute("isFinal", true);
+            } else {
+                request.setAttribute("isFinal", false);
+            }
             // TODO forward to multi-page JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("/quiz_take_multi.jsp");
             dispatcher.forward(request, response);
+
         } else {  // single-page
 
             RequestDispatcher dispatcher;
@@ -115,8 +122,8 @@ public class QuizTake extends HttpServlet {
                 request.getSession().setAttribute("quiz_id", id);
                 request.getSession().setAttribute("duration", finish - start);
             }
-            response.sendRedirect(redirectURL);
         }
+        response.sendRedirect(redirectURL);
 	}
 
 }

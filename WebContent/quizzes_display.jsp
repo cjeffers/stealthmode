@@ -12,13 +12,17 @@
         <div class="container">
             <% List<Quiz> quizzes = (List<Quiz>) request.getAttribute("quizzes"); %>
             <h1>Quizzes</h1>
-            <ul>
             <% for (Quiz q : quizzes) { %>
-                <% String href = "/stealthmode/quiz?id=" + q.getID(); %>
-                <li><a href="<%= href %>"><%= q.getName() %></a></li>
+                <div class="quiz_title">
+                    <% String quiz_href = "/stealthmode/quiz?id=" + q.getID(); %>
+                    <% String creator_href = "/stealthmode/user?id=" + q.getCreatorID(); %>
+                    <a href="<%= quiz_href %>"><%= q.getName() %></a> created by
+                    <a href="<%= creator_href %>"><%= User.findByID(q.getCreatorID()).getFullname() %></a>
+                </div>
             <% } %>
-            </ul>
+            <% if (request.getSession().getAttribute("user") != null)  { %>
             <a href="/stealthmode/quiz/create">Create a quiz</a>
+            <% } %>
         </div>
     </body>
 </html>

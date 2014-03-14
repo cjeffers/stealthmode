@@ -12,6 +12,14 @@ body {
     color: red;
 }
 
+.quiz_title {
+    border: 3px solid gray;
+    border-radius: 5px;
+    background-color: lightgoldenrodyellow;
+    margin: 10px 100px;
+    padding: 5px;
+}
+
 img.profile {
     width: 200px;
 }

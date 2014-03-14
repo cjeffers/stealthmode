@@ -5,15 +5,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
+        <%@ include file="links.jsp" %>
 		<meta charset="UTF-8" />
 		<title>Users</title>
 	</head>
 	<body>
-		<h1>Users</h1>
-		<ul>
-			<% for (User u : users) { %>
-			<li><a href="/stealthmode/user?id=<%= u.getID() %>"><%= u.getFullname() %></a></li>
-			<% } %>
-		</ul>
-	</body>
+        <%@ include file="header.jsp" %>
+        <div class="container">
+            <h1>Users</h1>
+                <% for (User usr : users) { %>
+                <div>
+                    <a href="/stealthmode/user?id=<%= usr.getID() %>"><%= usr.getFullname() %></a>
+                </div>
+                <% } %>
+        </body>
+    </div>
 </html>
