@@ -146,7 +146,9 @@ public class Message extends AbstractModel{
 		setSender(sender);           
 		setReceiver(receiver);
 		setMessageText(text);
+		setTime();
 		save();
+		
 
 	}
 
@@ -165,6 +167,7 @@ public class Message extends AbstractModel{
 		setType(type);
 		setReceiver(receiver);
 		setMessageText(text);
+		setTime();
 		save();
 
 	}
@@ -216,6 +219,15 @@ public class Message extends AbstractModel{
 		//save();
 	}
 	
+	/**
+	 * Sets the time stamp of a message
+	 * @param 
+	 */
+	public void setTime(){
+		setValue("sendtime", System.currentTimeMillis());
+		save();
+	}
+	
 	 /**
      * Gets the name of the sender
      * @return the name of the user
@@ -231,6 +243,14 @@ public class Message extends AbstractModel{
     
     public String getReceiver(){
         return (String) getValue("receiver");
+    }
+    
+    /**
+     * Get timestamp millis
+     */
+    
+    public long getTime(){
+        return (Long) getValue("sendtime");
     }
     
     /*
@@ -255,6 +275,11 @@ public class Message extends AbstractModel{
     public String getText(){
         return (String) getValue("text");
     }
+    
+    /**
+     * Gets the quizid of a challenge message
+     * @return the quizid of a challenge message
+     */
     
     public int getQuiz(){
     	return (Integer) getValue("quiz");

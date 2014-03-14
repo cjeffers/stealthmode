@@ -11,6 +11,7 @@ CREATE TABLE messages (
     text CHAR(255),
     typem CHAR(1),
     quiz INT,
+    sendtime BIGINT,
     PRIMARY KEY(id)
 
 );

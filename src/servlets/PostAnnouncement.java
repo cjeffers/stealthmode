@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Message;
+import models.User;
 
 /**
  * Servlet implementation class PostAnnouncement
@@ -33,7 +35,10 @@ public class PostAnnouncement extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		User me = (User)request.getSession().getAttribute("user");
+		//System.out.println(request.getParameter("announcement"));
+		Message.makeAnnouncement("placeholder", request.getParameter("announcement"));
+		//replace placeholder with me.getUserName()
 	}
 
 }

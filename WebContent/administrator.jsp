@@ -21,9 +21,8 @@ int quizcount = quizzes.size();
 <div>
 <h4> Create announcements </h4> <button class="expand">+</button>
 <div id="createannouncement">
-<form action="CreateAnnouncement" method="post">
-Announcement Text: <input type="text" name="username"><br>
-<input type="submit" id="newannouncement" value="Post">
+Announcement Text: <input type="text" id="announcement"></input><br>
+<button id="newannouncement" >Post </button>
 </form></div></div>
 
 <div>
