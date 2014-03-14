@@ -20,7 +20,7 @@ public class UsersTest {
         con = AbstractModel.getConnection();
 	}
 
-    @Test
+    /*@Test
     public void testBasicFunctionality() {
         User am = new User("ben_test", "cheese", "Ben Ulmer", true);
         assertTrue(User.nameInUse("ben_test"));
@@ -76,9 +76,20 @@ public class UsersTest {
     
     @Test
     public void testPassword(){
+<<<<<<< HEAD
     	User am1 = new User("ramdomTest", "johnson", "justChecking", false);
     	assertTrue(User.validateLogin("randomTest", "johnson") == true);
     	assertTrue(User.validateLogin("randomTest", "jones") == false);
+=======
+    	User am1 = new User("james", "johnson", "Jed", false);
+    	assertTrue(User.validateLogin("james", "johnson") == true);
+    	assertTrue(User.validateLogin("james", "jones") == false);
+    }*/
+    
+    @Test
+    public void findAll(){
+    	System.out.print(User.findAll().size());
+>>>>>>> cam/frontend_quiz
     }
 
 }

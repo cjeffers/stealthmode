@@ -66,7 +66,7 @@ public class QuestionTest {
 	@Test
 	public void testFindByQuizID() {
         List<Question> quiz1 = Question.findByQuizID(1);
-        assertTrue(quiz1.size() == 2);
+        assertTrue(quiz1.size() == 1);
         quiz1 = Question.findByQuizID(-1);
         assertTrue(quiz1.size() == 0);
 	}
@@ -74,14 +74,14 @@ public class QuestionTest {
 	@Test
 	public void testFindByType() {
         List<Question> basic = Question.findByType("basic");
-        assertTrue(basic.size() == 4);
+        assertTrue(basic.size() == 5);
         basic = Question.findByType("NotAType");
         assertTrue(basic.size() == 0);
 	}
 
 	@Test
 	public void testFindByID() {
-        q = Question.findByID(1);
+        q = Question.findByID(7);
         assertTrue(q.getPrompt().equals("You don't know my life!"));
         q = Question.findByID(-1);
         assertTrue(q == null);
@@ -102,7 +102,7 @@ public class QuestionTest {
     public void testGetID() {
         assertTrue(q.getID() == null); // hasn't been saved into DB
         q = new Question(Question.getOneByValue("questions", "prompt", (Object)"You don't know my life!"));
-        assertTrue(q.getID() == 1);
+        assertTrue(q.getID() == 7);
     }
 
 	@Test
@@ -145,7 +145,7 @@ public class QuestionTest {
 
     @Test
     public void testSaveNew() {
-        assertTrue(Question.findByID(9) == null);
+        assertTrue(Question.findByID(2) == null);
         int id = q.save();
         System.out.println(id);
         q = Question.findByID(id);
@@ -156,11 +156,11 @@ public class QuestionTest {
     @Test
     public void testSaveUpdate() {
         String newAns = "The Beatles, obvi.";
-        q = Question.findByID(1);
+        q = Question.findByID(7);
         assertTrue(q.getContent1().equals("Led Zeppelin, duh."));
         q.setContent1(newAns);
         q.save();
-        q = Question.findByID(1);
+        q = Question.findByID(7);
         assertTrue(q.getContent1().equals(newAns));
         q.setContent1("Led Zeppelin, duh.");
         q.save();
@@ -169,11 +169,11 @@ public class QuestionTest {
     @Test
     public void testDelete() {
         List<Question> basic = Question.findByType("basic");
-        assertTrue(basic.size() == 4);
+        assertTrue(basic.size() == 5);
         q = basic.get(0);
         q.delete();
         basic = Question.findByType("basic");
-        assertTrue(basic.size() == 3);
+        assertTrue(basic.size() == 4);
         q.save();
     }
 

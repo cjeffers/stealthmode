@@ -30,14 +30,13 @@ public class QuizTake extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("quiz_id"));
-        Quiz quiz = Quiz.findByID(id);
+        int quizID = (Integer) request.getSession().getAttribute("quiz_id");
+        int index = (Integer) request.getSession().getAttribute("next_index");
+        Quiz quiz = Quiz.findByID(quizID);
         List<Question> questions;
 
         if (quiz.hasMultiplePages()) {  // mutli-page
-            // TODO get index from form
-            int index = Integer.parseInt(request.getParameter("next_index"));
-            int quizID = Integer.parseInt(request.getParameter("quiz_id"));
+            // get stuff from form
             if (index == 0) {  // initialize question array
                 questions = quiz.getQuestions();
             } else {
@@ -45,8 +44,14 @@ public class QuizTake extends HttpServlet {
             }
             Question question = questions.get(index);
             int nextIndex = index + 1;
-            // TODO stick question and next index on request
+
+            // stick question and next index on request
+            request.setAttribute("question", question);
+            request.setAttribute("next_index", nextIndex);
+
             // TODO forward to multi-page JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/quiz_take_multi.jsp");
+            dispatcher.forward(request, response);
         } else {  // single-page
             questions = quiz.getQuestions();
 
@@ -64,7 +69,8 @@ public class QuizTake extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("quiz_id"));
+        int id = (Integer) request.getSession().getAttribute("quiz_id");
+        int index = (Integer) request.getSession().getAttribute("next_index");
         Quiz quiz = Quiz.findByID(id);
         List<Question> questions = quiz.getQuestions();
 

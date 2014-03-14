@@ -15,7 +15,7 @@
                 <jsp:include page="<%= include_str %>" flush="true">
                     <jsp:param name="question_id" value="<%= question.getID() %>" />
                 </jsp:include>
-                <input type="hidden" name="next_index" value='<%= (Integer) request.getAttribute("next_index")%>' />
+                <input type="hidden" name="next_index" value='<%= (Integer) request.getAttribute("next_index") %>' />
                 <input type="submit" value="Next Question" />
             </form>
         </div>

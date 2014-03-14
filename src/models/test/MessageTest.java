@@ -27,10 +27,12 @@ public class MessageTest {
 
 	@Test
 	public void testGetMessages() {
-		/*Message test1 = new Message("jed", "ben", "hellothisisjed", 'm');
-		Message test2 = new Message("jed", "ben", "blebleh", 'm');
-		Message test3 = new Message("ben", "ben", "bongbong", 'm');
-		Message test4 = new Message("ben", "jed", "hellothisisjed", 'm');*/
+		Message test1 = new Message("ben", "jed", "hellothisisjed", 'm');
+		Message test2 = new Message("jacob", "jed", "blebleh", 'm');
+		Message test3 = new Message("ben", "jacob", "bongbong", 'f');
+		Message test4 = new Message("ben", "jed", "hellothisisjed", 'm');
+		Message test5 = new Message("cameron", "jed", "bemyfriend", 'f');
+		Message test6 = new Message("cameron", "jed", "takethisquiz", 'c', 135);
 		List<Message> allM = Message.getAllMessages();
 		System.out.println(allM.size());
 		List<Message> jedGets = Message.findMessagesSentByUser("ben");

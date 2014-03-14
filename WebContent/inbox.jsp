@@ -16,13 +16,29 @@
 
 <%
 User me = (User)request.getSession().getAttribute("user");
-List<Message> inbox = me.seeMessages();
-
+List<Message> inboxmessage = me.seeMessages();
+List<Message> inboxchallenge = me.seeChallenges();
+List<Message> inboxrequests = me.seeRequests();
 %>
 
-<% for(Message a:inbox){ %>
+<% if(inboxmessage != null){
+for(Message a:inboxmessage){ %>
 From: <%=a.getSender()%> <br>
-Text: <%=a.getText() %>
-<%} %>
+Text: <%=a.getText() %> <br>
+<%}} %>
+<br>
+<%if(inboxchallenge != null){ 
+for(Message a:inboxchallenge){ %>
+From: <%=a.getSender()%> <br>
+Text: <%=a.getText() %> <br>
+QuizID: <%=a.getQuiz() %> <br>
+<%}} %>
+<br>
+<% if(inboxrequests != null){
+for(Message a:inboxrequests){ %>
+From: <%=a.getSender()%> <br>
+Text: <%=a.getText() %> <br>
+<%}} %>
+
 </body>
 </html>
