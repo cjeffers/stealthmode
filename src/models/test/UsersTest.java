@@ -71,15 +71,15 @@ public class UsersTest {
     	List<Message> notes = am1.seeMessages();
     	for(Message a:notes){
     		System.out.println(a.getText());
-    	}*/
-    }
+    	}
+    }*/
     
     @Test
     public void testPassword(){
     	User am1 = new User("james", "johnson", "Jed", false);
     	assertTrue(User.validateLogin("james", "johnson") == true);
     	assertTrue(User.validateLogin("james", "jones") == false);
-    }*/
+    }
     
     @Test
     public void findAll(){
