@@ -1,7 +1,7 @@
 package servlets;
 
 import java.util.*;
-import models.Quiz;
+import models.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -49,6 +49,7 @@ public class QuizCreate extends HttpServlet {
         String quizDescription = request.getParameter("quiz_description");
         String quizTimed = request.getParameter("quiz_timed");
         String quizMultiPages = request.getParameter("quiz_multi_pages");
+        User me = (User) request.getSession().getAttribute("user");
 
         // for the next question (if applicable)
         String questionType = request.getParameter("question_type");
@@ -57,22 +58,27 @@ public class QuizCreate extends HttpServlet {
         String cancel = request.getParameter("cancel");
         String add = request.getParameter("add");
 
-        if (add != null) {  // we are adding a question
+        if (me != null) {
+            if (add != null) {  // we are adding a question
 
-            boolean isTimed = (quizTimed == null ? false : true);
-            boolean isMultiPage = (quizMultiPages == null ? false : true);
+                boolean isTimed = (quizTimed == null ? false : true);
+                boolean isMultiPage = (quizMultiPages == null ? false : true);
 
-            // make and save the quiz
-            Quiz newQuiz = new Quiz(quizTitle, quizDescription, isTimed,
-                                    isMultiPage, System.currentTimeMillis(), -1);
-            int quizID = newQuiz.save();
+                // make and save the quiz
+                Quiz newQuiz = new Quiz(quizTitle, quizDescription, isTimed,
+                        isMultiPage, System.currentTimeMillis(), me.getID());
+                int quizID = newQuiz.save();
 
-            // show the form for the first question
-            request.getSession().setAttribute("quiz_id", quizID);
-            response.sendRedirect("/stealthmode/quiz/add_question?type=" + questionType);
+                // show the form for the first question
+                request.getSession().setAttribute("quiz_id", quizID);
+                response.sendRedirect("/stealthmode/quiz/add_question?type=" + questionType);
 
-        } else if (cancel != null) {  // we're cancelling quiz creation
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/cancel_quiz_creation.html");
+            } else if (cancel != null) {  // we're cancelling quiz creation
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/cancel_quiz_creation.html");
+                dispatcher.forward(request, response);
+            }
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/not_logged_in.jsp");
             dispatcher.forward(request, response);
         }
     }
