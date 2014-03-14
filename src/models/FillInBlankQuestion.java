@@ -66,8 +66,8 @@ public class FillInBlankQuestion extends AbstractQuestion {
 	public FillInBlankQuestion(int quizID, String type, ServletRequest request) {
 		super(quizID, type, request.getParameter(REQUEST_PROMPT));
 		setContent0(request.getParameter(REQUEST_BLANK));
-		setContent1(request.getParameter(REQUEST_BEFORE));
-		setContent2(request.getParameter(REQUEST_AFTER));
+		setBefore(request.getParameter(REQUEST_BEFORE));
+		setAfter(request.getParameter(REQUEST_AFTER));
 	}
 
 	/**
@@ -88,4 +88,29 @@ public class FillInBlankQuestion extends AbstractQuestion {
 		return DEFAULT_PROMPT;
 	}
 
+	/**
+	 * setBefore
+	 * Defaults to "" if the param is null
+	 * @param String
+	 */
+	public void setBefore(String before) {
+		if (before.equals(null)) {
+			setContent1("");
+		} else {
+			setContent1(before);
+		}
+	}
+	
+	/**
+	 * setAfter
+	 * Defaults to "" if the param is null
+	 * @param String
+	 */
+	public void setAfter(String after) {
+		if (after.equals(null)) {
+			setContent1("");
+		} else {
+			setContent1(after);
+		}
+	}
 }
