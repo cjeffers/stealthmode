@@ -319,6 +319,15 @@ public class Quiz extends AbstractModel{
         return quizzes;
 	}
 	
+	
+	/**
+	 * Returns all ratings associated with a quiz, along with their corresponding review
+	 * @return a list of abstract models
+	 */
+	public List<AbstractModel> getAllReviews(){
+		return AbstractModel.getByValue(RATING_DATABASE, "quiz_id", getID());
+	}
+	
 	public void report(){
 		String reportingMessage = "The quiz " + getName() + " has been reported. Please review it and delete if necessary.";
 		List<User> admins = User.findAdministrators();
