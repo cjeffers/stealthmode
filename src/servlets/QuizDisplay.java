@@ -31,6 +31,8 @@ public class QuizDisplay extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Quiz quiz = Quiz.findByID(Integer.parseInt(request.getParameter("id")));
         int numQuestions = quiz.getQuestions().size();
+        request.getSession().setAttribute("quiz_id", quiz.getID());
+        request.getSession().setAttribute("next_index", 0);
         request.setAttribute("quiz", quiz);
         request.setAttribute("num_questions", numQuestions);
 
