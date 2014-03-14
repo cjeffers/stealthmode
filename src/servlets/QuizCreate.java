@@ -29,8 +29,14 @@ public class QuizCreate extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        boolean loggedIn = (request.getSession().getAttribute("user") != null);
         // display the forms to create the question
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/create_quiz.jsp");
+        RequestDispatcher dispatcher;
+        if (loggedIn) {
+            dispatcher = request.getRequestDispatcher("/create_quiz.jsp");
+        } else {
+            dispatcher = request.getRequestDispatcher("/not_logged_in.jsp");
+        }
         dispatcher.forward(request, response);
     }
 

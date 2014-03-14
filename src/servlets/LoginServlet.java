@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
 		}
 		else{
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
-            request.setAttribute("msg", "Username or password was incorrect. Try again!");
+            request.getSession().setAttribute("msg", "Username or password was incorrect. Try again!");
 		    dispatcher.forward(request, response);
 		}
 

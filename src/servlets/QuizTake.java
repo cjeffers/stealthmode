@@ -33,15 +33,13 @@ public class QuizTake extends HttpServlet {
         int quizID = (Integer) request.getSession().getAttribute("quiz_id");
         int index = (Integer) request.getSession().getAttribute("next_index");
         Quiz quiz = Quiz.findByID(quizID);
-        List<Question> questions;
+        List<Question> questions = quiz.getQuestions();
 
         if (quiz.hasMultiplePages()) {  // mutli-page
             // get stuff from form
-            if (index == 0) {  // initialize question array
-                questions = quiz.getQuestions();
+            if (index == 0) {
                 request.getSession().setAttribute("score", 0);
-            } else {
-                questions = (List<Question>) request.getSession().getAttribute("questions");
+                request.getSession().setAttribute("start_time", System.currentTimeMillis());
             }
             Question question = questions.get(index);
 
@@ -53,10 +51,10 @@ public class QuizTake extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/quiz_take_multi.jsp");
             dispatcher.forward(request, response);
         } else {  // single-page
-            questions = quiz.getQuestions();
 
             RequestDispatcher dispatcher;
 
+            request.getSession().setAttribute("start_time", System.currentTimeMillis());
             request.setAttribute("quiz", quiz);
             request.setAttribute("questions", questions);
             dispatcher = request.getRequestDispatcher("/quiz_take_single.jsp");
@@ -69,9 +67,15 @@ public class QuizTake extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("user");
+        boolean loggedIn = (user != null);
         int id = (Integer) request.getSession().getAttribute("quiz_id");
         Quiz quiz = Quiz.findByID(id);
         List<Question> questions = quiz.getQuestions();
+        long finish = System.currentTimeMillis();
+        long start = (Long) request.getSession().getAttribute("start_time");
+        Result res;
+        String redirectURL = "/stealthmode/quiz/result";
 
         if (quiz.hasMultiplePages()) {  // mutli-page
             // get index of question, question, and current score
@@ -80,29 +84,38 @@ public class QuizTake extends HttpServlet {
             int score = (Integer) request.getSession().getAttribute("score");
 
             // set score + 1 if correct
-            if (question.checkAnswer(request)) {
-                score += 1;
-            }
+            if (question.checkAnswer(request)) score += 1;
+
             request.getSession().setAttribute("score", score);
-            request.getSession().setAttribute("questions", questions);
 
             int nextIndex = index + 1;
 
             if (nextIndex == questions.size()) {  // the quiz is over!
-                request.getSession().setAttribute("quiz_id", id);
-                response.sendRedirect("/stealthmode/quiz/result");
-            } else {
+                if (loggedIn) {
+                    res = new Result(quiz.getID(), user.getID(), score, questions.size(), finish, finish - start);
+                    redirectURL = redirectURL + "?id=" + res.save();
+                } else {
+                    request.getSession().setAttribute("quiz_id", id);
+                    request.getSession().setAttribute("duration", finish - start);
+                }
+            } else {  // send the next question
                 request.getSession().setAttribute("next_index", nextIndex);
-                response.sendRedirect("/stealthmode/quiz/take");
+                redirectURL = "/stealthmode/quiz/take";
             }
 
-        } else {
+        } else {  // single page
+
             Integer score = quiz.checkScore(request);
 
-            request.getSession().setAttribute("score", score);
-            request.getSession().setAttribute("quiz_id", id);
-
-            response.sendRedirect("/stealthmode/quiz/result");
+            if (loggedIn) {
+                res = new Result(quiz.getID(), user.getID(), score, questions.size(), finish, finish - start);
+                redirectURL = redirectURL + "?id=" + res.save();
+            } else {
+                request.getSession().setAttribute("score", score);
+                request.getSession().setAttribute("quiz_id", id);
+                request.getSession().setAttribute("duration", finish - start);
+            }
+            response.sendRedirect(redirectURL);
         }
 	}
 
