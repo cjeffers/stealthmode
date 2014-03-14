@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 		if(User.validateLogin(request.getParameter("username"), request.getParameter("password"))){
 			User newUser = User.findByUsername(request.getParameter("username"));
 			request.getSession().setAttribute("user", newUser);
-			response.sendRedirect("/stealthmode/user?id=" + 3);
+			response.sendRedirect("/stealthmode/user?id=" + newUser.getID());
 		}
 		else{
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
