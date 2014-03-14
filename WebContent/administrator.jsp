@@ -39,7 +39,7 @@ Announcement Text: <input type="text" id="announcement"></input><br>
 	<ul>
 		<% for (Quiz quiz:quizzes){ %>
 		<li><%=quiz.getName() %> 
-			<a href= "#" class="deletequiz" id="<%= quiz.getID() %>">Delete Quiz</a>
+			<button id='<%=quiz.getID()%>' class='deleteQuizButton'>Delete Quiz</button>
 		</li>
 <%} %></ul></div></div>
 
@@ -47,7 +47,7 @@ Announcement Text: <input type="text" id="announcement"></input><br>
 <h4> Clear all history information </h4> <button class="expand">+</button>
 <div id="historyremove"><ul><% for (Quiz quiz:quizzes){ %>
 
-<li><%=quiz.getName() %> <a href= "#" class="deletehistory" id="<%= quiz.getID() %>">Delete Quiz History</a></li>
+<li><%=quiz.getName() %> <button id='<%=quiz.getID()%>' class='deleteQuizHistoryButton'>Delete Quiz History</button></li>
 <%} %></ul></div>
 </div>
 

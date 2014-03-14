@@ -32,8 +32,21 @@ $(function(){
                cache: false, 
                data: { id:$(this).attr('id') }, 
                success: function(data){
-            	   alert($(this).attr('id'));
             	   $(this).closest('li').remove();
+            }
+         });
+    });
+    
+    $(".deleteQuizHistoryButton").click(function(){
+    	event.preventDefault();
+        $.ajax({ 
+               context:this,
+               url: 'DeleteQuizHistory',
+               type: 'POST',
+               cache: false, 
+               data: { id:$(this).attr('id') }, 
+               success: function(data){
+            	   alert("Quiz History Deleted");
             }
          });
     });

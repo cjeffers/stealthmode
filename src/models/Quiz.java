@@ -199,6 +199,11 @@ public class Quiz extends AbstractModel{
 			toDelete.get(i).delete();
 		}
 	}
+	
+	public static void clearHistoryByID(int ID){
+		Quiz toDeleteHistory = Quiz.findByID(ID);
+		toDeleteHistory.clearHistory();
+	}
 	    
 	    public static void deleteQuiz(int ID){
 	    	Quiz toDelete = Quiz.findByID(ID);
