@@ -1,18 +1,17 @@
 package models.test;
 
+import models.*;
+
+import java.sql.Connection;
 import java.util.*;
-import java.sql.*;
 
 import static org.junit.Assert.*;
-import models.AbstractModel;
 
 import org.junit.*;
-import models.User;
-import models.Message;
 
-public class UsersTest {
-	
-	
+
+public class AdminTest {
+
 	static Connection con;
 
 	@BeforeClass
@@ -24,19 +23,8 @@ public class UsersTest {
     public void testBasicFunctionality() {
         User am = new User("ben_test", "cheese", "Ben Ulmer", true);
         assertTrue(User.nameInUse("ben_test"));
-        am.setPicURL("testing");
-        assertTrue(am.isAdministrator());
-        assertTrue(am.getUserName().equals("ben_test"));
-        assertTrue(am.correctPassword("cheese"));
-        assertTrue(am.getPicURL().equals("testing"));
-        assertTrue(am.getFullname().equals("Ben Ulmer"));
-        am.setAdminPriveledge(false);
-        assertTrue(!am.isAdministrator());
-        am.setAmateurAuthor(true);
-        assertTrue(am.hasWonAmateurAuthor());
-        List<String> awardsWon = am.seeAwardsWon();
-        assertTrue(awardsWon.size() == 1);
-        am.delete();
+       User.deleteUser(am.getID());
+       assertTrue(!User.nameInUse("ben_test"));
     }
 
     @Test
@@ -65,20 +53,6 @@ public class UsersTest {
     	System.out.println("Amount of admins are: " + admins2.size());
     }
     
-    @Test
-    public void testMessages(){
-    /*	User am1 = new User("jed", "bleh", "Jed", false);
-    	List<Message> notes = am1.seeMessages();
-    	for(Message a:notes){
-    		System.out.println(a.getText());
-    	}*/
-    }
-    
-    @Test
-    public void testPassword(){
-    	User am1 = new User("ramdomTest", "johnson", "justChecking", false);
-    	assertTrue(User.validateLogin("randomTest", "johnson") == true);
-    	assertTrue(User.validateLogin("randomTest", "jones") == false);
-    }
+
 
 }

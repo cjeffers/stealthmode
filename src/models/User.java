@@ -396,6 +396,10 @@ public class User extends AbstractModel{
     }
     
     
+    public static int getAmountOfUsers(){
+    	return findAll().size();
+    }
+    
     /**
      * Get the URL for the user's profile picture.
      * @return the URL as a String
@@ -405,6 +409,15 @@ public class User extends AbstractModel{
     }
     
 
+    public static void deleteUser(String username){
+    	User toDelete = User.findByUsername(username);
+    	toDelete.delete();
+    }
+    
+    public static void deleteUser(int ID){
+    	User toDelete = User.findByID(ID);
+    	toDelete.delete();
+    }
 
     /**
      * Turns the user into a winner of the amateur author award
