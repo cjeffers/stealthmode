@@ -96,6 +96,10 @@ public class Result extends AbstractModel {
         return convertAMListToResults(ams);
     }
 
+    public static Result findByID(int resultID) {
+        return new Result(AbstractModel.getByID(RESULT_TABLENAME, resultID));
+    }
+
 	private static List<Result> convertAMListToResults(List<AbstractModel> ams) {
 		List<Result> results = new ArrayList<Result>(ams.size());
         for (AbstractModel am : ams) {

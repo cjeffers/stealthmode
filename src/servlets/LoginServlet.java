@@ -15,7 +15,7 @@ import models.User;
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/LoginServlet")
+@WebServlet("/user/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+        dispatcher.forward(request, response);
 	}
 
 	/**
@@ -41,14 +42,14 @@ public class LoginServlet extends HttpServlet {
 		if(User.validateLogin(request.getParameter("username"), request.getParameter("password"))){
 			User newUser = User.findByUsername(request.getParameter("username"));
 			request.getSession().setAttribute("user", newUser);
-			response.sendRedirect("profile.jsp");
+			response.sendRedirect("/stealthmode/user?id=" + newUser.getID());
 		}
 		else{
-			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+            request.getSession().setAttribute("msg", "Username or password was incorrect. Try again!");
 		    dispatcher.forward(request, response);
 		}
 
-		//getSession().setAttribute
 
 
 

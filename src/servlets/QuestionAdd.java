@@ -32,9 +32,15 @@ public class QuestionAdd extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // make sure the JSP can find the question type
         request.setAttribute("type", request.getParameter("type"));
+        boolean loggedIn = (request.getSession().getAttribute("user") != null);
 
-        // display the form for the question
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/add_question.jsp");
+        // display the form for the question if logged in
+        RequestDispatcher dispatcher;
+        if (loggedIn) {
+            dispatcher = request.getRequestDispatcher("/add_question.jsp");
+        } else {
+            dispatcher = request.getRequestDispatcher("/not_logged_in.jsp");
+        }
         dispatcher.forward(request, response);
 	}
 

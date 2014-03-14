@@ -8,6 +8,7 @@
         <title>Add question</title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <div class="container">
             <form action="/stealthmode/quiz/add_question" method="post">
                 <div id="question_info">

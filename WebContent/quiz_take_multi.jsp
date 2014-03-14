@@ -8,6 +8,7 @@
         <title>Take Quiz</title>
     </head>
     <body>
+        <%@ include file="header.jsp" %>
         <% Question question = (Question) request.getAttribute("question"); %>
         <% String include_str = question.getType() + "_question_display.jsp"; %>
         <div class="container">
@@ -15,7 +16,6 @@
                 <jsp:include page="<%= include_str %>" flush="true">
                     <jsp:param name="question_id" value="<%= question.getID() %>" />
                 </jsp:include>
-                <input type="hidden" name="next_index" value='<%= (Integer) request.getAttribute("next_index") %>' />
                 <input type="submit" value="Next Question" />
             </form>
         </div>

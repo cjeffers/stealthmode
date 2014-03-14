@@ -6,14 +6,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
+        <%@ include file="links.jsp" %>
 		<meta charset="UTF-8" />
 		<title><%= user.getUserName() %></title>
 	</head>
-	<body>
-		<h1><%= user.getUserName() %></h1>
-		<ul>
-			<li>Full name: <%= user.getFullname() %></li>
-		</ul>
-		<a href="/stealthmode/users">See users</a>
-	</body>
+    <body>
+        <%@ include file="header.jsp" %>
+        <div class="container">
+            <h1><%= user.getUserName() %></h1>
+            <ul>
+                <li>Full name: <%= user.getFullname() %></li>
+            </ul>
+            <img class="profile" src="<%= user.getPicURL() %>" />
+            <a href="/stealthmode/users">See users</a>
+        </div>
+    </body>
 </html>

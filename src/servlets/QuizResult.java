@@ -30,14 +30,44 @@ public class QuizResult extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int score = (Integer) request.getSession().getAttribute("score");
-        int quizID = (Integer) request.getSession().getAttribute("quiz_id");
-        Quiz quiz = Quiz.findByID(quizID);
-        int numQuestions = quiz.getQuestions().size();
+        int score;
+        int quizID;
+        int numQuestions;
+        long duration;
+        boolean isSaved;
+        Quiz quiz;
+
+        String resultIDStr = request.getParameter("id");
+        if (resultIDStr != null) {
+            isSaved = true;
+
+            int resultID = Integer.parseInt(resultIDStr);
+            Result result = Result.findByID(resultID);
+
+            int userID = result.getUserID();
+            quizID = result.getQuizID();
+            quiz = Quiz.findByID(quizID);
+
+            request.setAttribute("username", User.findByID(userID).getUserName());
+            request.setAttribute("result", result);
+        } else {
+            isSaved = false;
+
+            quizID = (Integer) request.getSession().getAttribute("quiz_id");
+            quiz = Quiz.findByID(quizID);
+
+            score = (Integer) request.getSession().getAttribute("score");
+            numQuestions = quiz.getQuestions().size();
+            duration = (Long) request.getSession().getAttribute("duration");
+
+            request.setAttribute("score", score);
+            request.setAttribute("num_questions", numQuestions);
+            request.setAttribute("duration", duration);
+        }
+        request.setAttribute("isSaved", isSaved);
+
 
         request.setAttribute("quiz", quiz);
-        request.setAttribute("score", score);
-        request.setAttribute("num_questions", numQuestions);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/quiz_result.jsp");
         dispatcher.forward(request, response);
