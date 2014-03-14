@@ -244,6 +244,54 @@ public class Quiz extends AbstractModel{
 	}
 
 	
+	private static final String RATING_DATABASE = "ratings";
+	
+	
+	/**
+	 * Reviews a quiz
+	 * @param userID
+	 * @param rating
+	 * @param review
+	 */
+	public void reviewQuiz(int userID, int rating, String review){
+		AbstractModel theReview = new AbstractModel(RATING_DATABASE);
+		if (rating >= 10) rating = 10;
+		if (rating <= 0) rating = 0;
+		theReview.setValue("quiz_id", getID());
+		theReview.setValue("user_id", userID);
+		theReview.setValue("rating", rating);
+		theReview.setValue("review", review);
+	}
+	
+	/**
+	 * Gets the average rating of a quiz
+	 * @return
+	 */
+	public double getAverageRating(){
+		List<AbstractModel> review = AbstractModel.getByValue(RATING_DATABASE, "quiz_id", getID());
+		double rating = 0;
+		if (review.size() == 0) return 0;
+		for (int i = 0; i < review.size(); i++){
+			rating += (Integer) review.get(i).getValue("rating");
+		}
+		double size = review.size();
+		return rating/size;
+	}
+	
+	/**
+	 * Gets a list of reviews of the quiz
+	 * @return a list of strings
+	 */
+	public List<String> getReviews(){
+		List<AbstractModel> review = AbstractModel.getByValue(RATING_DATABASE, "quiz_id", getID());
+		List<String> reviews = new ArrayList<String>();
+		if (review.size() == 0) return reviews;
+		for (int i = 0; i < review.size(); i++){
+			reviews.add((String) review.get(i).getValue("review"));
+		}
+		return reviews;
+	}
+	
 	/**
 	 * Returns all quizzes made by a certain user
 	 * Returns an empty list if none match the date
@@ -269,6 +317,14 @@ public class Quiz extends AbstractModel{
             quizzes.add(new Quiz(am));
         }
         return quizzes;
+	}
+	
+	public void report(){
+		String reportingMessage = "The quiz " + getName() + " has been reported. Please review it and delete if necessary.";
+		List<User> admins = User.findAdministrators();
+		for (int i = 0; i < admins.size(); i++){
+			Message report = new Message("Reporting", admins.get(i).getUserName(), reportingMessage, 'm', -1);
+		}
 	}
 
 	/**
