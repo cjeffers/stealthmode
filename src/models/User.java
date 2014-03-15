@@ -44,7 +44,7 @@ public class User extends AbstractModel{
 
     public User(AbstractModel am){	
     	super(USERS_DATABASE, am.getMap(), true);
-    	achievements = AbstractModel.getByID("ACHIEVEMENTS_DATABASE", (Integer) am.getValue("achievement_id"));
+    	achievements = AbstractModel.getByID(ACHIEVEMENTS_DATABASE, (Integer) am.getValue("achievement_id"));
     }
 
 
@@ -75,7 +75,8 @@ public class User extends AbstractModel{
             setUserName(username);
             setPicURL("");
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            setAchievementID(achievements.save());
+            achievements.save();
+            setAchievementID((Integer) achievements.getValue("id"));
             achievements.setValue("user_id", getID());
             achievements.save();
             setAdminPriveledge(administrator);
