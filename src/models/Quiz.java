@@ -391,7 +391,7 @@ public class Quiz extends AbstractModel{
    		return totalTime/results.size();
    	}
 
-   	private static int getPopularity(int quizID){
+   	public static int getPopularity(int quizID){
    		return Result.findByQuiz(quizID).size();
    	}
 
