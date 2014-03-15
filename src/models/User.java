@@ -670,5 +670,30 @@ public class User extends AbstractModel{
    		return quizzes;
    	}
    	
+   	
+   	/**
+   	 * Checks to see what achievements the user has earned
+   	 * Sets the values in the achievements table appropriately
+   	 */
+   	public void checkAchievements() {
+   		List<Quiz> quizzes = recentlyCreatedQuizzes();
+   			if (quizzes.size() > 0 ) {
+   				setAmateurAuthor(true);
+   				setProlificAuthor(quizzes.size() >= 5);
+   				setProdigiousAuthor(quizzes.size() >= 10);
+   				
+   				if (!hasWonIsGreatest()) {
+   					boolean high_score = false;
+   	   				for (Quiz q : quizzes) {
+   	   					if(q.getScores().get(0).getUserID() == getID()) high_score = true;
+   	   				}
+   	   				setIsGreatest(high_score);
+   				}
+   				
+   			}
+   			
+   			if (getRecentResults().size() >= 10) setQuizMachine(true);
+   	}
+   	
 
 }
