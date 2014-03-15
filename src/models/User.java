@@ -44,7 +44,7 @@ public class User extends AbstractModel{
 
     public User(AbstractModel am){	
     	super(USERS_DATABASE, am.getMap(), true);
-    	achievements = AbstractModel.getOneByValue(ACHIEVEMENTS_DATABASE, "user_id", am.getValue("user_id"));
+    	achievements = AbstractModel.getByID("ACHIEVEMENTS_DATABASE", (Integer) am.getValue("achievement_id"));
     }
 
 
@@ -75,6 +75,7 @@ public class User extends AbstractModel{
             setUserName(username);
             setPicURL("");
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
+            setAchievementID((Integer) achievements.getValue("id"));
             achievements.setValue("user_id", getID());
             setAdminPriveledge(administrator);
             setIsGreatest(false);
@@ -85,6 +86,10 @@ public class User extends AbstractModel{
         	setProlificAuthor(false);
             setPassword(password);
             save();
+    }
+    
+    private void setAchievementID(int id){
+    	setValue("achievement_id", id);
     }
     
     /**
@@ -100,6 +105,7 @@ public class User extends AbstractModel{
             setPassword(password);
             setAdminPriveledge(administrator);
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
+            setAchievementID((Integer) achievements.getValue("id"));
             achievements.setValue("user_id", getID());
             setFullname(fullname);
             setIsGreatest(false);
