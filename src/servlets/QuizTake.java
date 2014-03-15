@@ -117,6 +117,7 @@ public class QuizTake extends HttpServlet {
                     request.getSession().setAttribute("quiz_id", id);
                     request.getSession().setAttribute("duration", finish - start);
                 }
+                user.checkAchievements();
             } else {  // send the next question
                 request.getSession().setAttribute("next_index", nextIndex);
                 redirectURL = "/stealthmode/quiz/take";
@@ -135,6 +136,7 @@ public class QuizTake extends HttpServlet {
                 request.getSession().setAttribute("duration", finish - start);
             }
         }
+        user.checkAchievements();
         response.sendRedirect(redirectURL);
 	}
 
