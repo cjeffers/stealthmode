@@ -6,11 +6,15 @@
 <html>
 <head>
 <%@ include file="links.jsp" %>
+<link rel="stylesheet" type="text/css" href="/stealthmode/css/profile.css" />
+
 <meta charset="UTF-8" />
 <title>Profile</title>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <%@ include file="jquery.jsp" %>
+
 <%User me = (User)request.getSession().getAttribute("user");
 List<Quiz> quizzesMade = Quiz.findByCreator(me.getID());
 List<Quiz> recentQuizzes = me.recentlyCreatedQuizzes();
@@ -21,9 +25,10 @@ List<Message> inboxmessage = me.seeMessages();
 List<Message> inboxchallenge = me.seeChallenges();
 List<Message> inboxrequests = me.seeRequests();
 int n=0;%>
-<%=me.getUserName() %>
-<br>
-<div id="container">
+
+<div class="container">
+<center><h1><%=me.getUserName() %></h1>
+ <img class="profile" src="<%= me.getPicURL() %>" /></center>
 <div id="recentquizzes">
 <table class="recentHolder">
 <tr>
@@ -36,13 +41,26 @@ Last 5 Quizzes Created:
 </tr>
 <tr>
 <td>
-<ol>
+<table>
+
+<tr>
+<td>
+Quiz
+</td>
+<td>
+Score
+</td>
+</tr>
 <% for (Result res: lastfive){ 
+	
 	if(n==5) break;
 	n+=1;%>
-<li><%=res.getQuiz().getName()%><%=res.getScore() %> </li>	
+<tr>
+	<td><%=n%>. <a href="/stealthmode/quiz?id=<%=res.getQuizID()%>"><%=res.getQuiz().getName()%></a></td><td><%=res.getScore() %> </td>
+</tr>
 <%}%>
-</ol>
+
+</table>
 </td>
 <td>
 <ol>
@@ -50,69 +68,68 @@ Last 5 Quizzes Created:
 for (Quiz quiz: recentQuizzes){ 
 	if(m==5) break;
 	m+=1;%>
-<li><%=quiz.getName()%> </li>	
+<li><a href="/stealthmode/quiz?id=<%=quiz.getID()%>"><%=quiz.getName()%></a> </li>	
 <%}%>
 </ol>
 </td>
 </tr>
-</table>
-</div>
-<div id="achievements">
-
-</div>
+<tr>
+<td>
 <div id="friendsRecent"></div>
 <div >
-<button class="expand">+</button>
+Friends List <button class="expand">+</button>
 <div id="friendsList">
 <%for(User friend:friends){%>
 <a href=""><%=friend.getUserName() %></a>
+<br>
 <%}%>
 </div>
 </div>
-<div id="inbox">
-<% if(inboxmessage != null){
-for(Message a:inboxmessage){ %>
-<table>
-<tr>
+</td>
 <td>
-From: <%=a.getSender()%> </td>
-</tr>
-<tr>
-<td>
-Text: <%=a.getText() %> <br></td>
-</tr>
-</table>
-<%}} %>
-<br>
-<%if(inboxchallenge != null){ 
-for(Message a:inboxchallenge){ %>
-<table>
-<tr>
-<td>
-From: <%=a.getSender()%> </td>
-</tr>
-<tr>
-<td>
-QuizID: <%=a.getQuiz() %> <br></td>
-</tr>
-<tr>
-<td>
-Text: <%=a.getText() %> <br></td>
-</tr>
-</table>
-<%}} %>
-<br>
-<% if(inboxrequests != null){
-for(Message a:inboxrequests){ %>
-<table>
-<tr><td>From: <%=a.getSender()%> <br></td></tr>
-
-<tr><td>Text: <%=a.getText() %></td></tr> </table><br>
-<%}} %></div>
+<div>
+Quizzes Created<button class="expand">+</button>
 <div id="quizzesMade"><%for(Quiz quiz:quizzesMade){%>
 <a href=""><%=quiz.getName() %></a>
 <%}%></div>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="2" class="left">
+Inbox <button class="expand">+</button>
+<div id="inbox">
+<table>
+<tr><td>Messages</td></tr>
+<% for (Message message:inboxmessage){ %>
+<tr><td>From:</td><td><%=message.getSender() %></td></tr>
+<tr><td>Message:</td><td><%=message.getText() %></td></tr>
+<%} %>
+
+<tr><td>Challenges</td></tr>
+<% for (Message message:inboxchallenge){ 
+User j = User.findByUsername(message.getSender());%>
+
+<tr><td>From:</td><td><a href="/stealthmode/quiz?id=<%=j.getID()%>"><%=message.getSender() %></a></td></tr>
+<tr><td>Message:</td><td><%=message.getText() %></td></tr>
+<tr><td>Take this Quiz:</td><td><a href="/stealthmode/quiz?id=<%=message.getQuiz()%>">Take the Quiz!</a></td></tr>
+<%} %>
+
+</table>
+</div>
+</td>
+</tr>
+</table>
+<div id="achievements">
+
+</div>
+
+
+
 <div id="newQuiz"><a href="create_quiz.jsp" > Create A New Quiz</a></div>
+<% if (me.isAdministrator()){ %>
+<a href="administrator.jsp">Access Administrator Privileges</a>
+<%} %>
 </div>
 <script src="scripts/profile.js">
 </script>
