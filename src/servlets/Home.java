@@ -1,5 +1,8 @@
 package servlets;
 
+import models.*;
+
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,6 +30,12 @@ public class Home extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Quiz> popularQuizzes = Quiz.getTopQuizzes();
+        List<Quiz> recentQuizzes = Quiz.recentlyCreatedQuizzes();
+
+        request.setAttribute("popular_quizzes", popularQuizzes);
+        request.setAttribute("recent_quizzes", recentQuizzes);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/home.jsp");
         dispatcher.forward(request, response);
 	}
