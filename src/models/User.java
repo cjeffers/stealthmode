@@ -34,6 +34,12 @@ public class User extends AbstractModel{
         User user = new User(am);
         return user;
     }
+    
+    @Override 
+    public void delete(){
+    	super.delete();
+    	achievements.delete();
+    }
 
     /**
      * Create a new User from an AbstractModel.
