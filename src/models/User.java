@@ -92,6 +92,7 @@ public class User extends AbstractModel{
     
     private void setAchievementID(int id){
     	setValue("achievement_id", id);
+    	save();
     }
     
     /**
