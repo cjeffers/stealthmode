@@ -24,6 +24,13 @@ public class UsersTest {
     public static void tearDownAfterClass() throws Exception {
         AbstractModel.closeConnection();
     }
+    
+    @Test
+    public void jacobTest() {
+    	User user = new User("test_user", "test_pw", "test_name", true);
+    	System.out.println(user.save());
+    	user.delete();
+    }
 
     @Test
     public void testBasicFunctionality() {
@@ -44,6 +51,7 @@ public class UsersTest {
         am.delete();
     }
 
+    
     @Test
     public void testFriends() {
     	User am1 = new User("ben_test", "cheese", "Ben", true);
@@ -57,6 +65,8 @@ public class UsersTest {
     	am1.removeFriend("ben_test_friend");
     	List<User> newBenFriends = am1.getFriends();
     	assertTrue(newBenFriends.size() == 0);
+    	am1.delete();
+    	am2.delete();
     }
 
     @Test
@@ -68,16 +78,19 @@ public class UsersTest {
     	am1.setAdminPriveledge(false);
     	List<User> admins2 = User.findAdministrators();
     	System.out.println("Amount of admins are: " + admins2.size());
+    	am1.delete();
+    	am2.delete();
     }
 
     @Test
     public void testMessages(){
-    User am1 = new User("jed", "bleh", "Jed", false);
+    	User am1 = new User("jed", "bleh", "Jed", false);
     	List<Message> notes = am1.seeMessages();
     	for(Message a:notes){
     		System.out.println(a.getText());
 
     	}
+    	am1.delete();
     }
 
 
@@ -87,6 +100,7 @@ public class UsersTest {
     	User am1 = new User("james", "johnson", "Jed", false);
     	assertTrue(User.validateLogin("james", "johnson") == true);
     	assertTrue(User.validateLogin("james", "jones") == false);
+    	am1.delete();
     }
 
     @Test

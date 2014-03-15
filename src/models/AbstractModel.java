@@ -133,13 +133,14 @@ public class AbstractModel {
 	 * Any errors or exceptions return -1.
 	 */
 	public int save() {
-		int id = -1;
+		int id;
 		if(!isInDatabase) {
             id = update("INSERT INTO ");
             isInDatabase = true;
             setValue("id", id);
         } else {
-            id = update("UPDATE ");
+            update("UPDATE ");
+            id = (Integer)getValue("id");
         }
 		return id;
 	}
@@ -170,7 +171,8 @@ public class AbstractModel {
 
 			try {
 				state.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-
+				
+				
 				// get the generated id
 				ResultSet gk = state.getGeneratedKeys();
 				if (gk.next()) {

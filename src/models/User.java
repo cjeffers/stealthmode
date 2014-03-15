@@ -44,7 +44,7 @@ public class User extends AbstractModel{
 
     public User(AbstractModel am){	
     	super(USERS_DATABASE, am.getMap(), true);
-    	achievements = AbstractModel.getByID("ACHIEVEMENTS_DATABASE", (Integer) am.getValue("achievement_id"));
+    	achievements = AbstractModel.getByID(ACHIEVEMENTS_DATABASE, (Integer) am.getValue("achievement_id"));
     }
 
 
@@ -61,7 +61,7 @@ public class User extends AbstractModel{
         User user = new User(am);
         return user;
     }
-
+ 
 
     /**
      * Creates a new user
@@ -74,9 +74,11 @@ public class User extends AbstractModel{
         	setFullname(fullname);
             setUserName(username);
             setPicURL("");
+            save();
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            setAchievementID((Integer) achievements.getValue("id"));
             achievements.setValue("user_id", getID());
+            achievements.save();
+            setAchievementID((Integer) achievements.getValue("id"));
             setAdminPriveledge(administrator);
             setIsGreatest(false);
         	setPracticed(false);
@@ -105,8 +107,9 @@ public class User extends AbstractModel{
             setPassword(password);
             setAdminPriveledge(administrator);
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            setAchievementID((Integer) achievements.getValue("id"));
+            setAchievementID(achievements.save());
             achievements.setValue("user_id", getID());
+            achievements.save();
             setFullname(fullname);
             setIsGreatest(false);
         	setPracticed(false);
