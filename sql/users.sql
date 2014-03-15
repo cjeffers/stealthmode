@@ -11,6 +11,7 @@ CREATE TABLE users (
     password CHAR(64),
     pic_url CHAR(128),
     salt CHAR(128),
+    achievement_id INT,
     administrator INT(1),
     PRIMARY KEY(id)
 
