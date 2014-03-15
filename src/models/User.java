@@ -75,8 +75,9 @@ public class User extends AbstractModel{
             setUserName(username);
             setPicURL("");
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            setAchievementID((Integer) achievements.getValue("id"));
+            setAchievementID(achievements.save());
             achievements.setValue("user_id", getID());
+            achievements.save();
             setAdminPriveledge(administrator);
             setIsGreatest(false);
         	setPracticed(false);
@@ -105,8 +106,9 @@ public class User extends AbstractModel{
             setPassword(password);
             setAdminPriveledge(administrator);
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            setAchievementID((Integer) achievements.getValue("id"));
+            setAchievementID(achievements.save());
             achievements.setValue("user_id", getID());
+            achievements.save();
             setFullname(fullname);
             setIsGreatest(false);
         	setPracticed(false);
