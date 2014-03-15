@@ -33,13 +33,21 @@ public class QuizTake extends HttpServlet {
         int quizID = (Integer) request.getSession().getAttribute("quiz_id");
         int index = (Integer) request.getSession().getAttribute("next_index");
         Quiz quiz = Quiz.findByID(quizID);
-        List<Question> questions = quiz.getQuestions();
+        List<Question> questions;
 
         if (quiz.hasMultiplePages()) {  // mutli-page
             // get stuff from form
             if (index == 0) {
+                // initialize questions
+                questions = quiz.getQuestions();
+                if (quiz.isRandom()) {
+                    Collections.shuffle(questions);
+                }
+                request.getSession().setAttribute("questions", questions);
                 request.getSession().setAttribute("score", 0);
                 request.getSession().setAttribute("start_time", System.currentTimeMillis());
+            } else {
+                questions = (List<Question>) request.getSession().getAttribute("questions");
             }
             Question question = questions.get(index);
 
@@ -63,6 +71,10 @@ public class QuizTake extends HttpServlet {
 
             request.getSession().setAttribute("start_time", System.currentTimeMillis());
             request.setAttribute("quiz", quiz);
+            questions = quiz.getQuestions();
+            if (quiz.isRandom()) {
+                Collections.shuffle(questions);
+            }
             request.setAttribute("questions", questions);
             dispatcher = request.getRequestDispatcher("/quiz_take_single.jsp");
 
