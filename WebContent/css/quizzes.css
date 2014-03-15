@@ -42,8 +42,8 @@ table {
     margin-right: auto;
 }
 
-button{
-	-moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-	border-radius:0px;
+
+input.button, input.submit {
+   border: 1px outset blue;
+   background-color: lightBlue;
 }

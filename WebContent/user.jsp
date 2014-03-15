@@ -65,12 +65,7 @@ List<User> friends = user.getFriends();
             
             </ol></td></tr>
             <tr><td>Achievements
-            <%if(achievements.size() != 0){
-             for(String achievement:achievements){%>
-            <%=achievement %>
-            <%}}else{ %>
-            This user has not earned any achievements yet!
-            <%} %></td></tr>
+           </td></tr>
             <tr ><td colspan="2">Friends
             <%for(User friend: friends){%>
             	<a href="/stealthmode/user?id=<%=friend.getID()%>"><%=friend.getUserName() %></a>
