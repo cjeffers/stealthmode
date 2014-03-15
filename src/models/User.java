@@ -682,11 +682,14 @@ public class User extends AbstractModel{
    				setProlificAuthor(quizzes.size() >= 5);
    				setProdigiousAuthor(quizzes.size() >= 10);
    				
-   				boolean high_score = false;
-   				for (Quiz q : quizzes) {
-   					if(q.getScores().get(0).getUserID() == getID()) high_score = true;
+   				if (!hasWonIsGreatest()) {
+   					boolean high_score = false;
+   	   				for (Quiz q : quizzes) {
+   	   					if(q.getScores().get(0).getUserID() == getID()) high_score = true;
+   	   				}
+   	   				setIsGreatest(high_score);
    				}
-   				setIsGreatest(high_score);
+   				
    			}
    			
    			if (getRecentResults().size() >= 10) setQuizMachine(true);
