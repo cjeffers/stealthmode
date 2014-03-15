@@ -34,7 +34,7 @@ public class QuizTest {
 	public void testBasicConstructor() {
 		assertEquals(q.getName(), "test name");
 		assertEquals(q.getDescription(), "test description");
-		assertTrue(q.isTimed());
+		assertTrue(q.isRandom());
 		assertTrue(q.hasMultiplePages());
 		assertEquals(q.getDateMade(), 100);
 	}
@@ -54,13 +54,13 @@ public class QuizTest {
 	public void testEdits() {
 		q.setName("new name");
 		q.setDescription("new description");
-		q.setTimed(false);
+		q.setRandom(false);
 		q.setMultiplePages(false);
 		q.setDateMade(200);
 		
 		assertEquals(q.getName(), "new name");
 		assertEquals(q.getDescription(), "new description");
-		assertFalse(q.isTimed());
+		assertFalse(q.isRandom());
 		assertFalse(q.hasMultiplePages());
 		assertEquals(q.getDateMade(), 200);
 	}

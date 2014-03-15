@@ -27,7 +27,7 @@ public class Quiz extends AbstractModel{
 	private static final String ID_COLNAME = "id";
 	private static final String NAME_COLNAME = "name";
 	private static final String DESCRIPTION_COLNAME = "description";
-	private static final String TIMED_COLNAME = "timed";
+	private static final String RANDOM_COLNAME = "random";
 	private static final String MULTIPLEPAGES_COLNAME = "multiple_pages";
 	private static final String DATE_COLNAME = "creation_time";
 	private static final String CREATOR_ID_COLNAME = "creator_id";
@@ -49,11 +49,11 @@ public class Quiz extends AbstractModel{
 	 * @param givenMultiplePages whether the quiz consists of multiple pages
 	 * @param givenDateMade the date the quiz was made
 	 */
-	public Quiz(String theName, String theDescription, boolean theTimed, boolean theMultiplePages, long theDateMade, int creatorID){
+	public Quiz(String theName, String theDescription, boolean theRandom, boolean theMultiplePages, long theDateMade, int creatorID){
 		super(QUIZ_TABLENAME);
 		setName(theName);
 		setDescription(theDescription);
-		setTimed(theTimed);
+		setRandom(theRandom);
 		setMultiplePages(theMultiplePages);
 		setDateMade(theDateMade);
         setCreatorID(creatorID);
@@ -93,10 +93,11 @@ public class Quiz extends AbstractModel{
 	}
 
 	/**
-	 * @return whether or not the quiz is timed
+	 * @return whether or not the quiz displays
+	 * its questions in a random order
 	 */
-	public boolean isTimed() {
-        if (((Integer)getValue(TIMED_COLNAME)) == 0) return false;
+	public boolean isRandom() {
+        if (((Integer)getValue(RANDOM_COLNAME)) == 0) return false;
         return true;
 	}
 
@@ -154,13 +155,14 @@ public class Quiz extends AbstractModel{
 	}
 
 	/**
-	 * @param whether or not the quiz is timed
+	 * @param whether or not the quiz displays
+	 * its questions in random order
 	 */
-	public void setTimed(boolean timed) {
-        if (timed) {
-            setValue(TIMED_COLNAME, 1);
+	public void setRandom(boolean random) {
+        if (random) {
+            setValue(RANDOM_COLNAME, 1);
         } else {
-            setValue(TIMED_COLNAME, 0);
+            setValue(RANDOM_COLNAME, 0);
         }
 	}
 
@@ -313,7 +315,7 @@ public class Quiz extends AbstractModel{
 		str += "\n" + getName() + " - " + getDateMade();
 		str += "\n" + "# of questions - " + getQuestions().size();
 		str += "\n" + getDescription();
-		str += "\n" + "timed - " + isTimed();
+		str += "\n" + "random - " + isRandom();
 		str += "\n" + "multiple pages = " + hasMultiplePages();
 		return str;
 	}
