@@ -61,7 +61,7 @@ public class User extends AbstractModel{
         User user = new User(am);
         return user;
     }
-
+ 
 
     /**
      * Creates a new user
