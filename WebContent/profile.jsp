@@ -20,7 +20,7 @@ List<Quiz> quizzesMade = Quiz.findByCreator(me.getID());
 List<Quiz> recentQuizzes = me.recentlyCreatedQuizzes();
 List<Result> lastfive = me.getRecentResults();
 List<User> friends = me.getFriends();
-//List<String> achievements = me.seeAwardsWon();
+List<String> achievements = me.seeAwardsWon();
 List<Message> inboxmessage = me.seeMessages();
 List<Message> inboxchallenge = me.seeChallenges();
 List<Message> inboxrequests = me.seeRequests();
@@ -96,6 +96,25 @@ Quizzes Created<button class="expand">+</button>
 </td>
 </tr>
 <tr>
+<td colspan="2">
+<div id="achievements">
+ <%if(achievements.size() != 0){
+
+             for(String achievement:achievements){%>
+
+            <%=achievement %>
+
+            <%}}else{ %>
+
+            This user has not earned any achievements yet!
+
+            <%} %>
+
+
+</div>
+</td>
+</tr>
+<tr>
 <td colspan="2" class="left">
 Inbox <button class="expand">+</button>
 <div id="inbox">
@@ -119,10 +138,9 @@ User j = User.findByUsername(message.getSender());%>
 </div>
 </td>
 </tr>
-</table>
-<div id="achievements">
 
-</div>
+</table>
+
 
 
 
@@ -130,6 +148,7 @@ User j = User.findByUsername(message.getSender());%>
 <% if (me.isAdministrator()){ %>
 <a href="administrator.jsp">Access Administrator Privileges</a>
 <%} %>
+</div>
 </div>
 <script src="scripts/profile.js">
 </script>
