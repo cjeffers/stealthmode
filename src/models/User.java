@@ -74,11 +74,11 @@ public class User extends AbstractModel{
         	setFullname(fullname);
             setUserName(username);
             setPicURL("");
+            save();
             achievements =  new AbstractModel(ACHIEVEMENTS_DATABASE);
-            achievements.save();
-            setAchievementID((Integer) achievements.getValue("id"));
             achievements.setValue("user_id", getID());
             achievements.save();
+            setAchievementID((Integer) achievements.getValue("id"));
             setAdminPriveledge(administrator);
             setIsGreatest(false);
         	setPracticed(false);
