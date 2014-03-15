@@ -21,3 +21,24 @@ CREATE TABLE achievements (
 
     PRIMARY KEY (id)
 );
+INSERT INTO achievements
+(user_id,
+amateur_author,
+amateur_author_time,
+prolific_author,
+prolific_author_time,
+prodigious_author,
+prodigious_author_time,
+quiz_machine,
+quiz_machine_time,
+is_greatest,
+is_greatest_time,
+practice_perfect,
+practice_perfect_time) VALUES
+
+(1, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL),
+(3, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL),
+(5, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL),
+(7, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL),
+(9, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL);
+
